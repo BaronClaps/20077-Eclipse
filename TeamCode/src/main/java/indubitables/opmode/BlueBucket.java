@@ -38,7 +38,7 @@ public class BlueBucket extends OpMode {
     public void pathUpdate() {
         switch (pathState) {
             case 0:
-                Actions.runBlocking(auto.claw.closeClaw);
+                Actions.runBlocking(auto.claw.close);
                 Actions.runBlocking(auto.lift.toHighChamber);
                 auto.follower.followPath(auto.preload);
                 setPathState(1);
@@ -51,7 +51,7 @@ public class BlueBucket extends OpMode {
                     }
 
                     if (auto.lift.isAtTarget()) {
-                        Actions.runBlocking(auto.claw.openClaw);
+                        Actions.runBlocking(auto.claw.open);
                     }
 
                     Actions.runBlocking(auto.lift.toZero);
@@ -79,7 +79,7 @@ public class BlueBucket extends OpMode {
                     );
 
                     if (auto.lift.isAtTarget()) {
-                        Actions.runBlocking(auto.box.toScoring);
+                        Actions.runBlocking(auto.arm.toScoring);
                     }
 
                     auto.follower.followPath(auto.element2);

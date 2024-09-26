@@ -3,7 +3,7 @@ package indubitables.config.runmodes;
 import static indubitables.config.util.RobotConstants.intakeSpinInPwr;
 import static indubitables.config.util.RobotConstants.intakeSpinOutPwr;
 
-import indubitables.config.subsystem.BoxSubsystem;
+import indubitables.config.subsystem.ArmSubsystem;
 import indubitables.config.subsystem.ClawSubsystem;
 import indubitables.config.subsystem.ExtendSubsystem;
 import indubitables.config.subsystem.IntakeSubsystem;
@@ -31,8 +31,8 @@ public class Teleop {
     private IntakeSubsystem intake;
     private IntakeSubsystem.IntakeSpinState intakeSpinState;
     private IntakeSubsystem.IntakePivotState intakePivotState;
-    private BoxSubsystem box;
-    private BoxSubsystem.BoxState boxState;
+    private ArmSubsystem arm;
+    private ArmSubsystem.ArmState armState;
 
     public RunAction stopDrive, startDrive;
 
@@ -57,7 +57,7 @@ public class Teleop {
         lift = new LiftSubsystem(hardwareMap, telemetry);
         extend = new ExtendSubsystem(hardwareMap, telemetry);
         intake = new IntakeSubsystem(hardwareMap, intakeSpinState, intakePivotState);
-        box = new BoxSubsystem(hardwareMap, boxState);
+        arm = new ArmSubsystem(hardwareMap, armState);
 
 
         this.follower = follower;
@@ -77,7 +77,7 @@ public class Teleop {
         lift.init();
         extend.init();
         intake.init();
-        box.init();
+        arm.init();
     }
 
     public void update() {
@@ -117,7 +117,7 @@ public class Teleop {
         }
 
         if (currentGamepad1.a && !previousGamepad1.a)
-            box.switchState();
+            arm.switchState();
 
         if (currentGamepad2.x && !previousGamepad2.x)
             intake.switchPivotState();
@@ -140,7 +140,7 @@ public class Teleop {
         telemetry.addData("Claw State", clawState);
         telemetry.addData("Intake Spin State", intakeSpinState);
         telemetry.addData("Intake Pivot State", intakePivotState);
-        telemetry.addData("Box State", boxState);
+        telemetry.addData("arm State", armState);
         telemetry.update();
     }
 
@@ -149,7 +149,7 @@ public class Teleop {
         lift.start();
         extend.start();
         intake.start();
-        box.start();
+        arm.start();
         follower.setPose(startPose);
         follower.startTeleopDrive();
     }
@@ -170,7 +170,7 @@ public class Teleop {
                         intake.pivotTransfer,
                         //extend.toZero,
                         //lift.toZero,
-                        box.toTransfer),
+                        arm.toTransfer),
                 intake.spinOut,
                 new SleepAction(1),
                 intake.spinIn,

@@ -1,7 +1,7 @@
 package indubitables.config.subsystem;
 
-import static indubitables.config.util.RobotConstants.intakePivotGroundPos;
-import static indubitables.config.util.RobotConstants.intakePivotTransferPos;
+import static indubitables.config.util.RobotConstants.intakePivotGround;
+import static indubitables.config.util.RobotConstants.intakePivotTransfer;
 import static indubitables.config.util.RobotConstants.intakeSpinInPwr;
 import static indubitables.config.util.RobotConstants.intakeSpinOutPwr;
 import static indubitables.config.util.RobotConstants.intakeSpinStopPwr;
@@ -98,12 +98,12 @@ public class IntakeSubsystem {
     }
 
     public void pivotTransfer() {
-        pivot.setPosition(intakePivotTransferPos);
+        pivot.setPosition(intakePivotTransfer);
         this.pivotState = IntakePivotState.TRANSFER;
     }
 
     public void pivotGround() {
-        pivot.setPosition(intakePivotGroundPos);
+        pivot.setPosition(intakePivotGround);
         this.pivotState = IntakePivotState.GROUND;
     }
 

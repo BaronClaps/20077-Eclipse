@@ -4,6 +4,7 @@ import static indubitables.config.util.RobotConstants.*;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import indubitables.config.util.RobotConstants;
 import indubitables.config.util.action.Actions;
 import indubitables.config.util.action.RunAction;
 
@@ -14,28 +15,28 @@ public class ClawSubsystem {
         CLOSED, OPEN
     }
 
-    private Servo claw;
+    private Servo grab;
     private ClawState state;
-    public RunAction openClaw, closeClaw;
+    public RunAction open, close;
 
     public ClawSubsystem(HardwareMap hardwareMap, ClawState clawState) {
-        claw = hardwareMap.get(Servo.class, "claw");
+        grab = hardwareMap.get(Servo.class, "claw");
         this.state = clawState;
 
-        openClaw = new RunAction(this::openClaw);
-        closeClaw = new RunAction(this::closeClaw);
+        open = new RunAction(this::open);
+        close = new RunAction(this::close);
     }
 
     public void setPos(double clawPos) {
-        claw.setPosition(clawPos);
+        grab.setPosition(clawPos);
     }
 
     public void setState(ClawState clawState) {
         if (clawState == ClawState.CLOSED) {
-            claw.setPosition(clawClose);
+            grab.setPosition(clawClose);
             this.state = ClawState.CLOSED;
         } else if (clawState == ClawState.OPEN) {
-            claw.setPosition(clawOpen);
+            grab.setPosition(clawOpen);
             this.state = ClawState.OPEN;
         }
     }
@@ -48,20 +49,20 @@ public class ClawSubsystem {
         }
     }
 
-    public void openClaw() {
+    public void open() {
         setState(ClawState.OPEN);
     }
 
-    public void closeClaw() {
+    public void close() {
         setState(ClawState.CLOSED);
     }
 
     public void init() {
-        Actions.runBlocking(closeClaw);
+        Actions.runBlocking(close);
     }
 
     public void start() {
-        Actions.runBlocking(closeClaw);
+        Actions.runBlocking(close);
     }
 
 

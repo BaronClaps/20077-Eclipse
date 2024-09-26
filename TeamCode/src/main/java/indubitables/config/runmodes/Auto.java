@@ -4,7 +4,7 @@ import static indubitables.config.util.FieldConstants.*;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import indubitables.config.pedroPathing.pathGeneration.BezierCurve;
-import indubitables.config.subsystem.BoxSubsystem;
+import indubitables.config.subsystem.ArmSubsystem;
 import indubitables.config.subsystem.ClawSubsystem;
 import indubitables.config.subsystem.ExtendSubsystem;
 import indubitables.config.subsystem.IntakeSubsystem;
@@ -31,8 +31,8 @@ public class Auto {
     public IntakeSubsystem intake;
     public IntakeSubsystem.IntakeSpinState intakeSpinState;
     public IntakeSubsystem.IntakePivotState intakePivotState;
-    public BoxSubsystem box;
-    public BoxSubsystem.BoxState boxState;
+    public ArmSubsystem arm;
+    public ArmSubsystem.ArmState armState;
 
 
     public Follower follower;
@@ -47,7 +47,7 @@ public class Auto {
         lift = new LiftSubsystem(hardwareMap, telemetry);
         extend = new ExtendSubsystem(hardwareMap, telemetry);
         intake = new IntakeSubsystem(hardwareMap, intakeSpinState, intakePivotState);
-        box = new BoxSubsystem(hardwareMap, boxState);
+        arm = new ArmSubsystem(hardwareMap, armState);
 
         this.follower = follower;
         this.telemetry = telemetry;
@@ -65,7 +65,7 @@ public class Auto {
         //lift.init();
         //extend.init();
         intake.init();
-        box.init();
+        arm.init();
     }
 
     public void init_loop() {}
@@ -75,7 +75,7 @@ public class Auto {
         lift.start();
         //extend.start();
         //intake.start();
-        box.start();
+        arm.start();
     }
 
     public void update() {
@@ -151,7 +151,7 @@ public class Auto {
                 intake.spinStop,
                 new ParallelAction(
                         intake.pivotTransfer,
-                        box.toTransfer),
+                        arm.toTransfer),
                 intake.spinOut,
                 new SleepAction(1),
                 intake.spinIn,

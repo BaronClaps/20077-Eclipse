@@ -72,35 +72,35 @@ public class LiftSubsystem {
     }
 
     public void toZero() {
-        setTarget(liftZeroPos);
+        setTarget(liftZero);
     }
 
     public void toLowBucket() {
-        setTarget(liftToLowBucketPos);
+        setTarget(liftToLowBucket);
     }
 
     public void toHighBucket() {
-        setTarget(liftToHighBucketPos);
+        setTarget(liftToHighBucket);
     }
 
     public void toLowChamber() {
-        setTarget(liftToLowChamberPos);
+        setTarget(liftToLowChamber);
     }
 
     public void releaseLowChamber() {
-        setTarget(liftReleaseLowChamberPos);
+        setTarget(liftReleaseLowChamber);
     }
 
     public void toHighChamber() {
-        setTarget(liftToHighChamberPos);
+        setTarget(liftToHighChamber);
     }
 
     public void releaseHighChamber() {
-        setTarget(liftReleaseHighChamberPos);
+        setTarget(liftReleaseHighChamber);
     }
 
     public void toHumanPlayer() {
-        setTarget(liftToHumanPlayerPos);
+        setTarget(liftToHumanPlayer);
     }
 
     // Util //
