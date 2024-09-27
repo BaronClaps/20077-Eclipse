@@ -1,79 +1,68 @@
 package indubitables.config.subsystem;
 
+import static indubitables.config.util.RobotConstants.extendFull;
+import static indubitables.config.util.RobotConstants.extendHalf;
+import static indubitables.config.util.RobotConstants.extendManualIncrements;
+import static indubitables.config.util.RobotConstants.extendZero;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import indubitables.config.util.RobotConstants;
+import indubitables.config.util.action.Actions;
 import indubitables.config.util.action.RunAction;
 
 public class ExtendSubsystem {
     private Telemetry telemetry;
 
-    public DcMotor extend;
-    private int pos, initalPos;
+    public Servo leftExtend, rightExtend;
+    private double pos;
     public RunAction toZero, toHalf, toFull;
-
-    public PIDController extendPID;
-    public static int target;
-    public static double p = 0.05, i = 0, d = 0.001;
-    public static double f = 0.01;
-    private final double ticks_in_degrees = 537.7 / 360.0;
 
     public ExtendSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
         this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        extend = hardwareMap.get(DcMotor.class, "extend");
-        extend.setDirection(DcMotorSimple.Direction.REVERSE);
-        extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        extend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        extendPID = new PIDController(p, i, d);
+        leftExtend = hardwareMap.get(Servo.class, "leftExtend");
+        rightExtend = hardwareMap.get(Servo.class, "leftExtend");
 
         toZero = new RunAction(this::toZero);
         toHalf = new RunAction(this::toHalf);
         toFull = new RunAction(this::toFull);
     }
 
-    public void manual(double n) {
-        extend.setPower(n);
+    public void manual(int direction) {
+        pos += (extendManualIncrements * direction);
+        run();
     }
 
-    public void setTarget(int b) {
-        target = b;
+    public void setTarget(double b) {
+        pos = b;
+        run();
     }
 
-    public void addToTarget(int b) {
-        target += b;
-    }
-
-    public void updatePIDF(){
-        extendPID.setPID(p,i,d);
-        updatePos();
-        double pid = extendPID.calculate(pos, target);
-        double ff = Math.cos(Math.toRadians(target/ticks_in_degrees)) * f;
-
-        double power = pid + ff;
-
-        extend.setPower(power);
-        telemetry.addData("extend pos", pos);
-        telemetry.addData("extend target", target);
+    public void run() {
+        leftExtend.setPosition(pos);
+        rightExtend.setPosition(pos);
     }
 
     public void toZero() {
-        setTarget(0);
+        setTarget(extendZero);
     }
 
     public void toHalf() {
-        setTarget(1000);
+        setTarget(extendHalf);
     }
 
     public void toFull() {
-        setTarget(2000);
+        setTarget(extendFull);
     }
 
     // Util //
@@ -83,31 +72,18 @@ public class ExtendSubsystem {
     }
 
     public void updatePos() {
-        pos = extend.getCurrentPosition() - initalPos;
+        pos = leftExtend.getPosition();
     }
 
-    public boolean isAtTarget() {
-        return Math.abs(pos - target) < 10;
-    }
-
-    public void resetEncoder() {
-        extend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
 
     // Init + Start //
     public void init() {
-        resetEncoder();
-        extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        extend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        initalPos = extend.getCurrentPosition();
-        pos = extend.getCurrentPosition();
+        updatePos();
+        Actions.runBlocking(toZero);
     }
 
     public void start() {
-        initalPos = extend.getCurrentPosition();
-        pos = extend.getCurrentPosition();
-        setTarget(10);
+        updatePos();
     }
 
 }

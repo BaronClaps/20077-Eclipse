@@ -6,6 +6,9 @@ import com.acmerobotics.dashboard.config.Config;
 public class RobotConstants {
     public static double clawClose = 1;
     public static double clawOpen = 0;
+    public static double clawMiddle = 0.5;
+    public static double clawTransfer = 0.25;
+    public static double clawScore = 0.75;
     
     public static double intakeSpinInPwr = 1;
     public static double intakeSpinOutPwr = -0.25;
@@ -25,4 +28,9 @@ public class RobotConstants {
     public static int liftReleaseLowChamber = 0;
     public static int liftToLowBucket = 0;
     public static int liftToHighBucket = 0;
+
+    public static double extendZero = 0;
+    public static double extendHalf = 0.05;
+    public static double extendFull = 0.01;
+    public static double extendManualIncrements = 0.0025;
 }

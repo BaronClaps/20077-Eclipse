@@ -1,12 +1,8 @@
 package indubitables.config.runmodes;
 
-import static indubitables.config.util.RobotConstants.intakeSpinInPwr;
-import static indubitables.config.util.RobotConstants.intakeSpinOutPwr;
-
 import indubitables.config.subsystem.ArmSubsystem;
 import indubitables.config.subsystem.ClawSubsystem;
 import indubitables.config.subsystem.ExtendSubsystem;
-import indubitables.config.subsystem.IntakeSubsystem;
 import indubitables.config.subsystem.LiftSubsystem;
 import indubitables.config.pedroPathing.follower.Follower;
 import indubitables.config.pedroPathing.localization.Pose;
@@ -25,19 +21,20 @@ import indubitables.config.util.action.SleepAction;
 public class Teleop {
 
     private ClawSubsystem claw;
-    private ClawSubsystem.ClawState clawState;
+    private ClawSubsystem.ClawGrabState clawGrabState;
+    private ClawSubsystem.ClawPivotState clawPivotState;
     private LiftSubsystem lift;
     private ExtendSubsystem extend;
-    private IntakeSubsystem intake;
-    private IntakeSubsystem.IntakeSpinState intakeSpinState;
-    private IntakeSubsystem.IntakePivotState intakePivotState;
+   //private IntakeSubsystem intake;
+    //private IntakeSubsystem.IntakeSpinState intakeSpinState;
+    //private IntakeSubsystem.IntakePivotState intakePivotState;
     private ArmSubsystem arm;
     private ArmSubsystem.ArmState armState;
 
     public RunAction stopDrive, startDrive;
 
-    private Follower follower;
-    private Pose startPose;
+    //private Follower follower;
+    //private Pose startPose;
 
     private Telemetry telemetry;
 
@@ -53,15 +50,15 @@ public class Teleop {
 
 
     public Teleop(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, Pose startPose,  boolean fieldCentric, Gamepad gamepad1, Gamepad gamepad2) {
-        claw = new ClawSubsystem(hardwareMap, clawState);
+        claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
         lift = new LiftSubsystem(hardwareMap, telemetry);
         extend = new ExtendSubsystem(hardwareMap, telemetry);
-        intake = new IntakeSubsystem(hardwareMap, intakeSpinState, intakePivotState);
+        //intake = new IntakeSubsystem(hardwareMap, intakeSpinState, intakePivotState);
         arm = new ArmSubsystem(hardwareMap, armState);
 
 
-        this.follower = follower;
-        this.startPose = startPose;
+        //this.follower = follower;
+        //this.startPose = startPose;
 
         this.fieldCentric = fieldCentric;
         this.telemetry = telemetry;
@@ -74,9 +71,9 @@ public class Teleop {
 
     public void init() {
         claw.init();
-        lift.init();
+        //lift.init();
         extend.init();
-        intake.init();
+        //intake.init();
         arm.init();
     }
 
@@ -95,17 +92,20 @@ public class Teleop {
 
         lift.manual(gamepad2.right_trigger - gamepad2.left_trigger);
 
-        if (gamepad2.left_bumper)
-            extend.manual(-1);
-        else if (gamepad2.right_bumper)
+        if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper)
             extend.manual(1);
+        else if (currentGamepad2.left_bumper && !previousGamepad2.left_bumper)
+            extend.manual(-1);
         else
             extend.manual(0);
 
-        if (currentGamepad2.a && !previousGamepad2.a)
-            claw.switchState();
+        if (currentGamepad2.b && !previousGamepad2.b)
+            claw.switchGrabState();
 
-        if (gamepad2.b) {
+        if (currentGamepad2.x && !previousGamepad2.x)
+            claw.switchPivotState();
+
+        /*if (gamepad2.b) {
             intake.spin.setPower(intakeSpinInPwr);
             intake.setSpinState(IntakeSubsystem.IntakeSpinState.IN, true);
         } else if (gamepad2.dpad_down) {
@@ -114,67 +114,69 @@ public class Teleop {
         } else {
             intake.setSpinState(IntakeSubsystem.IntakeSpinState.STOP, true);
             intake.spin.setPower(0);
-        }
+        }*/
 
-        if (currentGamepad1.a && !previousGamepad1.a)
+        if (currentGamepad2.a && !previousGamepad2.a)
             arm.switchState();
 
-        if (currentGamepad2.x && !previousGamepad2.x)
-            intake.switchPivotState();
+      //  if (currentGamepad2.x && !previousGamepad2.x)
+      //      intake.switchPivotState();
 
-        if (currentGamepad1.b && !previousGamepad1.b)
-            intake.setPivotState(IntakeSubsystem.IntakePivotState.TRANSFER);
+     //   if (currentGamepad1.b && !previousGamepad1.b)
+      //      intake.setPivotState(IntakeSubsystem.IntakePivotState.TRANSFER);
 
-        if(currentGamepad2.y && !previousGamepad2.y)
-            Actions.runBlocking(transfer());
+        //if(currentGamepad2.y && !previousGamepad2.y)
+       //     Actions.runBlocking(transfer());
 
-        follower.setTeleOpMovementVectors(-gamepad1.left_stick_y * speed, -gamepad1.left_stick_x * speed, -gamepad1.right_stick_x * speed, !fieldCentric);
-        follower.update();
+        //follower.setTeleOpMovementVectors(-gamepad1.left_stick_y * speed, -gamepad1.left_stick_x * speed, -gamepad1.right_stick_x * speed, !fieldCentric);
+        //follower.update();
 
-        telemetry.addData("X", follower.getPose().getX());
-        telemetry.addData("Y", follower.getPose().getY());
-        telemetry.addData("Heading", Math.toDegrees(follower.getPose().getHeading()));
+        //telemetry.addData("X", follower.getPose().getX());
+        //telemetry.addData("Y", follower.getPose().getY());
+        //telemetry.addData("Heading", Math.toDegrees(follower.getPose().getHeading()));
 
-        telemetry.addData("Actual Lift Pos", lift.lift.getCurrentPosition());
-        telemetry.addData("Actual Extend Pos", extend.extend.getCurrentPosition());
-        telemetry.addData("Claw State", clawState);
-        telemetry.addData("Intake Spin State", intakeSpinState);
-        telemetry.addData("Intake Pivot State", intakePivotState);
+        telemetry.addData("Left Lift Pos", lift.leftLift.getCurrentPosition());
+        telemetry.addData("Right Lift Pos", lift.rightLift.getCurrentPosition());
+telemetry.addData(" Extend Pos", extend.getPos());
+        telemetry.addData("Claw State", clawGrabState);
+     //   telemetry.addData("Intake Spin State", intakeSpinState);
+     //   telemetry.addData("Intake Pivot State", intakePivotState);
         telemetry.addData("arm State", armState);
         telemetry.update();
     }
 
     public void start() {
         claw.start();
-        lift.start();
+        //lift.start();
         extend.start();
-        intake.start();
+        //intake.start();
         arm.start();
-        follower.setPose(startPose);
-        follower.startTeleopDrive();
+        //follower.setPose(startPose);
+        //follower.startTeleopDrive();
     }
 
     private void startDrive() {
-        follower.startTeleopDrive();
+        //follower.startTeleopDrive();
     }
 
     private void stopDrive(){
-        follower.breakFollowing();
+        //follower.breakFollowing();
     }
 
     public Action transfer() {
         return new SequentialAction(
                 stopDrive,
-                intake.spinStop,
+                //intake.spinStop,
                 new ParallelAction(
-                        intake.pivotTransfer,
-                        //extend.toZero,
+                        //intake.pivotTransfer,
+                        extend.toZero,
+                        claw.open,
                         //lift.toZero,
                         arm.toTransfer),
-                intake.spinOut,
+                //intake.spinOut,
                 new SleepAction(1),
-                intake.spinIn,
-                intake.spinStop,
+               // intake.spinIn,
+                //intake.spinStop,
                 startDrive
         );
     }

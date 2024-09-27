@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -15,7 +16,7 @@ import indubitables.config.util.action.RunAction;
 public class LiftSubsystem {
     private Telemetry telemetry;
 
-    public DcMotor lift;
+    public DcMotor rightLift, leftLift;
     private int pos, initalPos;
     public RunAction toZero, toLowBucket, toHighBucket, toLowChamber, releaseLowChamber, toHighChamber, releaseHighChamber, toHumanPlayer;
     public PIDController liftPID;
@@ -28,12 +29,16 @@ public class LiftSubsystem {
     public LiftSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
         this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        lift = hardwareMap.get(DcMotor.class, "lift");
-        lift.setDirection(DcMotor.Direction.REVERSE);
-        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightLift = hardwareMap.get(DcMotor.class, "rightLift");
+        leftLift = hardwareMap.get(DcMotor.class, "leftLift");
+        rightLift.setDirection(DcMotor.Direction.REVERSE);
+        leftLift.setDirection(DcMotor.Direction.FORWARD);
+        rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        liftPID = new PIDController(p, i, d);
+        /*liftPID = new PIDController(p, i, d);
 
         toZero = new RunAction(this::toZero);
         toLowBucket = new RunAction(this::toLowBucket);
@@ -42,12 +47,13 @@ public class LiftSubsystem {
         releaseLowChamber = new RunAction(this::releaseLowChamber);
         toHighChamber = new RunAction(this::toHighChamber);
         releaseHighChamber = new RunAction(this::releaseHighChamber);
-        toHumanPlayer = new RunAction(this::toHumanPlayer);
+        toHumanPlayer = new RunAction(this::toHumanPlayer);*/
     }
 
     // Manual Control //
     public void manual(double n){ //(int liftPos, boolean negative) {
-        lift.setPower(n);
+        rightLift.setPower(n);
+        leftLift.setPower(n);
     }
 
     public void setTarget(int b) {
@@ -57,7 +63,7 @@ public class LiftSubsystem {
     public void addToTarget(int b) {
         target += b;
     }
-
+/*
     public void updatePIDF(){
         liftPID.setPID(p,i,d);
         updatePos();
@@ -133,7 +139,6 @@ public class LiftSubsystem {
 
     public void start() {
         initalPos = lift.getCurrentPosition();
-        setTarget(10);
-    }
+    }*/
 
 }

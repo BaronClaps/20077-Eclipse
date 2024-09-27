@@ -25,7 +25,8 @@ public class Auto {
     private RobotStart startLocation;
 
     public ClawSubsystem claw;
-    public ClawSubsystem.ClawState clawState;
+    public ClawSubsystem.ClawGrabState clawGrabState;
+    public ClawSubsystem.ClawPivotState clawPivotState;
     public LiftSubsystem lift;
     public ExtendSubsystem extend;
     public IntakeSubsystem intake;
@@ -43,7 +44,7 @@ public class Auto {
     private Pose startPose, preloadPose, element1Pose, element1ControlPose, element2Pose, element2ControlPose, element3Pose, element3ControlPose, elementScorePose, parkControlPose, parkPose;
 
     public Auto(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, boolean isBlue, boolean isBucket) {
-        claw = new ClawSubsystem(hardwareMap, clawState);
+        claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
         lift = new LiftSubsystem(hardwareMap, telemetry);
         extend = new ExtendSubsystem(hardwareMap, telemetry);
         intake = new IntakeSubsystem(hardwareMap, intakeSpinState, intakePivotState);
@@ -64,7 +65,8 @@ public class Auto {
         claw.init();
         //lift.init();
         //extend.init();
-        intake.init();
+        // intake.init();
+        //Kuek likes men.  Kuek likes men kissing.
         arm.init();
     }
 
@@ -72,7 +74,7 @@ public class Auto {
 
     public void start() {
         claw.start();
-        lift.start();
+       // lift.start();
         //extend.start();
         //intake.start();
         arm.start();

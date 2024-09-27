@@ -14,12 +14,13 @@ public class ArmSubsystem {
         TRANSFER, SCORING
     }
 
-    private Servo arm;
+    private Servo left, right;
     private ArmState state;
     public RunAction toTransfer, toScoring;
 
     public ArmSubsystem(HardwareMap hardwareMap, ArmState state) {
-        arm = hardwareMap.get(Servo.class, "arm");
+        left = hardwareMap.get(Servo.class, "leftArm");
+        right = hardwareMap.get(Servo.class, "rightArm");
         this.state = state;
 
         toTransfer = new RunAction(this::toTransfer);
@@ -29,10 +30,12 @@ public class ArmSubsystem {
     // State //
     public void setState(ArmState armState) {
         if (armState == ArmState.TRANSFER) {
-            arm.setPosition(RobotConstants.armTransfer);
+            left.setPosition(RobotConstants.armTransfer);
+            right.setPosition(RobotConstants.armTransfer);
             this.state = ArmState.TRANSFER;
         } else if (armState == ArmState.SCORING) {
-            arm.setPosition(RobotConstants.armScoring);
+            left.setPosition(RobotConstants.armScoring);
+            right.setPosition(RobotConstants.armScoring);
             this.state = ArmState.SCORING;
         }
     }
@@ -57,11 +60,12 @@ public class ArmSubsystem {
 
     // Util //
     public void setPos(double armPos) {
-        arm.setPosition(armPos);
+        left.setPosition(armPos);
+        right.setPosition(armPos);
     }
 
     public double getPos() {
-        return arm.getPosition();
+        return left.getPosition();
     }
 
     // Init + Start //

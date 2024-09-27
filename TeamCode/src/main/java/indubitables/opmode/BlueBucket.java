@@ -46,13 +46,13 @@ public class BlueBucket extends OpMode {
             case 1:
                 if(!auto.follower.isBusy()) {
 
-                    if (auto.lift.isAtTarget()) {
+                    //if (auto.lift.isAtTarget()) {
                         Actions.runBlocking(auto.lift.releaseHighChamber);
-                    }
+                   // }
 
-                    if (auto.lift.isAtTarget()) {
+                  //  if (auto.lift.isAtTarget()) {
                         Actions.runBlocking(auto.claw.open);
-                    }
+                 //   }
 
                     Actions.runBlocking(auto.lift.toZero);
                     auto.follower.followPath(auto.element1);
@@ -78,9 +78,9 @@ public class BlueBucket extends OpMode {
                             )
                     );
 
-                    if (auto.lift.isAtTarget()) {
-                        Actions.runBlocking(auto.arm.toScoring);
-                    }
+                   // if (auto.lift.isAtTarget()) {
+                 //       Actions.runBlocking(auto.arm.toScoring);
+                //    }
 
                     auto.follower.followPath(auto.element2);
                     setPathState(4);

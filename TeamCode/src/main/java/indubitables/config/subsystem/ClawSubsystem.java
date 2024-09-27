@@ -11,58 +11,107 @@ import indubitables.config.util.action.RunAction;
 
 public class ClawSubsystem {
 
-    public enum ClawState {
+    public enum ClawGrabState {
         CLOSED, OPEN
     }
 
-    private Servo grab;
-    private ClawState state;
-    public RunAction open, close;
+    public enum ClawPivotState {
+        TRANSFER, SCORE, MIDDLE
+    }
 
-    public ClawSubsystem(HardwareMap hardwareMap, ClawState clawState) {
-        grab = hardwareMap.get(Servo.class, "claw");
-        this.state = clawState;
+    private Servo grab, pivot;
+    private ClawGrabState grabState;
+    private ClawPivotState pivotState;
+    public RunAction open, close, transfer, score, middle;
+
+    public ClawSubsystem(HardwareMap hardwareMap, ClawGrabState clawGrabState, ClawPivotState clawPivotState) {
+        grab = hardwareMap.get(Servo.class, "clawGrab");
+        pivot = hardwareMap.get(Servo.class, "clawPivot");
+        this.grabState = clawGrabState;
+        this.pivotState = clawPivotState;
 
         open = new RunAction(this::open);
         close = new RunAction(this::close);
+        transfer = new RunAction(this::transfer);
+        score = new RunAction(this::score);
+        middle = new RunAction(this::middle);
     }
 
-    public void setPos(double clawPos) {
-        grab.setPosition(clawPos);
+    public void setPivotPos(double clawPos) {
+        pivot.setPosition(clawPos);
     }
 
-    public void setState(ClawState clawState) {
-        if (clawState == ClawState.CLOSED) {
-            grab.setPosition(clawClose);
-            this.state = ClawState.CLOSED;
-        } else if (clawState == ClawState.OPEN) {
-            grab.setPosition(clawOpen);
-            this.state = ClawState.OPEN;
+    public void setPivotState(ClawPivotState clawPivotState) {
+        if (clawPivotState == ClawPivotState.TRANSFER) {
+            setPivotPos(RobotConstants.clawTransfer);
+            this.pivotState = ClawPivotState.TRANSFER;
+        } else if (clawPivotState == ClawPivotState.SCORE) {
+            setPivotPos(clawScore);
+            this.pivotState = ClawPivotState.SCORE;
+        } else if (clawPivotState == ClawPivotState.MIDDLE) {
+            setPivotPos(clawMiddle);
+            this.pivotState = ClawPivotState.MIDDLE;
         }
     }
 
-    public void switchState() {
-        if (state == ClawState.CLOSED) {
-            setState(ClawState.OPEN);
-        } else if (state == ClawState.OPEN) {
-            setState(ClawState.CLOSED);
+    public void switchPivotState() {
+        if (pivotState == ClawPivotState.TRANSFER) {
+            setPivotState(ClawPivotState.TRANSFER);
+        } else if (pivotState == ClawPivotState.SCORE) {
+            setPivotState(ClawPivotState.SCORE);
+        }
+    }
+
+    public void setGrabPos(double clawPos) {
+        grab.setPosition(clawPos);
+    }
+
+    public void setGrabState(ClawGrabState clawGrabState) {
+        if (clawGrabState == ClawGrabState.CLOSED) {
+            grab.setPosition(clawClose);
+            this.grabState = ClawGrabState.CLOSED;
+        } else if (clawGrabState == ClawGrabState.OPEN) {
+            grab.setPosition(clawOpen);
+            this.grabState = ClawGrabState.OPEN;
+        }
+    }
+
+    public void switchGrabState() {
+        if (grabState == ClawGrabState.CLOSED) {
+            setGrabState(ClawGrabState.OPEN);
+        } else if (grabState == ClawGrabState.OPEN) {
+            setGrabState(ClawGrabState.CLOSED);
         }
     }
 
     public void open() {
-        setState(ClawState.OPEN);
+        setGrabState(ClawGrabState.OPEN);
     }
 
     public void close() {
-        setState(ClawState.CLOSED);
+        setGrabState(ClawGrabState.CLOSED);
+    }
+
+    public void transfer() {
+        setPivotState(ClawPivotState.TRANSFER);
+    }
+
+    public void score() {
+        setPivotState(ClawPivotState.SCORE);
+    }
+
+    public void middle() {
+        setPivotState(ClawPivotState.MIDDLE);
     }
 
     public void init() {
         Actions.runBlocking(close);
+        Actions.runBlocking(transfer);
     }
 
     public void start() {
         Actions.runBlocking(close);
+        Actions.runBlocking(middle);
     }
 
 
