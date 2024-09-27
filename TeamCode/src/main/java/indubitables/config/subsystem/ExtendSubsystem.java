@@ -23,7 +23,7 @@ public class ExtendSubsystem {
     private Telemetry telemetry;
 
     public Servo leftExtend, rightExtend;
-    private double pos;
+    private double pos = 0;
     public RunAction toZero, toHalf, toFull;
 
     public ExtendSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {

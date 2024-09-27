@@ -37,33 +37,25 @@ public class ClawSubsystem {
         middle = new RunAction(this::middle);
     }
 
-    public void setPivotPos(double clawPos) {
-        pivot.setPosition(clawPos);
-    }
-
     public void setPivotState(ClawPivotState clawPivotState) {
         if (clawPivotState == ClawPivotState.TRANSFER) {
-            setPivotPos(RobotConstants.clawTransfer);
+            pivot.setPosition(RobotConstants.clawTransfer);
             this.pivotState = ClawPivotState.TRANSFER;
         } else if (clawPivotState == ClawPivotState.SCORE) {
-            setPivotPos(clawScore);
+            pivot.setPosition(clawScore);
             this.pivotState = ClawPivotState.SCORE;
         } else if (clawPivotState == ClawPivotState.MIDDLE) {
-            setPivotPos(clawMiddle);
+            pivot.setPosition(clawMiddle);
             this.pivotState = ClawPivotState.MIDDLE;
         }
     }
 
     public void switchPivotState() {
         if (pivotState == ClawPivotState.TRANSFER) {
-            setPivotState(ClawPivotState.TRANSFER);
-        } else if (pivotState == ClawPivotState.SCORE) {
             setPivotState(ClawPivotState.SCORE);
+        } else if (pivotState == ClawPivotState.SCORE) {
+            setPivotState(ClawPivotState.TRANSFER);
         }
-    }
-
-    public void setGrabPos(double clawPos) {
-        grab.setPosition(clawPos);
     }
 
     public void setGrabState(ClawGrabState clawGrabState) {
@@ -105,13 +97,13 @@ public class ClawSubsystem {
     }
 
     public void init() {
-        Actions.runBlocking(close);
-        Actions.runBlocking(transfer);
+        close();
+        transfer();
     }
 
     public void start() {
-        Actions.runBlocking(close);
-        Actions.runBlocking(middle);
+        close();
+        middle();
     }
 
 
