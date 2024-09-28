@@ -39,18 +39,16 @@ public class ExtendSubsystem {
     }
 
     public void manual(int direction) {
+        pos = leftExtend.getPosition();
         pos += (extendManualIncrements * direction);
-        run();
+        leftExtend.setPosition(pos);
+        rightExtend.setPosition(pos);
     }
 
     public void setTarget(double b) {
+        leftExtend.setPosition(b);
+        rightExtend.setPosition(b);
         pos = b;
-        run();
-    }
-
-    public void run() {
-        leftExtend.setPosition(pos);
-        rightExtend.setPosition(pos);
     }
 
     public void toZero() {
@@ -79,11 +77,12 @@ public class ExtendSubsystem {
     // Init + Start //
     public void init() {
         updatePos();
-        Actions.runBlocking(toZero);
+        toZero();
     }
 
     public void start() {
         updatePos();
+        toZero();
     }
 
 }

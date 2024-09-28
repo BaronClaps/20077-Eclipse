@@ -64,17 +64,13 @@ public class ArmSubsystem {
         right.setPosition(armPos);
     }
 
-    public double getPos() {
-        return left.getPosition();
-    }
-
     // Init + Start //
     public void init() {
-        Actions.runBlocking(toTransfer);
+        toTransfer();
     }
 
     public void start() {
-        Actions.runBlocking(toTransfer);
+        toTransfer();
     }
 
 }

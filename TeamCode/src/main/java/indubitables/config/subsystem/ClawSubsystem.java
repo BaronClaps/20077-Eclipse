@@ -37,15 +37,15 @@ public class ClawSubsystem {
         middle = new RunAction(this::middle);
     }
 
-    public void setPivotState(ClawPivotState clawPivotState) {
-        if (clawPivotState == ClawPivotState.TRANSFER) {
+    public void setPivotState(ClawPivotState state) {
+        if (state == ClawPivotState.TRANSFER) {
             pivot.setPosition(RobotConstants.clawTransfer);
             this.pivotState = ClawPivotState.TRANSFER;
-        } else if (clawPivotState == ClawPivotState.SCORE) {
-            pivot.setPosition(clawScore);
+        } else if (state == ClawPivotState.SCORE) {
+            pivot.setPosition(RobotConstants.clawScore);
             this.pivotState = ClawPivotState.SCORE;
-        } else if (clawPivotState == ClawPivotState.MIDDLE) {
-            pivot.setPosition(clawMiddle);
+        } else if (state == ClawPivotState.MIDDLE) {
+            pivot.setPosition(RobotConstants.clawMiddle);
             this.pivotState = ClawPivotState.MIDDLE;
         }
     }
@@ -60,10 +60,10 @@ public class ClawSubsystem {
 
     public void setGrabState(ClawGrabState clawGrabState) {
         if (clawGrabState == ClawGrabState.CLOSED) {
-            grab.setPosition(clawClose);
+            grab.setPosition(RobotConstants.clawClose);
             this.grabState = ClawGrabState.CLOSED;
         } else if (clawGrabState == ClawGrabState.OPEN) {
-            grab.setPosition(clawOpen);
+            grab.setPosition(RobotConstants.clawOpen);
             this.grabState = ClawGrabState.OPEN;
         }
     }
@@ -103,7 +103,7 @@ public class ClawSubsystem {
 
     public void start() {
         close();
-        middle();
+        transfer();
     }
 
 

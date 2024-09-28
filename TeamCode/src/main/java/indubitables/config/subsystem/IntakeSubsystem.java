@@ -27,14 +27,15 @@ public class IntakeSubsystem {
     public CRServo spin;
     private IntakeSpinState spinState;
 
-    private Servo pivot;
+    private Servo leftPivot, rightPivot;
     private IntakePivotState pivotState;
 
     public RunAction spinIn, spinOut, spinStop, pivotTransfer, pivotGround;
 
     public IntakeSubsystem(HardwareMap hardwareMap, IntakeSpinState spinState, IntakePivotState pivotState) {
         spin = hardwareMap.get(CRServo.class, "intakeSpin");
-        pivot = hardwareMap.get(Servo.class, "intakePivot");
+        leftPivot = hardwareMap.get(Servo.class, "intakeLeftPivot");
+        rightPivot = hardwareMap.get(Servo.class, "intakeRightPivot");
         this.spinState = spinState;
         this.pivotState = pivotState;
 
@@ -81,38 +82,47 @@ public class IntakeSubsystem {
 
     public void setPivotState(IntakePivotState pivotState) {
         if (pivotState == IntakePivotState.TRANSFER) {
-            pivotTransfer();
+            leftPivot.setPosition(intakePivotTransfer);
+            rightPivot.setPosition(intakePivotTransfer);
+            this.pivotState = IntakePivotState.TRANSFER;
         } else if (pivotState == IntakePivotState.GROUND) {
-            pivotGround();
+            leftPivot.setPosition(intakePivotGround);
+            rightPivot.setPosition(intakePivotGround);
+            this.pivotState = IntakePivotState.GROUND;
         }
     }
 
     public void switchPivotState() {
         if (pivotState == IntakePivotState.TRANSFER) {
-            pivotGround();
-            pivotState = IntakePivotState.GROUND;
+            leftPivot.setPosition(intakePivotGround);
+            rightPivot.setPosition(intakePivotGround);
+            this.pivotState = IntakePivotState.GROUND;
         } else if (pivotState == IntakePivotState.GROUND) {
-            pivotTransfer();
-            pivotState = IntakePivotState.TRANSFER;
+            leftPivot.setPosition(intakePivotTransfer);
+            rightPivot.setPosition(intakePivotTransfer);
+            this.pivotState = IntakePivotState.TRANSFER;
         }
     }
 
     public void pivotTransfer() {
-        pivot.setPosition(intakePivotTransfer);
+        leftPivot.setPosition(intakePivotTransfer);
+        rightPivot.setPosition(intakePivotTransfer);
         this.pivotState = IntakePivotState.TRANSFER;
     }
 
     public void pivotGround() {
-        pivot.setPosition(intakePivotGround);
+        leftPivot.setPosition(intakePivotGround);
+        rightPivot.setPosition(intakePivotGround);
         this.pivotState = IntakePivotState.GROUND;
     }
 
 
     public void init() {
-        Actions.runBlocking(new ParallelAction(pivotTransfer, spinStop));
-
+        pivotTransfer();
+        spinStop();
     }
     public void start() {
-        Actions.runBlocking(new ParallelAction(pivotTransfer, spinStop));
+        pivotTransfer();
+        spinStop();
     }
 }
