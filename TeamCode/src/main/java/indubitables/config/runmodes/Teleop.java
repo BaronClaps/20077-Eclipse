@@ -6,15 +6,10 @@ import indubitables.config.subsystem.ExtendSubsystem;
 import indubitables.config.subsystem.LiftSubsystem;
 import indubitables.config.pedroPathing.follower.Follower;
 import indubitables.config.pedroPathing.localization.Pose;
-
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-import indubitables.config.util.RobotConstants;
 import indubitables.config.util.action.Action;
-import indubitables.config.util.action.Actions;
 import indubitables.config.util.action.ParallelAction;
 import indubitables.config.util.action.RunAction;
 import indubitables.config.util.action.SequentialAction;
@@ -40,8 +35,7 @@ public class Teleop {
 
     private Telemetry telemetry;
 
-    private Gamepad gamepad1;
-    private Gamepad gamepad2;
+    private Gamepad gamepad1, gamepad2;
     private Gamepad currentGamepad1 = new Gamepad();
     private Gamepad currentGamepad2 = new Gamepad();
     private Gamepad previousGamepad1 = new Gamepad();
