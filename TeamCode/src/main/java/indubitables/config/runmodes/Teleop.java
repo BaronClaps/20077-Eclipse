@@ -77,6 +77,8 @@ public class Teleop {
         extend.init();
         //intake.init();
         arm.init();
+
+        initPos();
     }
 
     public void update() {
@@ -198,6 +200,10 @@ telemetry.addData(" Extend Pos", extend.leftExtend.getPosition());
         claw.transfer();
         claw.open();
         arm.transfer();
+    }
+
+    private void initPos() {
+        transferPos();
     }
 
 }
