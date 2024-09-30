@@ -28,13 +28,10 @@ public class ExtendSubsystem {
     }
 
     public void manual(int direction) {
-        double leftPos = leftExtend.getPosition();
         double rightPos = rightExtend.getPosition();
-        leftPos += (extendManualIncrements * direction);
         rightPos += (extendManualIncrements * direction);
-        leftExtend.setPosition(leftPos);
+        leftExtend.setPosition(rightPos);
         rightExtend.setPosition(rightPos);
-        pos = ((leftPos + rightPos) / 2);
     }
 
     public void setTarget(double b) {

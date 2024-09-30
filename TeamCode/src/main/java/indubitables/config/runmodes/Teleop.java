@@ -117,8 +117,6 @@ public class Teleop {
         if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left)
             specimenPos();
 
-        //claw.switchPivotState();
-
         /*if (gamepad2.b) {
             intake.spin.setPower(intakeSpinInPwr);
             intake.setSpinState(IntakeSubsystem.IntakeSpinState.IN, true);
@@ -176,7 +174,7 @@ telemetry.addData(" Extend Pos", extend.leftExtend.getPosition());
         //follower.breakFollowing();
     }
 
-    public Action transfer() {
+    /*public Action transfer() {
         return new SequentialAction(
                 stopDrive,
                 //intake.spinStop,
@@ -192,7 +190,7 @@ telemetry.addData(" Extend Pos", extend.leftExtend.getPosition());
                 //intake.spinStop,
                 startDrive
         );
-    }
+    }*/
 
     private void scoringPos() {
         claw.score();
