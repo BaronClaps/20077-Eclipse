@@ -15,7 +15,7 @@ public class ArmSubsystem {
     }
 
     private Servo left, right;
-    private ArmState state;
+    public ArmState state;
     public RunAction toTransfer, toScoring;
 
     public ArmSubsystem(HardwareMap hardwareMap, ArmState state) {

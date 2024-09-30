@@ -19,9 +19,9 @@ public class ClawSubsystem {
         TRANSFER, SCORE, MIDDLE
     }
 
-    private Servo grab, pivot;
-    private ClawGrabState grabState;
-    private ClawPivotState pivotState;
+    public Servo grab, pivot;
+    public ClawGrabState grabState;
+    public ClawPivotState pivotState;
     public RunAction open, close, transfer, score, middle;
 
     public ClawSubsystem(HardwareMap hardwareMap, ClawGrabState clawGrabState, ClawPivotState clawPivotState) {

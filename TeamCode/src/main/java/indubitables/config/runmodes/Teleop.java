@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+import indubitables.config.util.RobotConstants;
 import indubitables.config.util.action.Action;
 import indubitables.config.util.action.Actions;
 import indubitables.config.util.action.ParallelAction;
@@ -137,11 +139,12 @@ public class Teleop {
 
         telemetry.addData("Left Lift Pos", lift.leftLift.getCurrentPosition());
         telemetry.addData("Right Lift Pos", lift.rightLift.getCurrentPosition());
-telemetry.addData(" Extend Pos", extend.getPos());
-        telemetry.addData("Claw State", clawGrabState);
+telemetry.addData(" Extend Pos", extend.leftExtend.getPosition());
+        telemetry.addData("Claw Grab State", claw.grabState);
+        telemetry.addData("Claw Pivot State", claw.pivotState);
      //   telemetry.addData("Intake Spin State", intakeSpinState);
      //   telemetry.addData("Intake Pivot State", intakePivotState);
-        telemetry.addData("arm State", armState);
+        telemetry.addData("arm State", arm.state);
         telemetry.update();
     }
 
