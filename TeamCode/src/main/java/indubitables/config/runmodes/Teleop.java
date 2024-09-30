@@ -27,7 +27,7 @@ public class Teleop {
     private ClawSubsystem.ClawPivotState clawPivotState;
     private LiftSubsystem lift;
     private ExtendSubsystem extend;
-   //private IntakeSubsystem intake;
+    //private IntakeSubsystem intake;
     //private IntakeSubsystem.IntakeSpinState intakeSpinState;
     //private IntakeSubsystem.IntakePivotState intakePivotState;
     private ArmSubsystem arm;
@@ -35,8 +35,8 @@ public class Teleop {
 
     public RunAction stopDrive, startDrive;
 
-    //private Follower follower;
-    //private Pose startPose;
+    private Follower follower;
+    private Pose startPose;
 
     private Telemetry telemetry;
 
@@ -48,7 +48,8 @@ public class Teleop {
     private Gamepad previousGamepad2 = new Gamepad();
 
     public double speed = 0.75;
-    private boolean fieldCentric = true;
+
+    private boolean fieldCentric;
 
 
     public Teleop(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, Pose startPose,  boolean fieldCentric, Gamepad gamepad1, Gamepad gamepad2) {
@@ -59,8 +60,8 @@ public class Teleop {
         arm = new ArmSubsystem(hardwareMap, armState);
 
 
-        //this.follower = follower;
-        //this.startPose = startPose;
+        this.follower = follower;
+        this.startPose = startPose;
 
         this.fieldCentric = fieldCentric;
         this.telemetry = telemetry;
@@ -73,7 +74,6 @@ public class Teleop {
 
     public void init() {
         claw.init();
-        //lift.in();
         extend.init();
         //intake.init();
         arm.init();

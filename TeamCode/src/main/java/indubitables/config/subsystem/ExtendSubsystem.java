@@ -1,22 +1,11 @@
 package indubitables.config.subsystem;
 
-import static indubitables.config.util.RobotConstants.extendFull;
-import static indubitables.config.util.RobotConstants.extendHalf;
-import static indubitables.config.util.RobotConstants.extendManualIncrements;
-import static indubitables.config.util.RobotConstants.extendZero;
-
+import static indubitables.config.util.RobotConstants.*;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-import indubitables.config.util.RobotConstants;
-import indubitables.config.util.action.Actions;
 import indubitables.config.util.action.RunAction;
 
 public class ExtendSubsystem {
@@ -39,10 +28,13 @@ public class ExtendSubsystem {
     }
 
     public void manual(int direction) {
-        pos = leftExtend.getPosition();
-        pos += (extendManualIncrements * direction);
-        leftExtend.setPosition(pos);
-        rightExtend.setPosition(pos);
+        double leftPos = leftExtend.getPosition();
+        double rightPos = rightExtend.getPosition();
+        leftPos += (extendManualIncrements * direction);
+        rightPos += (extendManualIncrements * direction);
+        leftExtend.setPosition(leftPos);
+        rightExtend.setPosition(rightPos);
+        pos = ((leftPos + rightPos) / 2);
     }
 
     public void setTarget(double b) {
@@ -70,7 +62,7 @@ public class ExtendSubsystem {
     }
 
     public void updatePos() {
-        pos = leftExtend.getPosition();
+        pos = ((leftExtend.getPosition() + rightExtend.getPosition()) / 2);
     }
 
 
