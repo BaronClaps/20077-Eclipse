@@ -59,6 +59,8 @@ public class Auto {
         buildPaths();
 
         transfer = new RunAction(this::transfer);
+
+        init();
     }
 
     public void init() {
@@ -66,7 +68,6 @@ public class Auto {
         //lift.init();
         //extend.init();
         // intake.init();
-        //Kuek likes men.  Kuek likes men kissing.
         arm.init();
     }
 
@@ -75,7 +76,7 @@ public class Auto {
     public void start() {
         claw.start();
        // lift.start();
-        //extend.start();
+        extend.start();
         //intake.start();
         arm.start();
     }

@@ -73,7 +73,7 @@ public class Teleop {
 
     public void init() {
         claw.init();
-        //lift.init();
+        lift.init();
         extend.init();
         //intake.init();
         arm.init();
@@ -92,6 +92,7 @@ public class Teleop {
         else
             speed = 0.75;
 
+
         lift.manual(gamepad2.right_trigger - gamepad2.left_trigger);
 
         if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper)
@@ -101,11 +102,16 @@ public class Teleop {
         else
             extend.manual(0);
 
-        if (currentGamepad2.b && !previousGamepad2.b)
+        if (currentGamepad2.a && !previousGamepad2.a)
             claw.switchGrabState();
 
+        if (currentGamepad2.y && !previousGamepad2.y)
+            transfer();
+
         if (currentGamepad2.x && !previousGamepad2.x)
-            claw.switchPivotState();
+            score();
+
+        //claw.switchPivotState();
 
         /*if (gamepad2.b) {
             intake.spin.setPower(intakeSpinInPwr);
@@ -118,8 +124,6 @@ public class Teleop {
             intake.spin.setPower(0);
         }*/
 
-        if (currentGamepad2.a && !previousGamepad2.a)
-            arm.switchState();
 
       //  if (currentGamepad2.x && !previousGamepad2.x)
       //      intake.switchPivotState();
@@ -150,7 +154,7 @@ telemetry.addData(" Extend Pos", extend.leftExtend.getPosition());
 
     public void start() {
         claw.start();
-        //lift.start();
+        lift.start();
         extend.start();
         //intake.start();
         arm.start();
@@ -182,6 +186,18 @@ telemetry.addData(" Extend Pos", extend.leftExtend.getPosition());
                 //intake.spinStop,
                 startDrive
         );
+    }
+
+    private void scoringPos() {
+        claw.score();
+        claw.close();
+        arm.score();
+    }
+
+    private void transferPos() {
+        claw.transfer();
+        claw.open();
+        arm.transfer();
     }
 
 }

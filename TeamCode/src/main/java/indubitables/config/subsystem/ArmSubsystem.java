@@ -23,8 +23,8 @@ public class ArmSubsystem {
         right = hardwareMap.get(Servo.class, "rightArm");
         this.state = state;
 
-        toTransfer = new RunAction(this::toTransfer);
-        toScoring = new RunAction(this::toScoring);
+        toTransfer = new RunAction(this::transfer);
+        toScoring = new RunAction(this::score);
     }
 
     // State //
@@ -50,11 +50,11 @@ public class ArmSubsystem {
 
     // Preset //
 
-    public void toTransfer() {
+    public void transfer() {
         setState(ArmState.TRANSFER);
     }
 
-    public void toScoring() {
+    public void score() {
         setState(ArmState.SCORING);
     }
 
