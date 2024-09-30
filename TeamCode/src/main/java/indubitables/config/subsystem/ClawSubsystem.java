@@ -16,13 +16,13 @@ public class ClawSubsystem {
     }
 
     public enum ClawPivotState {
-        TRANSFER, SCORE, MIDDLE
+        TRANSFER, SCORE, SPECIMEN
     }
 
     public Servo grab, pivot;
     public ClawGrabState grabState;
     public ClawPivotState pivotState;
-    public RunAction open, close, transfer, score, middle;
+    public RunAction open, close, transfer, score, specimen;
 
     public ClawSubsystem(HardwareMap hardwareMap, ClawGrabState clawGrabState, ClawPivotState clawPivotState) {
         grab = hardwareMap.get(Servo.class, "clawGrab");
@@ -34,19 +34,19 @@ public class ClawSubsystem {
         close = new RunAction(this::close);
         transfer = new RunAction(this::transfer);
         score = new RunAction(this::score);
-        middle = new RunAction(this::middle);
+        specimen = new RunAction(this::specimen);
     }
 
     public void setPivotState(ClawPivotState state) {
         if (state == ClawPivotState.TRANSFER) {
-            pivot.setPosition(RobotConstants.clawTransfer);
+            pivot.setPosition(clawTransfer);
             this.pivotState = ClawPivotState.TRANSFER;
         } else if (state == ClawPivotState.SCORE) {
-            pivot.setPosition(RobotConstants.clawScore);
+            pivot.setPosition(clawScore);
             this.pivotState = ClawPivotState.SCORE;
-        } else if (state == ClawPivotState.MIDDLE) {
-            pivot.setPosition(RobotConstants.clawMiddle);
-            this.pivotState = ClawPivotState.MIDDLE;
+        } else if (state == ClawPivotState.SPECIMEN) {
+            pivot.setPosition(clawSpecimen);
+            this.pivotState = ClawPivotState.SPECIMEN;
         }
     }
 
@@ -60,10 +60,10 @@ public class ClawSubsystem {
 
     public void setGrabState(ClawGrabState clawGrabState) {
         if (clawGrabState == ClawGrabState.CLOSED) {
-            grab.setPosition(RobotConstants.clawClose);
+            grab.setPosition(clawClose);
             this.grabState = ClawGrabState.CLOSED;
         } else if (clawGrabState == ClawGrabState.OPEN) {
-            grab.setPosition(RobotConstants.clawOpen);
+            grab.setPosition(clawOpen);
             this.grabState = ClawGrabState.OPEN;
         }
     }
@@ -92,8 +92,8 @@ public class ClawSubsystem {
         setPivotState(ClawPivotState.SCORE);
     }
 
-    public void middle() {
-        setPivotState(ClawPivotState.MIDDLE);
+    public void specimen() {
+        setPivotState(ClawPivotState.SPECIMEN);
     }
 
     public void init() {

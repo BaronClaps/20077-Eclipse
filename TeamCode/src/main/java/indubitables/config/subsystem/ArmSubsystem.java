@@ -1,17 +1,16 @@
 package indubitables.config.subsystem;
 
+import static indubitables.config.util.RobotConstants.*;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import indubitables.config.util.action.Actions;
 import indubitables.config.util.action.RunAction;
-import indubitables.config.util.RobotConstants;
 
 
 public class ArmSubsystem {
 
     public enum ArmState {
-        TRANSFER, SCORING
+        TRANSFER, SCORING, SPECIMEN
     }
 
     private Servo left, right;
@@ -30,13 +29,17 @@ public class ArmSubsystem {
     // State //
     public void setState(ArmState armState) {
         if (armState == ArmState.TRANSFER) {
-            left.setPosition(RobotConstants.armTransfer);
-            right.setPosition(RobotConstants.armTransfer);
+            left.setPosition(armTransfer);
+            right.setPosition(armTransfer);
             this.state = ArmState.TRANSFER;
         } else if (armState == ArmState.SCORING) {
-            left.setPosition(RobotConstants.armScoring);
-            right.setPosition(RobotConstants.armScoring);
+            left.setPosition(armScoring);
+            right.setPosition(armScoring);
             this.state = ArmState.SCORING;
+        } else if (armState == ArmState.SPECIMEN) {
+            left.setPosition(armSpecimen);
+            right.setPosition(armSpecimen);
+            this.state = ArmState.SPECIMEN;
         }
     }
 
@@ -56,6 +59,10 @@ public class ArmSubsystem {
 
     public void score() {
         setState(ArmState.SCORING);
+    }
+
+    public void specimen() {
+        setState(ArmState.SPECIMEN);
     }
 
     // Util //

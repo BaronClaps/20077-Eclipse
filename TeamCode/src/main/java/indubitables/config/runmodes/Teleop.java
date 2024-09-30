@@ -91,9 +91,16 @@ public class Teleop {
 
         lift.manual(gamepad2.right_trigger - gamepad2.left_trigger);
 
-        if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper)
+//        if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper)
+//            extend.manual(1);
+//        else if (currentGamepad2.left_bumper && !previousGamepad2.left_bumper)
+//            extend.manual(-1);
+//        else
+//            extend.manual(0);
+
+        if (gamepad2.right_bumper)
             extend.manual(1);
-        else if (currentGamepad2.left_bumper && !previousGamepad2.left_bumper)
+        else if (gamepad2.left_bumper)
             extend.manual(-1);
         else
             extend.manual(0);
@@ -106,6 +113,9 @@ public class Teleop {
 
         if (currentGamepad2.x && !previousGamepad2.x)
             scoringPos();
+
+        if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left)
+            specimenPos();
 
         //claw.switchPivotState();
 
@@ -194,6 +204,12 @@ telemetry.addData(" Extend Pos", extend.leftExtend.getPosition());
         claw.transfer();
         claw.open();
         arm.transfer();
+    }
+
+    private void specimenPos() {
+        claw.specimen();
+        claw.open();
+        arm.specimen();
     }
 
     private void initPos() {

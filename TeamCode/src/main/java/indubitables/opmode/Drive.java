@@ -1,6 +1,6 @@
 package indubitables.opmode;
 
-import static indubitables.config.util.FieldConstants.blueBucketStartPose;
+import static indubitables.config.util.FieldConstants.*;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -16,7 +16,7 @@ public class Drive extends OpMode {
 
     @Override
     public void init() {
-        teleop = new Teleop(hardwareMap, telemetry, new Follower(hardwareMap), blueBucketStartPose, false, gamepad1, gamepad2);
+        teleop = new Teleop(hardwareMap, telemetry, new Follower(hardwareMap), blueBucketParkPose, false, gamepad1, gamepad2);
         teleop.init();
     }
 
