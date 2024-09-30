@@ -32,5 +32,5 @@ public class RobotConstants {
     public static double extendZero = 0;
     public static double extendHalf = 0.05;
     public static double extendFull = 0.01;
-    public static double extendManualIncrements = 0.0025;
+    public static double extendManualIncrements = 0.05;
 }
