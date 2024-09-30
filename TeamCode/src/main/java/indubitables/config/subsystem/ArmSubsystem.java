@@ -66,11 +66,11 @@ public class ArmSubsystem {
 
     // Init + Start //
     public void init() {
-        toTransfer();
+        transfer();
     }
 
     public void start() {
-        toTransfer();
+        transfer();
     }
 
 }

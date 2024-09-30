@@ -73,7 +73,7 @@ public class Teleop {
 
     public void init() {
         claw.init();
-        lift.init();
+        //lift.in();
         extend.init();
         //intake.init();
         arm.init();
@@ -108,10 +108,10 @@ public class Teleop {
             claw.switchGrabState();
 
         if (currentGamepad2.y && !previousGamepad2.y)
-            transfer();
+            transferPos();
 
         if (currentGamepad2.x && !previousGamepad2.x)
-            score();
+            scoringPos();
 
         //claw.switchPivotState();
 
@@ -156,7 +156,7 @@ telemetry.addData(" Extend Pos", extend.leftExtend.getPosition());
 
     public void start() {
         claw.start();
-        lift.start();
+        //lift.start();
         extend.start();
         //intake.start();
         arm.start();

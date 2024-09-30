@@ -31,7 +31,7 @@ public class ExtendSubsystem {
         this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         leftExtend = hardwareMap.get(Servo.class, "leftExtend");
-        rightExtend = hardwareMap.get(Servo.class, "leftExtend");
+        rightExtend = hardwareMap.get(Servo.class, "rightExtend");
 
         toZero = new RunAction(this::toZero);
         toHalf = new RunAction(this::toHalf);
