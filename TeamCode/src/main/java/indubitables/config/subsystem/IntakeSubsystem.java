@@ -24,7 +24,7 @@ public class IntakeSubsystem {
         TRANSFER, GROUND
     }
 
-    public CRServo spin;
+    public CRServo leftSpin, rightSpin;
     private IntakeSpinState spinState;
 
     private Servo leftPivot, rightPivot;
@@ -33,9 +33,13 @@ public class IntakeSubsystem {
     public RunAction spinIn, spinOut, spinStop, pivotTransfer, pivotGround;
 
     public IntakeSubsystem(HardwareMap hardwareMap, IntakeSpinState spinState, IntakePivotState pivotState) {
-        spin = hardwareMap.get(CRServo.class, "intakeSpin");
+        leftSpin = hardwareMap.get(CRServo.class, "intakeLeftSpin");
+        rightSpin = hardwareMap.get(CRServo.class, "intakeRightSpin");
         leftPivot = hardwareMap.get(Servo.class, "intakeLeftPivot");
         rightPivot = hardwareMap.get(Servo.class, "intakeRightPivot");
+
+        rightPivot.setDirection(Servo.Direction.REVERSE);
+
         this.spinState = spinState;
         this.pivotState = pivotState;
 
@@ -64,17 +68,20 @@ public class IntakeSubsystem {
     }
 
     public void spinIn() {
-        spin.setPower(intakeSpinInPwr);
+        leftSpin.setPower(intakeSpinInPwr);
+        rightSpin.setPower(-intakeSpinInPwr);
         this.spinState = IntakeSpinState.IN;
     }
 
     public void spinOut() {
-        spin.setPower(intakeSpinOutPwr);
+        leftSpin.setPower(intakeSpinOutPwr);
+        rightSpin.setPower(-intakeSpinOutPwr);
         this.spinState = IntakeSpinState.OUT;
     }
 
     public void spinStop() {
-        spin.setPower(intakeSpinStopPwr);
+        leftSpin.setPower(intakeSpinStopPwr);
+        rightSpin.setPower(intakeSpinStopPwr);
         this.spinState = IntakeSpinState.STOP;
     }
 
@@ -94,13 +101,9 @@ public class IntakeSubsystem {
 
     public void switchPivotState() {
         if (pivotState == IntakePivotState.TRANSFER) {
-            leftPivot.setPosition(intakePivotGround);
-            rightPivot.setPosition(intakePivotGround);
-            this.pivotState = IntakePivotState.GROUND;
+            pivotGround();
         } else if (pivotState == IntakePivotState.GROUND) {
-            leftPivot.setPosition(intakePivotTransfer);
-            rightPivot.setPosition(intakePivotTransfer);
-            this.pivotState = IntakePivotState.TRANSFER;
+            pivotTransfer();
         }
     }
 
@@ -121,6 +124,7 @@ public class IntakeSubsystem {
         pivotTransfer();
         spinStop();
     }
+
     public void start() {
         pivotTransfer();
         spinStop();

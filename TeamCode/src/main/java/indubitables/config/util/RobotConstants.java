@@ -8,16 +8,16 @@ public class RobotConstants {
     public static double clawOpen = 0.25;
     public static double clawSpecimen = 0.5;
     public static double clawTransfer = 0.15;
-    public static double clawScore = 0.5;
+    public static double clawScore = 0.3;
     
     public static double intakeSpinInPwr = 1;
     public static double intakeSpinOutPwr = -0.25;
     public static double intakeSpinStopPwr = 0;
     
-    public static double intakePivotTransfer= 0.965;
-    public static double intakePivotGround = 0.4;
+    public static double intakePivotTransfer= 0;
+    public static double intakePivotGround = 0.1;
     
-    public static double armTransfer= 0.5;
+    public static double armTransfer= 0.46;
     public static double armScoring = 0.95;
     public static double armSpecimen = 1;
     
