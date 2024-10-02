@@ -33,8 +33,8 @@ public class Teleop {
 
     public RunAction stopDrive, startDrive;
 
-    private Follower follower;
-    private Pose startPose;
+    //private Follower follower;
+ //   private Pose startPose;
 
     private Telemetry telemetry;
 
@@ -72,8 +72,8 @@ public class Teleop {
         leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        this.follower = follower;
-        this.startPose = startPose;
+      //  this.follower = follower;
+      //  this.startPose = startPose;
 
         this.fieldCentric = fieldCentric;
         this.telemetry = telemetry;
