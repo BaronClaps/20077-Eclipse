@@ -1,21 +1,20 @@
 package indubitables.config.subsystem;
 
+import static indubitables.config.util.RobotConstants.*;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import indubitables.config.util.action.Actions;
 import indubitables.config.util.action.RunAction;
-import indubitables.config.util.RobotConstants;
 
 
 public class ArmSubsystem {
 
     public enum ArmState {
-        TRANSFER, SCORING
+        TRANSFER, SCORING, SPECIMEN
     }
 
     private Servo left, right;
-    private ArmState state;
+    public ArmState state;
     public RunAction toTransfer, toScoring;
 
     public ArmSubsystem(HardwareMap hardwareMap, ArmState state) {
@@ -23,20 +22,24 @@ public class ArmSubsystem {
         right = hardwareMap.get(Servo.class, "rightArm");
         this.state = state;
 
-        toTransfer = new RunAction(this::toTransfer);
-        toScoring = new RunAction(this::toScoring);
+        toTransfer = new RunAction(this::transfer);
+        toScoring = new RunAction(this::score);
     }
 
     // State //
     public void setState(ArmState armState) {
         if (armState == ArmState.TRANSFER) {
-            left.setPosition(RobotConstants.armTransfer);
-            right.setPosition(RobotConstants.armTransfer);
+            left.setPosition(armTransfer);
+            right.setPosition(armTransfer);
             this.state = ArmState.TRANSFER;
         } else if (armState == ArmState.SCORING) {
-            left.setPosition(RobotConstants.armScoring);
-            right.setPosition(RobotConstants.armScoring);
+            left.setPosition(armScoring);
+            right.setPosition(armScoring);
             this.state = ArmState.SCORING;
+        } else if (armState == ArmState.SPECIMEN) {
+            left.setPosition(armSpecimen);
+            right.setPosition(armSpecimen);
+            this.state = ArmState.SPECIMEN;
         }
     }
 
@@ -50,12 +53,16 @@ public class ArmSubsystem {
 
     // Preset //
 
-    public void toTransfer() {
+    public void transfer() {
         setState(ArmState.TRANSFER);
     }
 
-    public void toScoring() {
+    public void score() {
         setState(ArmState.SCORING);
+    }
+
+    public void specimen() {
+        setState(ArmState.SPECIMEN);
     }
 
     // Util //
@@ -66,11 +73,11 @@ public class ArmSubsystem {
 
     // Init + Start //
     public void init() {
-        toTransfer();
+        transfer();
     }
 
     public void start() {
-        toTransfer();
+        transfer();
     }
 
 }

@@ -3,16 +3,16 @@ package indubitables.config.runmodes;
 import indubitables.config.subsystem.ArmSubsystem;
 import indubitables.config.subsystem.ClawSubsystem;
 import indubitables.config.subsystem.ExtendSubsystem;
+import indubitables.config.subsystem.IntakeSubsystem;
 import indubitables.config.subsystem.LiftSubsystem;
 import indubitables.config.pedroPathing.follower.Follower;
 import indubitables.config.pedroPathing.localization.Pose;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import indubitables.config.util.action.Action;
-import indubitables.config.util.action.Actions;
 import indubitables.config.util.action.ParallelAction;
 import indubitables.config.util.action.RunAction;
 import indubitables.config.util.action.SequentialAction;
@@ -25,40 +25,55 @@ public class Teleop {
     private ClawSubsystem.ClawPivotState clawPivotState;
     private LiftSubsystem lift;
     private ExtendSubsystem extend;
-   //private IntakeSubsystem intake;
-    //private IntakeSubsystem.IntakeSpinState intakeSpinState;
-    //private IntakeSubsystem.IntakePivotState intakePivotState;
+    private IntakeSubsystem intake;
+    private IntakeSubsystem.IntakeSpinState intakeSpinState;
+    private IntakeSubsystem.IntakePivotState intakePivotState;
     private ArmSubsystem arm;
     private ArmSubsystem.ArmState armState;
 
     public RunAction stopDrive, startDrive;
 
-    //private Follower follower;
-    //private Pose startPose;
+    private Follower follower;
+    private Pose startPose;
 
     private Telemetry telemetry;
 
-    private Gamepad gamepad1;
-    private Gamepad gamepad2;
+    private Gamepad gamepad1, gamepad2;
     private Gamepad currentGamepad1 = new Gamepad();
     private Gamepad currentGamepad2 = new Gamepad();
     private Gamepad previousGamepad1 = new Gamepad();
     private Gamepad previousGamepad2 = new Gamepad();
 
+    private DcMotor leftFront, rightFront, leftRear, rightRear;
+
     public double speed = 0.75;
-    private boolean fieldCentric = true;
+
+    private boolean fieldCentric;
 
 
     public Teleop(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, Pose startPose,  boolean fieldCentric, Gamepad gamepad1, Gamepad gamepad2) {
         claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
         lift = new LiftSubsystem(hardwareMap, telemetry);
         extend = new ExtendSubsystem(hardwareMap, telemetry);
-        //intake = new IntakeSubsystem(hardwareMap, intakeSpinState, intakePivotState);
+        intake = new IntakeSubsystem(hardwareMap, intakeSpinState, intakePivotState);
         arm = new ArmSubsystem(hardwareMap, armState);
 
 
-        //this.follower = follower;
-        //this.startPose = startPose;
+        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
+        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+        leftRear = hardwareMap.get(DcMotor.class, "leftRear");
+        rightRear = hardwareMap.get(DcMotor.class, "rightRear");
+
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        leftRear.setDirection(DcMotor.Direction.REVERSE);
+
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        this.follower = follower;
+        this.startPose = startPose;
 
         this.fieldCentric = fieldCentric;
         this.telemetry = telemetry;
@@ -71,10 +86,11 @@ public class Teleop {
 
     public void init() {
         claw.init();
-        //lift.init();
         extend.init();
-        //intake.init();
+        intake.init();
         arm.init();
+
+        initPos();
     }
 
     public void update() {
@@ -92,41 +108,70 @@ public class Teleop {
 
         lift.manual(gamepad2.right_trigger - gamepad2.left_trigger);
 
-        if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper)
+        double max;
+        double axial = -gamepad1.left_stick_y;  //Pushing stick forward gives negative value
+        double lateral = gamepad1.left_stick_x;
+        double yaw = gamepad1.right_stick_x;
+        double leftFrontPower = axial + lateral + yaw;
+        double rightFrontPower = axial - lateral - yaw;
+        double leftBackPower = axial - lateral + yaw;
+        double rightBackPower = axial + lateral - yaw;
+        // Normalize the values so no wheel power exceeds 100%
+        max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+        max = Math.max(max, Math.abs(leftBackPower));
+        max = Math.max(max, Math.abs(rightBackPower));
+
+        if (max > 1.0) {
+            leftFrontPower /= max;
+            rightFrontPower /= max;
+            leftBackPower /= max;
+            rightBackPower /= max;
+        }
+
+        double lfspeed = leftFrontPower * speed;
+        double rfspeed = rightFrontPower * speed;
+        double lbspeed = leftBackPower * speed;
+        double rbspeed = rightBackPower * speed;
+
+        leftFront.setPower(lfspeed);
+        rightFront.setPower(rfspeed);
+        leftRear.setPower(lbspeed);
+        rightRear.setPower(rbspeed);
+
+        if (gamepad2.b)
+            intake.setSpinState(IntakeSubsystem.IntakeSpinState.IN, false);
+        else if (gamepad2.dpad_down)
+            intake.setSpinState(IntakeSubsystem.IntakeSpinState.OUT, false);
+        else
+            intake.setSpinState(IntakeSubsystem.IntakeSpinState.STOP, false);
+
+        if(gamepad2.dpad_right)
+            intake.switchPivotState();
+
+        if (gamepad2.right_bumper)
             extend.manual(1);
-        else if (currentGamepad2.left_bumper && !previousGamepad2.left_bumper)
+        else if (gamepad2.left_bumper)
             extend.manual(-1);
         else
             extend.manual(0);
 
-        if (currentGamepad2.b && !previousGamepad2.b)
+        if (currentGamepad2.a && !previousGamepad2.a)
             claw.switchGrabState();
 
+        if (currentGamepad2.y && !previousGamepad2.y)
+            transferPos();
+
         if (currentGamepad2.x && !previousGamepad2.x)
-            claw.switchPivotState();
+            scoringPos();
 
-        /*if (gamepad2.b) {
-            intake.spin.setPower(intakeSpinInPwr);
-            intake.setSpinState(IntakeSubsystem.IntakeSpinState.IN, true);
-        } else if (gamepad2.dpad_down) {
-            intake.spin.setPower(intakeSpinOutPwr);
-            intake.setSpinState(IntakeSubsystem.IntakeSpinState.OUT, true);
-        } else {
-            intake.setSpinState(IntakeSubsystem.IntakeSpinState.STOP, true);
-            intake.spin.setPower(0);
-        }*/
+        if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left)
+            specimenPos();
 
-        if (currentGamepad2.a && !previousGamepad2.a)
-            arm.switchState();
+        if (currentGamepad2.x && !previousGamepad2.x)
+            intake.switchPivotState();
 
-      //  if (currentGamepad2.x && !previousGamepad2.x)
-      //      intake.switchPivotState();
-
-     //   if (currentGamepad1.b && !previousGamepad1.b)
-      //      intake.setPivotState(IntakeSubsystem.IntakePivotState.TRANSFER);
-
-        //if(currentGamepad2.y && !previousGamepad2.y)
-       //     Actions.runBlocking(transfer());
+        if (currentGamepad1.b && !previousGamepad1.b)
+            intake.setPivotState(IntakeSubsystem.IntakePivotState.TRANSFER);
 
         //follower.setTeleOpMovementVectors(-gamepad1.left_stick_y * speed, -gamepad1.left_stick_x * speed, -gamepad1.right_stick_x * speed, !fieldCentric);
         //follower.update();
@@ -137,11 +182,12 @@ public class Teleop {
 
         telemetry.addData("Left Lift Pos", lift.leftLift.getCurrentPosition());
         telemetry.addData("Right Lift Pos", lift.rightLift.getCurrentPosition());
-telemetry.addData(" Extend Pos", extend.getPos());
-        telemetry.addData("Claw State", clawGrabState);
+telemetry.addData(" Extend Pos", extend.leftExtend.getPosition());
+        telemetry.addData("Claw Grab State", claw.grabState);
+        telemetry.addData("Claw Pivot State", claw.pivotState);
      //   telemetry.addData("Intake Spin State", intakeSpinState);
      //   telemetry.addData("Intake Pivot State", intakePivotState);
-        telemetry.addData("arm State", armState);
+        telemetry.addData("arm State", arm.state);
         telemetry.update();
     }
 
@@ -163,7 +209,7 @@ telemetry.addData(" Extend Pos", extend.getPos());
         //follower.breakFollowing();
     }
 
-    public Action transfer() {
+    /*public Action transfer() {
         return new SequentialAction(
                 stopDrive,
                 //intake.spinStop,
@@ -179,6 +225,28 @@ telemetry.addData(" Extend Pos", extend.getPos());
                 //intake.spinStop,
                 startDrive
         );
+    }*/
+
+    private void scoringPos() {
+        claw.score();
+        claw.close();
+        arm.score();
+    }
+
+    private void transferPos() {
+        claw.transfer();
+        claw.open();
+        arm.transfer();
+    }
+
+    private void specimenPos() {
+        claw.specimen();
+        claw.open();
+        arm.specimen();
+    }
+
+    private void initPos() {
+        transferPos();
     }
 
 }

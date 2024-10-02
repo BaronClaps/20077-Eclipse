@@ -1,22 +1,11 @@
 package indubitables.config.subsystem;
 
-import static indubitables.config.util.RobotConstants.extendFull;
-import static indubitables.config.util.RobotConstants.extendHalf;
-import static indubitables.config.util.RobotConstants.extendManualIncrements;
-import static indubitables.config.util.RobotConstants.extendZero;
-
+import static indubitables.config.util.RobotConstants.*;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-import indubitables.config.util.RobotConstants;
-import indubitables.config.util.action.Actions;
 import indubitables.config.util.action.RunAction;
 
 public class ExtendSubsystem {
@@ -31,7 +20,7 @@ public class ExtendSubsystem {
         this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         leftExtend = hardwareMap.get(Servo.class, "leftExtend");
-        rightExtend = hardwareMap.get(Servo.class, "leftExtend");
+        rightExtend = hardwareMap.get(Servo.class, "rightExtend");
 
         toZero = new RunAction(this::toZero);
         toHalf = new RunAction(this::toHalf);
@@ -39,10 +28,10 @@ public class ExtendSubsystem {
     }
 
     public void manual(int direction) {
-        pos = leftExtend.getPosition();
-        pos += (extendManualIncrements * direction);
-        leftExtend.setPosition(pos);
-        rightExtend.setPosition(pos);
+        double rightPos = rightExtend.getPosition();
+        rightPos += (extendManualIncrements * direction);
+        leftExtend.setPosition(rightPos);
+        rightExtend.setPosition(rightPos);
     }
 
     public void setTarget(double b) {
@@ -70,7 +59,7 @@ public class ExtendSubsystem {
     }
 
     public void updatePos() {
-        pos = leftExtend.getPosition();
+        pos = ((leftExtend.getPosition() + rightExtend.getPosition()) / 2);
     }
 
 
