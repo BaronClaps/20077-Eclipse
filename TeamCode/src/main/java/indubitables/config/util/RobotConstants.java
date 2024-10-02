@@ -16,6 +16,7 @@ public class RobotConstants {
     
     public static double intakePivotTransfer= 0.035;
     public static double intakePivotGround = 0;
+    public static double intakePivotSubmersible = 0.05;
     
     public static double armTransfer= 0.46;
     public static double armScoring = 0.95;
@@ -31,7 +32,7 @@ public class RobotConstants {
     public static int liftToHighBucket = 0;*/
 
     public static double extendZero = 0;
-    public static double extendHalf = 0.05;
-    public static double extendFull = 0.01;
-    public static double extendManualIncrements = 0.005; //0.05
+    public static double extendFull = 0.175;
+    public static double extendHalf = extendFull/2;
+    public static double extendManualIncrements = 0.0025; //0.05
 }

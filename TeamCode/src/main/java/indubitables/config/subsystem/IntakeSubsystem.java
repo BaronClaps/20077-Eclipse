@@ -1,6 +1,7 @@
 package indubitables.config.subsystem;
 
 import static indubitables.config.util.RobotConstants.intakePivotGround;
+import static indubitables.config.util.RobotConstants.intakePivotSubmersible;
 import static indubitables.config.util.RobotConstants.intakePivotTransfer;
 import static indubitables.config.util.RobotConstants.intakeSpinInPwr;
 import static indubitables.config.util.RobotConstants.intakeSpinOutPwr;
@@ -21,7 +22,7 @@ public class IntakeSubsystem {
     }
 
     public enum IntakePivotState {
-        TRANSFER, GROUND
+        TRANSFER, GROUND, SUBMERSIBLE
     }
 
     public CRServo leftSpin, rightSpin;
@@ -94,6 +95,10 @@ public class IntakeSubsystem {
             leftPivot.setPosition(intakePivotGround);
             rightPivot.setPosition(intakePivotGround);
             this.pivotState = IntakePivotState.GROUND;
+        } else if (pivotState == IntakePivotState.SUBMERSIBLE) {
+            leftPivot.setPosition(intakePivotSubmersible);
+            rightPivot.setPosition(intakePivotSubmersible);
+            this.pivotState = IntakePivotState.SUBMERSIBLE;
         }
     }
 

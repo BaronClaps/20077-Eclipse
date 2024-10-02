@@ -5,6 +5,8 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import indubitables.config.util.action.RunAction;
 
@@ -29,9 +31,17 @@ public class ExtendSubsystem {
 
     public void manual(int direction) {
         double rightPos = rightExtend.getPosition();
-        rightPos += (extendManualIncrements * direction);
+
+        if (rightPos <= extendFull || direction < 0) {
+            rightPos += (extendManualIncrements * direction);
+        } else {
+            rightPos = rightExtend.getPosition();
+        }
+
         leftExtend.setPosition(rightPos);
         rightExtend.setPosition(rightPos);
+
+
     }
 
     public void setTarget(double b) {
