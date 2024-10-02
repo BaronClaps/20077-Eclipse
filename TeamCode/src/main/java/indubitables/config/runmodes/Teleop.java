@@ -145,7 +145,7 @@ public class Teleop {
         else
             intake.setSpinState(IntakeSubsystem.IntakeSpinState.STOP, false);
 
-        if(gamepad2.dpad_right)
+        if(currentGamepad2.dpad_right && !previousGamepad2.dpad_right)
             intake.switchPivotState();
 
         if (gamepad2.right_bumper)
@@ -195,7 +195,7 @@ telemetry.addData(" Extend Pos", extend.leftExtend.getPosition());
         claw.start();
         //lift.start();
         extend.start();
-        //intake.start();
+        intake.start();
         arm.start();
         //follower.setPose(startPose);
         //follower.startTeleopDrive();

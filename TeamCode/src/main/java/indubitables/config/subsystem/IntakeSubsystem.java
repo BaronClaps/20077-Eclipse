@@ -38,8 +38,6 @@ public class IntakeSubsystem {
         leftPivot = hardwareMap.get(Servo.class, "intakeLeftPivot");
         rightPivot = hardwareMap.get(Servo.class, "intakeRightPivot");
 
-        rightPivot.setDirection(Servo.Direction.REVERSE);
-
         this.spinState = spinState;
         this.pivotState = pivotState;
 
