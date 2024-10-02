@@ -4,6 +4,7 @@ package indubitables.config.pedroPathing.pathGeneration;
 import indubitables.config.pedroPathing.tuning.FollowerConstants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * This is the BezierCurve class. This class handles the creation of Bezier curves, which are used

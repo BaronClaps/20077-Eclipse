@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import indubitables.config.pedroPathing.localization.Pose;
 import indubitables.config.pedroPathing.follower.Follower;
 
 /**
@@ -48,9 +47,6 @@ public class TeleOpEnhancements extends OpMode {
         rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        follower.setStartingPose(new Pose(0,0,0));
-        follower.setPose(new Pose(0,0,0));
-
         follower.startTeleopDrive();
     }
 
@@ -60,7 +56,7 @@ public class TeleOpEnhancements extends OpMode {
      */
     @Override
     public void loop() {
-        follower.setTeleOpMovementVectors(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, false);
+        follower.setTeleOpMovementVectors(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x);
         follower.update();
     }
 }

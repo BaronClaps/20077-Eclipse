@@ -1,6 +1,9 @@
 package indubitables.config.pedroPathing.util;
 
+import indubitables.config.pedroPathing.follower.Follower;
 import indubitables.config.pedroPathing.localization.PoseUpdater;
+
+import java.util.ArrayList;
 
 /**
  * This is the DashboardPoseTracker class. This tracks the pose history of the robot through a

@@ -26,7 +26,7 @@ import indubitables.config.pedroPathing.util.Drawing;
  */
 @Config
 @Autonomous(name = "Forward Localizer Tuner", group = "Autonomous Pathing Tuning")
-public class FowardTuner extends OpMode {
+public class ForwardTuner extends OpMode {
     private PoseUpdater poseUpdater;
     private DashboardPoseTracker dashboardPoseTracker;
 

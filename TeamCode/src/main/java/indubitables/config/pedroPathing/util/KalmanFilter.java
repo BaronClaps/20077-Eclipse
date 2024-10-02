@@ -1,5 +1,7 @@
 package indubitables.config.pedroPathing.util;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**

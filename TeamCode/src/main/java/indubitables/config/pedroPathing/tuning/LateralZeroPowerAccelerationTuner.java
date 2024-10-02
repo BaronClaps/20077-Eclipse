@@ -1,5 +1,10 @@
 package indubitables.config.pedroPathing.tuning;
 
+import static indubitables.config.pedroPathing.tuning.FollowerConstants.leftFrontMotorName;
+import static indubitables.config.pedroPathing.tuning.FollowerConstants.leftRearMotorName;
+import static indubitables.config.pedroPathing.tuning.FollowerConstants.rightFrontMotorName;
+import static indubitables.config.pedroPathing.tuning.FollowerConstants.rightRearMotorName;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -65,10 +70,10 @@ public class LateralZeroPowerAccelerationTuner extends OpMode {
     public void init() {
         poseUpdater = new PoseUpdater(hardwareMap);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, FollowerConstants.leftFrontMotorName);
-        leftRear = hardwareMap.get(DcMotorEx.class, FollowerConstants.leftRearMotorName);
-        rightRear = hardwareMap.get(DcMotorEx.class, FollowerConstants.rightRearMotorName);
-        rightFront = hardwareMap.get(DcMotorEx.class, FollowerConstants.rightFrontMotorName);
+        leftFront = hardwareMap.get(DcMotorEx.class, leftFrontMotorName);
+        leftRear = hardwareMap.get(DcMotorEx.class, leftRearMotorName);
+        rightRear = hardwareMap.get(DcMotorEx.class, rightRearMotorName);
+        rightFront = hardwareMap.get(DcMotorEx.class, rightFrontMotorName);
 
         // TODO: Make sure that this is the direction your motors need to be reversed in.
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);

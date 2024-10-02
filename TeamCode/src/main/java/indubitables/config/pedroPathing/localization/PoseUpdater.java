@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import indubitables.config.pedroPathing.localization.localizers.ThreeWheelIMULocalizer;
+import indubitables.config.pedroPathing.localization.localizers.ThreeWheelLocalizer;
+import indubitables.config.pedroPathing.localization.localizers.TwoWheelLocalizer;
 import indubitables.config.pedroPathing.pathGeneration.MathFunctions;
 import indubitables.config.pedroPathing.pathGeneration.Vector;
 
@@ -67,7 +69,7 @@ public class PoseUpdater {
      */
     public PoseUpdater(HardwareMap hardwareMap) {
         // TODO: replace the second argument with your preferred localizer
-        this(hardwareMap, new ThreeWheelIMULocalizer(hardwareMap));
+        this(hardwareMap, new ThreeWheelLocalizer(hardwareMap));
     }
 
     /**
@@ -335,5 +337,12 @@ public class PoseUpdater {
      */
     public Localizer getLocalizer() {
         return localizer;
+    }
+
+    /**
+     *
+     */
+    public void resetIMU() {
+        localizer.resetIMU();
     }
 }

@@ -1,5 +1,10 @@
 package indubitables.config.pedroPathing.localization.localizers;
 
+import static indubitables.config.pedroPathing.tuning.FollowerConstants.leftFrontMotorName;
+import static indubitables.config.pedroPathing.tuning.FollowerConstants.leftRearMotorName;
+import static indubitables.config.pedroPathing.tuning.FollowerConstants.rightFrontMotorName;
+import static indubitables.config.pedroPathing.tuning.FollowerConstants.rightRearMotorName;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -10,7 +15,6 @@ import indubitables.config.pedroPathing.localization.Matrix;
 import indubitables.config.pedroPathing.localization.Pose;
 import indubitables.config.pedroPathing.pathGeneration.MathFunctions;
 import indubitables.config.pedroPathing.pathGeneration.Vector;
-import indubitables.config.pedroPathing.tuning.FollowerConstants;
 import indubitables.config.pedroPathing.util.NanoTimer;
 
 /**
@@ -60,10 +64,10 @@ public class DriveEncoderLocalizer extends Localizer {
     public DriveEncoderLocalizer(HardwareMap map, Pose setStartPose) {
         hardwareMap = map;
 
-        leftFront = new Encoder(hardwareMap.get(DcMotorEx.class, FollowerConstants.leftFrontMotorName));
-        leftRear = new Encoder(hardwareMap.get(DcMotorEx.class, FollowerConstants.leftRearMotorName));
-        rightRear = new Encoder(hardwareMap.get(DcMotorEx.class, FollowerConstants.rightRearMotorName));
-        rightFront = new Encoder(hardwareMap.get(DcMotorEx.class, FollowerConstants.rightFrontMotorName));
+        leftFront = new Encoder(hardwareMap.get(DcMotorEx.class, leftFrontMotorName));
+        leftRear = new Encoder(hardwareMap.get(DcMotorEx.class, leftRearMotorName));
+        rightRear = new Encoder(hardwareMap.get(DcMotorEx.class, rightRearMotorName));
+        rightFront = new Encoder(hardwareMap.get(DcMotorEx.class, rightFrontMotorName));
 
         // TODO: reverse any encoders necessary
         leftFront.setDirection(Encoder.REVERSE);
@@ -258,5 +262,11 @@ public class DriveEncoderLocalizer extends Localizer {
      */
     public double getTurningMultiplier() {
         return TURN_TICKS_TO_RADIANS;
+    }
+
+    /**
+     * This does nothing since this localizer does not use the IMU.
+     */
+    public void resetIMU() {
     }
 }
