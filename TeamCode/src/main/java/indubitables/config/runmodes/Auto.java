@@ -58,7 +58,7 @@ public class Auto {
         createPoses();
         buildPaths();
 
-        transfer = new RunAction(this::transfer);
+        //transfer = new RunAction(this::transfer);
 
         init();
     }

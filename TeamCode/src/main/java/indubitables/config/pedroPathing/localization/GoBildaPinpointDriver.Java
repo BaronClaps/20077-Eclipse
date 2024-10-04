@@ -1,4 +1,3 @@
-
 /*   MIT License
  *   Copyright (c) [2024] [Base 10 Assets, LLC]
  *
@@ -21,7 +20,7 @@
  *   SOFTWARE.
  */
 
-package indubitables.config.pedroPathing.localization.pinpoint;
+package indubitables.config.pedroPathing.localization;
 
 import static com.qualcomm.robotcore.util.TypeConversion.byteArrayToInt;
 
@@ -511,3 +510,7 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
 
 
 }
+
+
+
+
