@@ -145,7 +145,7 @@ public class Teleop {
         else
             intake.setSpinState(IntakeSubsystem.IntakeSpinState.STOP, false);
 
-        if(currentGamepad2.dpad_right && !previousGamepad2.dpad_right)
+        if(currentGamepad1.a && !previousGamepad1.a)
             intake.switchPivotState();
 
         if (gamepad2.right_bumper)
@@ -167,11 +167,11 @@ public class Teleop {
         if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left)
             specimenPos();
 
+        if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right)
+            chamberPos();
+
         if (currentGamepad1.b && !previousGamepad1.b)
             intake.setPivotState(IntakeSubsystem.IntakePivotState.TRANSFER);
-
-        if (currentGamepad1.y && !previousGamepad1.y)
-            intake.setPivotState(IntakeSubsystem.IntakePivotState.SUBMERSIBLE);
 
         //follower.setTeleOpMovementVectors(-gamepad1.left_stick_y * speed, -gamepad1.left_stick_x * speed, -gamepad1.right_stick_x * speed, !fieldCentric);
         //follower.update();
@@ -243,6 +243,12 @@ telemetry.addData(" Extend Pos", extend.leftExtend.getPosition());
         claw.specimen();
         claw.open();
         arm.specimen();
+    }
+
+    private void chamberPos() {
+        claw.chamber();
+        claw.close();
+        arm.chamber();
     }
 
     private void initPos() {

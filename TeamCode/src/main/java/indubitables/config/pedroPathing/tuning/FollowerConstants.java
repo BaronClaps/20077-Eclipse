@@ -30,8 +30,8 @@ public class FollowerConstants {
 
     // This section is for setting the actual drive vector for the front left wheel, if the robot
     // is facing a heading of 0 radians with the wheel centered at (0,0)
-    private static double xMovement = 81.34056;
-    private static double yMovement = 65.43028;
+    private static double xMovement = 66.7735;
+    private static double yMovement = 54.942;
     private static double[] convertToPolar = Point.cartesianToPolar(xMovement, -yMovement);
     public static Vector frontLeftVector = MathFunctions.normalizeVector(new Vector(convertToPolar[0],convertToPolar[1]));
 
@@ -83,7 +83,7 @@ public class FollowerConstants {
 
 
     // Mass of robot in kilograms
-    public static double mass = 10.65942;
+    public static double mass = 10.5;
 
     // Centripetal force to power scaling
     public static double centripetalScaling = 0.0005;
@@ -91,11 +91,11 @@ public class FollowerConstants {
 
     // Acceleration of the drivetrain when power is cut in inches/second^2 (should be negative)
     // if not negative, then the robot thinks that its going to go faster under 0 power
-    public static double forwardZeroPowerAcceleration = -34.62719;
+    public static double forwardZeroPowerAcceleration = -65.6023;
 
     // Acceleration of the drivetrain when power is cut in inches/second^2 (should be negative)
     // if not negative, then the robot thinks that its going to go faster under 0 power
-    public static double lateralZeroPowerAcceleration = -78.15554;
+    public static double lateralZeroPowerAcceleration = -333.3787;
 
     // A multiplier for the zero power acceleration to change the speed the robot decelerates at
     // the end of paths.
@@ -154,9 +154,9 @@ public class FollowerConstants {
 
     // These activate / deactivate the secondary PIDs. These take over at errors under a set limit for
     // the translational, heading, and drive PIDs.
-    public static boolean useSecondaryTranslationalPID = false;
-    public static boolean useSecondaryHeadingPID = false;
-    public static boolean useSecondaryDrivePID = false;
+    public static boolean useSecondaryTranslationalPID = true;
+    public static boolean useSecondaryHeadingPID = true;
+    public static boolean useSecondaryDrivePID = true;
 
 
     // the limit at which the translational PIDF switches between the main and secondary translational PIDFs,

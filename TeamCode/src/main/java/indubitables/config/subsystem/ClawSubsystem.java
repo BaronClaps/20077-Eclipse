@@ -16,7 +16,7 @@ public class ClawSubsystem {
     }
 
     public enum ClawPivotState {
-        TRANSFER, SCORE, SPECIMEN
+        TRANSFER, SCORE, SPECIMEN, CHAMBER
     }
 
     public Servo grab, pivot;
@@ -47,6 +47,9 @@ public class ClawSubsystem {
         } else if (state == ClawPivotState.SPECIMEN) {
             pivot.setPosition(clawSpecimen);
             this.pivotState = ClawPivotState.SPECIMEN;
+        } else if (state == ClawPivotState.CHAMBER) {
+            pivot.setPosition(clawChamber);
+            this.pivotState = ClawPivotState.CHAMBER;
         }
     }
 
@@ -94,6 +97,10 @@ public class ClawSubsystem {
 
     public void specimen() {
         setPivotState(ClawPivotState.SPECIMEN);
+    }
+
+    public void chamber() {
+        setPivotState(ClawPivotState.CHAMBER);
     }
 
     public void init() {
