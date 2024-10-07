@@ -170,6 +170,9 @@ public class Teleop {
         if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right)
             chamberPos();
 
+        if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up)
+            claw.specimenScore();
+
         if (currentGamepad1.b && !previousGamepad1.b)
             intake.setPivotState(IntakeSubsystem.IntakePivotState.TRANSFER);
 
