@@ -8,6 +8,9 @@ import indubitables.config.util.RobotConstants;
 import indubitables.config.util.action.Actions;
 import indubitables.config.util.action.RunAction;
 
+/** @author Baron Henderson
+ * @version 1.0 | 7/1/24
+ */
 
 public class ClawSubsystem {
 
