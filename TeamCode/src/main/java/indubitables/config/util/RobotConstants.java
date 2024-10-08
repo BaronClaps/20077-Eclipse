@@ -7,7 +7,7 @@ public class RobotConstants {
     public static double clawClose = 0.0675;
     public static double clawOpen = 0.25;
     public static double clawSpecimen = 0.19;
-    public static double clawTransfer = 0.25;
+    public static double clawTransfer = 0.175;
     public static double clawScore = 0.4;
     public static double clawChamber = 0.5;
     public static double clawSpecimenScore = 0.4;
@@ -20,7 +20,7 @@ public class RobotConstants {
     public static double intakePivotGround = 0;
     public static double intakePivotSubmersible = 0.05;
     
-    public static double armTransfer= 0;
+    public static double armTransfer= 0.05;
     public static double armScoring = 0.5;
     public static double armSpecimen = 0.825;
     public static double armChamber = 0.6;
