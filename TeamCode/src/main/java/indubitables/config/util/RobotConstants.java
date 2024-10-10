@@ -16,11 +16,11 @@ public class RobotConstants {
     public static double intakeSpinOutPwr = -0.25;
     public static double intakeSpinStopPwr = 0;
     
-    public static double intakePivotTransfer= 0.04;
+    public static double intakePivotTransfer= 0.05;
     public static double intakePivotGround = 0;
     public static double intakePivotSubmersible = 0.05;
     
-    public static double armTransfer= 0.05;
+    public static double armTransfer= 0.0475;
     public static double armScoring = 0.5;
     public static double armSpecimen = 0.825;
     public static double armChamber = 0.6;

@@ -49,6 +49,7 @@ public class PinpointLocalizer extends Localizer {
 
         resetPinpoint();
     }
+
     @Override
     public Pose getPose() {
         Pose2D pose = odo.getPosition();
