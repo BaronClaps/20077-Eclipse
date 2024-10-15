@@ -89,7 +89,6 @@ public class Teleop {
         extend.init();
         intake.init();
         arm.init();
-
         initPos();
     }
 

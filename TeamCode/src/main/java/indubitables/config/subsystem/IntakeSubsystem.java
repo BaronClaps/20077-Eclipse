@@ -25,7 +25,7 @@ public class IntakeSubsystem {
         TRANSFER, GROUND, SUBMERSIBLE
     }
 
-    public CRServo leftSpin, rightSpin;
+    public CRServo leftSpin, rightSpin, backSpin;
     private IntakeSpinState spinState;
 
     private Servo leftPivot, rightPivot;
@@ -36,6 +36,7 @@ public class IntakeSubsystem {
     public IntakeSubsystem(HardwareMap hardwareMap, IntakeSpinState spinState, IntakePivotState pivotState) {
         leftSpin = hardwareMap.get(CRServo.class, "intakeLeftSpin");
         rightSpin = hardwareMap.get(CRServo.class, "intakeRightSpin");
+        backSpin = hardwareMap.get(CRServo.class, "intakeBackSpin");
         leftPivot = hardwareMap.get(Servo.class, "intakeLeftPivot");
         rightPivot = hardwareMap.get(Servo.class, "intakeRightPivot");
 
@@ -69,18 +70,23 @@ public class IntakeSubsystem {
     public void spinIn() {
         leftSpin.setPower(intakeSpinInPwr);
         rightSpin.setPower(-intakeSpinInPwr);
+        if(pivotState == IntakePivotState.TRANSFER) {
+            backSpin.setPower(-intakeSpinInPwr);
+        }
         this.spinState = IntakeSpinState.IN;
     }
 
     public void spinOut() {
         leftSpin.setPower(intakeSpinOutPwr);
         rightSpin.setPower(-intakeSpinOutPwr);
+        backSpin.setPower(-intakeSpinOutPwr);
         this.spinState = IntakeSpinState.OUT;
     }
 
     public void spinStop() {
         leftSpin.setPower(intakeSpinStopPwr);
         rightSpin.setPower(intakeSpinStopPwr);
+        backSpin.setPower(intakeSpinStopPwr);
         this.spinState = IntakeSpinState.STOP;
     }
 
