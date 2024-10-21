@@ -2,7 +2,7 @@ package indubitables.config.util;
 
 import com.acmerobotics.dashboard.config.Config;
 
-import indubitables.config.pedroPathing.localization.Pose;
+import indubitables.pedroPathing.localization.Pose;
 
 @Config
 public class FieldConstants {

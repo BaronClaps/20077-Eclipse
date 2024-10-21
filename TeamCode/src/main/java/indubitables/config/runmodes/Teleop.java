@@ -5,8 +5,8 @@ import indubitables.config.subsystem.ClawSubsystem;
 import indubitables.config.subsystem.ExtendSubsystem;
 import indubitables.config.subsystem.IntakeSubsystem;
 import indubitables.config.subsystem.LiftSubsystem;
-import indubitables.config.pedroPathing.follower.Follower;
-import indubitables.config.pedroPathing.localization.Pose;
+import indubitables.pedroPathing.follower.Follower;
+import indubitables.pedroPathing.localization.Pose;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;

@@ -16,7 +16,7 @@ public class RobotConstants {
     public static double intakeSpinOutPwr = -0.25;
     public static double intakeSpinStopPwr = 0;
     
-    public static double intakePivotTransfer= 0.05;
+    public static double intakePivotTransfer= 0.0475;
     public static double intakePivotGround = 0;
     public static double intakePivotSubmersible = 0.05;
     
@@ -37,5 +37,5 @@ public class RobotConstants {
     public static double extendZero = 0;
     public static double extendFull = 0.175;
     public static double extendHalf = extendFull/2;
-    public static double extendManualIncrements = 0.0025; //0.05
+    public static double extendManualIncrements = 0.01; //0.05
 }

@@ -2,8 +2,8 @@ package indubitables.config.runmodes;
 
 //import org.firstinspires.ftc.teamcode.config.subsystem.ServoSubsystem;
 import indubitables.config.subsystem.VisionSubsystem;
-import indubitables.config.pedroPathing.follower.Follower;
-import indubitables.config.pedroPathing.localization.Pose;
+import indubitables.pedroPathing.follower.Follower;
+import indubitables.pedroPathing.localization.Pose;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;

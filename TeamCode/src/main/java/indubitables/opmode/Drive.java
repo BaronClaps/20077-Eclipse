@@ -5,7 +5,7 @@ import static indubitables.config.util.FieldConstants.*;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import indubitables.config.pedroPathing.follower.Follower;
+import indubitables.pedroPathing.follower.Follower;
 import indubitables.config.runmodes.Teleop;
 
 
