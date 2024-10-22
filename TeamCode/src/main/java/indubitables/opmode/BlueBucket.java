@@ -38,8 +38,8 @@ public class BlueBucket extends OpMode {
     public void pathUpdate() {
         switch (pathState) {
             case 0:
-                Actions.runBlocking(auto.claw.close);
-                Actions.runBlocking(auto.lift.toHighChamber);
+             //   Actions.runBlocking(auto.claw.close);
+               // Actions.runBlocking(auto.lift.toHighChamber);
                 auto.follower.followPath(auto.preload);
                 setPathState(1);
                 break;
@@ -47,36 +47,36 @@ public class BlueBucket extends OpMode {
                 if(!auto.follower.isBusy()) {
 
                     //if (auto.lift.isAtTarget()) {
-                        Actions.runBlocking(auto.lift.releaseHighChamber);
+                   //     Actions.runBlocking(auto.lift.releaseHighChamber);
                    // }
 
                   //  if (auto.lift.isAtTarget()) {
-                        Actions.runBlocking(auto.claw.open);
+                   //     Actions.runBlocking(auto.claw.open);
                  //   }
 
-                    Actions.runBlocking(auto.lift.toZero);
+         //           Actions.runBlocking(auto.lift.toZero);
                     auto.follower.followPath(auto.element1);
-                    Actions.runBlocking(auto.intake.pivotGround);
-                    Actions.runBlocking(auto.intake.spinIn);
+        //            Actions.runBlocking(auto.intake.pivotGround);
+        //            Actions.runBlocking(auto.intake.spinIn);
                     setPathState(2);
                 }
                 break;
             case 2:
                 if(!auto.follower.isBusy()) {
                     auto.follower.followPath(auto.score1);
-                    Actions.runBlocking(auto.intake.spinStop);
-                    Actions.runBlocking(auto.intake.pivotTransfer);
+                 //   Actions.runBlocking(auto.intake.spinStop);
+                 //   Actions.runBlocking(auto.intake.pivotTransfer);
                     setPathState(3);
                 }
                 break;
             case 3:
                 if(!auto.follower.isBusy()) {
-                    Actions.runBlocking(
-                            new SequentialAction(
-                                    auto.transfer,
-                                    auto.lift.toLowBucket
-                            )
-                    );
+                //    Actions.runBlocking(
+                  //          new SequentialAction(
+                    //                auto.transfer,
+                      //              auto.lift.toLowBucket
+                        //    )
+                    //);
 
                    // if (auto.lift.isAtTarget()) {
                  //       Actions.runBlocking(auto.arm.toScoring);

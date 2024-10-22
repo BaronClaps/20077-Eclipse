@@ -16,6 +16,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+import indubitables.config.util.FieldConstants;
+import indubitables.config.util.RobotConstants;
 import indubitables.pedroPathing.localization.PoseUpdater;
 import indubitables.pedroPathing.util.DashboardPoseTracker;
 import indubitables.pedroPathing.util.Drawing;
@@ -50,6 +53,7 @@ public class LocalizationTest extends OpMode {
     @Override
     public void init() {
         poseUpdater = new PoseUpdater(hardwareMap);
+        poseUpdater.setStartingPose(FieldConstants.blueBucketStartPose);
 
         dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
 
