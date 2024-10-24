@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import indubitables.pedroPathing.localization.localizers.PinpointLocalizer;
 import indubitables.pedroPathing.localization.localizers.ThreeWheelLocalizer;
+import indubitables.pedroPathing.localization.localizers.TwoWheelLocalizer;
 import indubitables.pedroPathing.pathGeneration.MathFunctions;
 import indubitables.pedroPathing.pathGeneration.Vector;
 
@@ -69,7 +70,7 @@ public class PoseUpdater {
      */
     public PoseUpdater(HardwareMap hardwareMap) {
         // TODO: replace the second argument with your preferred localizer
-        this(hardwareMap, new PinpointLocalizer(hardwareMap));
+        this(hardwareMap, new TwoWheelLocalizer(hardwareMap));
     }
 
     /**

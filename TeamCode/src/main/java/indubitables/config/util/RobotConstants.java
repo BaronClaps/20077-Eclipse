@@ -4,7 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class RobotConstants {
-    public static double clawClose = 0.0675;
+    public static double clawClose = 0.1075;
     public static double clawOpen = 0.25;
     public static double clawSpecimen = 0.19;
     public static double clawTransfer = 0.2;

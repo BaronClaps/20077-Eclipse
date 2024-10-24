@@ -248,9 +248,9 @@ telemetry.addData(" Extend Pos", extend.leftExtend.getPosition());
     }
 
     private void chamberPos() {
-        claw.chamber();
+        claw.specimen();
         claw.close();
-        arm.chamber();
+        arm.specimen();
     }
 
     private void initPos() {

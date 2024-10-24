@@ -64,6 +64,7 @@ public class Auto {
     }
 
     public void init() {
+        follower.setStartingPose(startPose);
         claw.init();
         //lift.init();
         //extend.init();
