@@ -59,8 +59,8 @@ public class TwoWheelLocalizer extends Localizer { // todo: make two wheel odo w
     private double previousIMUOrientation;
     private double deltaRadians;
     private double totalHeading;
-    public static double FORWARD_TICKS_TO_INCHES = 0.0019695378151260525;
-    public static double STRAFE_TICKS_TO_INCHES = -0.0019588894402799944;
+    public static double FORWARD_TICKS_TO_INCHES = -.001989436789; //0.0019695378151260525;
+    public static double STRAFE_TICKS_TO_INCHES = -.001989436789; //-0.0019588894402799944;
 
     /**
      * This creates a new TwoWheelLocalizer from a HardwareMap, with a starting Pose at (0,0)
