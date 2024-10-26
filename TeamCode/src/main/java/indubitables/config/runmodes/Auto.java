@@ -81,6 +81,11 @@ public class Auto {
     public void update() {
         follower.update();
         //lift.updatePIDF();
+        transfer();
+        bucket();
+        chamber();
+        intake();
+        park();
     }
 
     public void createPoses() {
@@ -277,28 +282,35 @@ public class Auto {
         switch (intakeState) {
             case 1:
                 actionBusy = true;
-                intake.pivotTransfer();
-                intake.spinStop();
-                lift.toTransfer();
-                arm.transfer();
-                claw.transfer();
                 claw.open();
-                extend.toHalf();
-                transferTimer.resetTimer();
+                intakeTimer.resetTimer();
                 setTransferState(2);
                 break;
             case 2:
-                if (transferTimer.getElapsedTimeSeconds() > 1) {
-                    intake.pivotGround();
-                    intake.spinIn();
-                    transferTimer.resetTimer();
+                if(intakeTimer.getElapsedTimeSeconds() > 0.5) {
+                    arm.transfer();
+                    claw.transfer();
+                    intake.pivotTransfer();
+                    intake.spinStop();
+                    lift.toTransfer();
+                    claw.open();
+                    extend.toHalf();
+                    intakeTimer.resetTimer();
                     setTransferState(3);
                 }
                 break;
             case 3:
-                if (transferTimer.getElapsedTimeSeconds() > 1.5) {
+                if (intakeTimer.getElapsedTimeSeconds() > 1) {
+                    intake.pivotGround();
+                    intake.spinIn();
+                    intakeTimer.resetTimer();
+                    setTransferState(4);
+                }
+                break;
+            case 4:
+                if (intakeTimer.getElapsedTimeSeconds() > 1.5) {
                     intake.spinStop();
-                    transferTimer.resetTimer();
+                    intakeTimer.resetTimer();
                     actionBusy = false;
                     setTransferState(-1);
                 }
@@ -317,18 +329,27 @@ public class Auto {
     }
 
     public void park() {
-        if (parkState == 1) {
-            actionBusy = true;
-            intake.pivotTransfer();
-            intake.spinStop();
-            lift.toPark();
-            arm.transfer();
-            claw.transfer();
-            claw.open();
-            extend.toZero();
-            transferTimer.resetTimer();
-            actionBusy = false;
-            setTransferState(-1);
+        switch (parkState) {
+            case 1:
+                actionBusy = true;
+                claw.open();
+                parkTimer.resetTimer();
+                setParkState(2);
+                break;
+            case 2:
+                if(parkTimer.getElapsedTimeSeconds() > 0.5) {
+                    intake.pivotTransfer();
+                    intake.spinStop();
+                    lift.toPark();
+                    arm.transfer();
+                    claw.transfer();
+                    claw.open();
+                    extend.toZero();
+                    parkTimer.resetTimer();
+                    actionBusy = false;
+                    setTransferState(-1);
+                }
+                break;
         }
     }
 
@@ -344,5 +365,9 @@ public class Auto {
 
     public boolean actionNotBusy() {
         return !actionBusy;
+    }
+
+    public boolean notBusy() {
+        return (!follower.isBusy() && actionNotBusy());
     }
 }
