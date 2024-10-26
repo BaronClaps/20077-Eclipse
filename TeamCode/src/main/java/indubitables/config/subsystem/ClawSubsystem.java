@@ -19,13 +19,13 @@ public class ClawSubsystem {
     }
 
     public enum ClawPivotState {
-        TRANSFER, SCORE, SPECIMEN, CHAMBER, SPECIMEN_SCORE
+        TRANSFER, SCORE, SPECIMEN, CHAMBER
     }
 
     public Servo grab, pivot;
     public ClawGrabState grabState;
     public ClawPivotState pivotState;
-    public RunAction open, close, transfer, score, specimen, specimenScore;
+    public RunAction open, close, transfer, score, specimen;
 
     public ClawSubsystem(HardwareMap hardwareMap, ClawGrabState clawGrabState, ClawPivotState clawPivotState) {
         grab = hardwareMap.get(Servo.class, "clawGrab");
@@ -38,7 +38,6 @@ public class ClawSubsystem {
         transfer = new RunAction(this::transfer);
         score = new RunAction(this::score);
         specimen = new RunAction(this::specimen);
-        specimenScore = new RunAction(this::specimenScore);
     }
 
     public void setPivotState(ClawPivotState state) {
@@ -54,9 +53,6 @@ public class ClawSubsystem {
         } else if (state == ClawPivotState.CHAMBER) {
             pivot.setPosition(clawChamber);
             this.pivotState = ClawPivotState.CHAMBER;
-        } else if (state == ClawPivotState.SPECIMEN_SCORE) {
-            pivot.setPosition(clawSpecimenScore);
-            this.pivotState = ClawPivotState.SPECIMEN_SCORE;
         }
     }
 
@@ -110,10 +106,6 @@ public class ClawSubsystem {
         setPivotState(ClawPivotState.CHAMBER);
     }
 
-    public void specimenScore() {
-        setPivotState(ClawPivotState.SPECIMEN_SCORE);
-    }
-
     public void init() {
         close();
         transfer();
@@ -123,7 +115,4 @@ public class ClawSubsystem {
         close();
         transfer();
     }
-
-
-
 }

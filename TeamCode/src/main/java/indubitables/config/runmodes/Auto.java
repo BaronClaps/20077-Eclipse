@@ -14,11 +14,7 @@ import indubitables.pedroPathing.localization.Pose;
 import indubitables.pedroPathing.pathGeneration.BezierLine;
 import indubitables.pedroPathing.pathGeneration.Path;
 import indubitables.pedroPathing.pathGeneration.Point;
-import indubitables.config.util.action.Action;
-import indubitables.config.util.action.ParallelAction;
-import indubitables.config.util.action.RunAction;
-import indubitables.config.util.action.SequentialAction;
-import indubitables.config.util.action.SleepAction;
+import indubitables.pedroPathing.util.Timer;
 
 public class Auto {
 
@@ -39,7 +35,11 @@ public class Auto {
     public Follower follower;
     public Telemetry telemetry;
 
-    public RunAction transfer;
+    public boolean actionBusy;
+
+    public Timer transferTimer = new Timer(), bucketTimer = new Timer(), chamberTimer = new Timer(), intakeTimer = new Timer(), parkTimer = new Timer();
+    public int transferState = -1, bucketState = -1, chamberState = -1, intakeState = -1, parkState = -1;
+
     public Path preload, element1, score1, element2, score2, element3, score3, park;
     private Pose startPose, preloadPose, element1Pose, element1ControlPose, element2Pose, element2ControlPose, element3Pose, element3ControlPose, elementScorePose, parkControlPose, parkPose;
 
@@ -54,11 +54,9 @@ public class Auto {
         this.telemetry = telemetry;
 
         startLocation = isBlue ? (isBucket ? RobotStart.BLUE_BUCKET : RobotStart.BLUE_OBSERVATION) : (isBucket ? RobotStart.RED_BUCKET : RobotStart.RED_OBSERVATION);
-        
+
         createPoses();
         buildPaths();
-
-        //transfer = new RunAction(this::transfer);
 
         init();
     }
@@ -67,25 +65,22 @@ public class Auto {
         follower.setStartingPose(startPose);
         claw.init();
         //lift.init();
-        //extend.init();
-        // intake.init();
+        extend.init();
+        intake.init();
         arm.init();
     }
 
-    public void init_loop() {}
-
     public void start() {
         claw.start();
-       // lift.start();
+        // lift.start();
         extend.start();
-        //intake.start();
+        intake.start();
         arm.start();
     }
 
     public void update() {
         follower.update();
         //lift.updatePIDF();
-        //extend.updatePIDF();
     }
 
     public void createPoses() {
@@ -150,16 +145,204 @@ public class Auto {
         park.setLinearHeadingInterpolation(elementScorePose.getHeading(), parkPose.getHeading());
     }
 
-    private Action transfer() {
-        return new SequentialAction(
-                intake.spinStop,
-                new ParallelAction(
-                        intake.pivotTransfer,
-                        arm.toTransfer),
-                intake.spinOut,
-                new SleepAction(1),
-                intake.spinIn,
-                intake.spinStop
-        );
+    public void transfer() {
+        switch (transferState) {
+            case 1:
+                actionBusy = true;
+                intake.pivotTransfer();
+                intake.spinIn();
+                lift.toTransfer();
+                arm.transfer();
+                claw.transfer();
+                claw.open();
+                extend.toZero();
+                transferTimer.resetTimer();
+                setTransferState(2);
+                break;
+            case 2:
+                if (transferTimer.getElapsedTimeSeconds() > 1.5) {
+                    intake.spinStop();
+                    transferTimer.resetTimer();
+                    setTransferState(3);
+                }
+                break;
+            case 3:
+                if (transferTimer.getElapsedTimeSeconds() > 1) {
+                    lift.toZero();
+                    transferTimer.resetTimer();
+                    setTransferState(4);
+                }
+                break;
+            case 4:
+                if (transferTimer.getElapsedTimeSeconds() > 0.5) {
+                    claw.close();
+                    actionBusy = false;
+                    setTransferState(-1);
+                }
+                break;
+        }
+    }
+
+    public void setTransferState(int x) {
+        transferState = x;
+    }
+
+    public void startTransfer() {
+        if (actionNotBusy()) {
+            setTransferState(1);
+        }
+    }
+
+    public void bucket() {
+        switch (bucketState) {
+            case 1:
+                actionBusy = true;
+                intake.pivotTransfer();
+                intake.spinStop();
+                lift.toHighBucket();
+                claw.close();
+                extend.toZero();
+                bucketTimer.resetTimer();
+                setBucketState(2);
+                break;
+            case 2:
+                if (bucketTimer.getElapsedTimeSeconds() > 0.5) {
+                    arm.score();
+                    claw.score();
+                    bucketTimer.resetTimer();
+                    setBucketState(3);
+                }
+                break;
+            case 3:
+                if (bucketTimer.getElapsedTimeSeconds() > 1) {
+                    actionBusy = false;
+                    setBucketState(-1);
+                }
+
+        }
+    }
+
+    public void setBucketState(int x) {
+        bucketState = x;
+    }
+
+    public void startBucket() {
+        if (actionNotBusy()) {
+            setBucketState(1);
+        }
+    }
+
+    public void chamber() {
+        switch (chamberState) {
+            case 1:
+                actionBusy = true;
+                intake.pivotTransfer();
+                intake.spinStop();
+                claw.close();
+                lift.toHighChamber();
+                extend.toZero();
+                chamberTimer.resetTimer();
+                setChamberState(2);
+                break;
+            case 2:
+                if (chamberTimer.getElapsedTimeSeconds() > 2) {
+                    arm.chamber();
+                    claw.chamber();
+                    chamberTimer.resetTimer();
+                    setChamberState(3);
+                }
+                break;
+            case 3:
+                if (chamberTimer.getElapsedTimeSeconds() > 1) {
+                    claw.open();
+                    claw.transfer();
+                    arm.transfer();
+                    actionBusy = false;
+                    setChamberState(-1);
+                }
+        }
+    }
+
+    public void setChamberState(int x) {
+        chamberState = x;
+    }
+
+    public void startChamber() {
+        if(actionNotBusy()) {
+            setChamberState(1);
+        }
+    }
+
+    public void intake() {
+        switch (intakeState) {
+            case 1:
+                actionBusy = true;
+                intake.pivotTransfer();
+                intake.spinStop();
+                lift.toTransfer();
+                arm.transfer();
+                claw.transfer();
+                claw.open();
+                extend.toHalf();
+                transferTimer.resetTimer();
+                setTransferState(2);
+                break;
+            case 2:
+                if (transferTimer.getElapsedTimeSeconds() > 1) {
+                    intake.pivotGround();
+                    intake.spinIn();
+                    transferTimer.resetTimer();
+                    setTransferState(3);
+                }
+                break;
+            case 3:
+                if (transferTimer.getElapsedTimeSeconds() > 1.5) {
+                    intake.spinStop();
+                    transferTimer.resetTimer();
+                    actionBusy = false;
+                    setTransferState(-1);
+                }
+                break;
+        }
+    }
+
+    public void setIntakeState(int x) {
+        intakeState = x;
+    }
+
+    public void startIntake() {
+        if (actionNotBusy()) {
+            setIntakeState(1);
+        }
+    }
+
+    public void park() {
+        if (parkState == 1) {
+            actionBusy = true;
+            intake.pivotTransfer();
+            intake.spinStop();
+            lift.toPark();
+            arm.transfer();
+            claw.transfer();
+            claw.open();
+            extend.toZero();
+            transferTimer.resetTimer();
+            actionBusy = false;
+            setTransferState(-1);
+        }
+    }
+
+    public void setParkState(int x) {
+        parkState = x;
+    }
+
+    public void startPark() {
+        if (actionNotBusy()) {
+            setParkState(1);
+        }
+    }
+
+    public boolean actionNotBusy() {
+        return !actionBusy;
     }
 }

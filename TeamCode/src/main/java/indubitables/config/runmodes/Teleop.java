@@ -79,9 +79,6 @@ public class Teleop {
         this.telemetry = telemetry;
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
-
-        stopDrive = new RunAction(this::stopDrive);
-        startDrive = new RunAction(this::startDrive);
     }
 
     public void init() {
@@ -169,9 +166,6 @@ public class Teleop {
         if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right)
             chamberPos();
 
-        if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up)
-            claw.specimenScore();
-
         if (currentGamepad1.b && !previousGamepad1.b)
             intake.setPivotState(IntakeSubsystem.IntakePivotState.TRANSFER);
 
@@ -203,32 +197,6 @@ telemetry.addData(" Extend Pos", extend.leftExtend.getPosition());
         //follower.startTeleopDrive();
     }
 
-    private void startDrive() {
-        //follower.startTeleopDrive();
-    }
-
-    private void stopDrive(){
-        //follower.breakFollowing();
-    }
-
-    /*public Action transfer() {
-        return new SequentialAction(
-                stopDrive,
-                //intake.spinStop,
-                new ParallelAction(
-                        //intake.pivotTransfer,
-                        extend.toZero,
-                        claw.open,
-                        //lift.toZero,
-                        arm.toTransfer),
-                //intake.spinOut,
-                new SleepAction(1),
-               // intake.spinIn,
-                //intake.spinStop,
-                startDrive
-        );
-    }*/
-
     private void scoringPos() {
         claw.score();
         claw.close();
@@ -248,9 +216,9 @@ telemetry.addData(" Extend Pos", extend.leftExtend.getPosition());
     }
 
     private void chamberPos() {
-        claw.specimen();
+        claw.chamber();
         claw.close();
-        arm.specimen();
+        arm.chamber();
     }
 
     private void initPos() {
