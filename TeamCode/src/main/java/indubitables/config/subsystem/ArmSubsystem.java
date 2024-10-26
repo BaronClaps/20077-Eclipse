@@ -13,7 +13,7 @@ public class ArmSubsystem {
         TRANSFER, SCORING, SPECIMEN, CHAMBER
     }
 
-    private Servo left, right;
+    public Servo left, right;
     public ArmState state;
     public RunAction toTransfer, toScoring;
 
