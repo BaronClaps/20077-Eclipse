@@ -33,12 +33,14 @@ public class BlueBucket extends OpMode {
         telemetry.addData("x", auto.follower.getPose().getX());
         telemetry.addData("y", auto.follower.getPose().getY());
         telemetry.addData("h", auto.follower.getPose().getHeading());
+        telemetry.addData("actionBusy", auto.actionBusy);
+        telemetry.update();
     }
 
     public void pathUpdate() {
         switch (pathState) {
             case 0:
-                auto.startChamber();
+                //auto.startChamber();
                 auto.follower.followPath(auto.preload);
                 setPathState(1);
                 break;
@@ -50,66 +52,66 @@ public class BlueBucket extends OpMode {
                 break;
             case 2:
                 if(!auto.follower.isBusy()) {
-                    auto.startIntake();
+                    //auto.startIntake();
                     setPathState(3);
                 }
                 break;
             case 3:
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    auto.startTransfer();
+                    //auto.startTransfer();
                     setPathState(4);
                 }
                 break;
             case 4:
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    auto.startBucket();
+                    ///auto.startBucket();
                     auto.follower.followPath(auto.score1);
                     setPathState(5);
                 }
                 break;
             case 5:
                 if(!auto.follower.isBusy() && auto.actionNotBusy()) {
-                    auto.startIntake();
+                    //auto.startIntake();
                     auto.follower.followPath(auto.element2);
                     setPathState(6);
                 }
                 break;
             case 6:
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    auto.startTransfer();
+                    //auto.startTransfer();
                     setPathState(7);
                 }
                 break;
             case 7:
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    auto.startBucket();
+                    //auto.startBucket();
                     auto.follower.followPath(auto.score2);
                     setPathState(8);
                 }
                 break;
             case 8:
                 if(!auto.follower.isBusy() && auto.actionNotBusy()) {
-                    auto.startIntake();
+                    //auto.startIntake();
                     auto.follower.followPath(auto.element3);
                     setPathState(9);
                 }
                 break;
             case 9:
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    auto.startTransfer();
+                    //auto.startTransfer();
                     setPathState(10);
                 }
                 break;
             case 10:
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    auto.startBucket();
+                    //auto.startBucket();
                     auto.follower.followPath(auto.score3);
                     setPathState(8);
                 }
                 break;
             case 11:
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    auto.startPark();
+                    //auto.startPark();
                     auto.follower.followPath(auto.park);
                     setPathState(-1);
                 }

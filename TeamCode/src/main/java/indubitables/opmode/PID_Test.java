@@ -37,67 +37,102 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
-/*
- * This file contains an example of a Linear "OpMode".
- * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
- * The names of OpModes appear on the menu of the FTC Driver Station.
- * When a selection is made from the menu, the corresponding OpMode is executed.
- *
- * This particular OpMode illustrates driving a 4-motor Omni-Directional (or Holonomic) robot.
- * This code will work with either a Mecanum-Drive or an X-Drive train.
- * Both of these drives are illustrated at https://gm0.org/en/latest/docs/robot-design/drivetrains/holonomic.html
- * Note that a Mecanum drive must display an X roller-pattern when viewed from above.
- *
- * Also note that it is critical to set the correct rotation direction for each motor.  See details below.
- *
- * Holonomic drives provide the ability for the robot to move in three axes (directions) simultaneously.
- * Each motion axis is controlled by one Joystick axis.
- *
- * 1) Axial:    Driving forward and backward               Left-joystick Forward/Backward
- * 2) Lateral:  Strafing right and left                     Left-joystick Right and Left
- * 3) Yaw:      Rotating Clockwise and counter clockwise    Right-joystick Right and Left
- *
- * This code is written assuming that the right-side motors need to be reversed for the robot to drive forward.
- * When you first test your robot, if it moves backward when you push the left stick forward, then you must flip
- * the direction of all 4 motors (see code below).
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
- */
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+import indubitables.config.util.action.RunAction;
+
 @Config
 @TeleOp(name="PID_Test", group="z")
 public class PID_Test extends OpMode {
-    private PIDController liftPID;
-
-    private DcMotor lift;
-    private int pos;
-
-    public static double p = 0, i = 0, d = 0;
-    public static double f = 0;
+    public DcMotor rightLift, leftLift;
+    public boolean manual = false;
+    public int pos, bottom;
+    public RunAction toZero, toHighBucket, toHighChamber, toHumanPlayer, toTransfer, toPark;
+    public PIDController liftPID;
     public static int target;
-
-    private final double ticks_in_degrees = 537.7 / 360.0;
+    public static double p = 0.04, i = 0, d = 0.000001;
+    public static double f = 0.01;
+    private Gamepad currentGamepad2, previousGamepad2;
 
     @Override
     public void init() {
+        rightLift = hardwareMap.get(DcMotor.class, "rightLift");
+        leftLift = hardwareMap.get(DcMotor.class, "leftLift");
+
+        rightLift.setDirection(DcMotor.Direction.FORWARD);
+        leftLift.setDirection(DcMotor.Direction.REVERSE);
+        rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        bottom = getPos();
+
         liftPID = new PIDController(p, i, d);
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        lift = hardwareMap.get(DcMotor.class, "lift");
-        lift.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftPID.setPID(p,i,d);
+
     }
 
     @Override
     public void loop() {
-        liftPID.setPID(p,i,d);
-        int pos = lift.getCurrentPosition();
-        double pid = liftPID.calculate(pos, target);
-        double ff = Math.cos(Math.toRadians(target/ticks_in_degrees)) * f;
+        previousGamepad2.copy(currentGamepad2);
+        currentGamepad2.copy(gamepad2);
 
-        double power = pid + ff;
+        if(gamepad2.right_trigger >= 0.05 || gamepad2.left_trigger >= 0.05){
+            manual(gamepad2.right_trigger - (gamepad2.left_trigger * .75));
+        }
 
-        lift.setPower(power);
-        telemetry.addData("lift pos", pos);
-        telemetry.addData("lift target", target);
+        if ((!(currentGamepad2.right_trigger >= 0.05) && (previousGamepad2.right_trigger >= 0.05)) || (!(currentGamepad2.left_trigger >= 0.05) && (previousGamepad2.right_trigger >= 0.05))) {
+            targetCurrent();
+        }
+
+        updatePIDF();
+
+        telemetry.addData("manual", manual);
+        telemetry.update();
+    }
+
+    public void updatePIDF(){
+        if (!manual) {
+            double pid = liftPID.calculate(getPos(), target);
+            double ticks_in_degrees = 537.7 / 360.0;
+            double ff = Math.cos(Math.toRadians(target / ticks_in_degrees)) * f;
+            double power = pid + ff;
+
+            rightLift.setPower(power);
+            leftLift.setPower(power);
+
+            telemetry.addData("lift pos", getPos());
+            telemetry.addData("lift target", target);
+        }
+    }
+
+    public void manual(double n){
+        manual = true;
+
+        rightLift.setPower(n);
+        leftLift.setPower(n);
+    }
+
+    //Util
+    public void targetCurrent() {
+        setTarget(getPos());
+        manual = false;
+    }
+
+    public void setTarget(int b) {
+        target = b;
+    }
+
+    public void addToTarget(int b) {
+        target += b;
+    }
+
+    public int getPos() {
+        pos = rightLift.getCurrentPosition() - bottom;
+        return rightLift.getCurrentPosition() - bottom;
     }
 }
