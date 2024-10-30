@@ -58,13 +58,14 @@ public class Auto {
         createPoses();
         buildPaths();
 
+        follower.setStartingPose(startPose);
+
         init();
     }
 
     public void init() {
-        follower.setStartingPose(startPose);
         claw.init();
-        //lift.init();
+        lift.init();
         extend.init();
         intake.init();
         arm.init();
@@ -72,7 +73,7 @@ public class Auto {
 
     public void start() {
         claw.start();
-        // lift.start();
+        lift.start();
         extend.start();
         intake.start();
         arm.start();
@@ -80,7 +81,7 @@ public class Auto {
 
     public void update() {
         follower.update();
-        //lift.updatePIDF();
+        lift.updatePIDF();
         transfer();
         bucket();
         chamber();

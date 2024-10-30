@@ -16,6 +16,13 @@ public class BlueBucket extends OpMode {
     @Override
     public void init() {
         auto = new Auto(hardwareMap, telemetry, new Follower(hardwareMap), true, true);
+
+        telemetry.addData("state", pathState);
+        telemetry.addData("x", auto.follower.getPose().getX());
+        telemetry.addData("y", auto.follower.getPose().getY());
+        telemetry.addData("h", auto.follower.getPose().getHeading());
+        telemetry.addData("actionBusy", auto.actionBusy);
+        telemetry.update();
     }
 
     @Override
@@ -40,12 +47,12 @@ public class BlueBucket extends OpMode {
     public void pathUpdate() {
         switch (pathState) {
             case 0:
-                //auto.startChamber();
+                auto.startChamber();
                 auto.follower.followPath(auto.preload);
                 setPathState(1);
                 break;
             case 1:
-                if(!auto.follower.isBusy() && auto.actionNotBusy()) {
+                if(!auto.follower.isBusy()){// && auto.actionNotBusy()) {
                     auto.follower.followPath(auto.element1);
                     setPathState(2);
                 }
@@ -57,7 +64,7 @@ public class BlueBucket extends OpMode {
                 }
                 break;
             case 3:
-                if(auto.actionNotBusy() && !auto.follower.isBusy()) {
+                if(/*auto.actionNotBusy() && */!auto.follower.isBusy()) {
                     //auto.startTransfer();
                     setPathState(4);
                 }
@@ -106,7 +113,7 @@ public class BlueBucket extends OpMode {
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
                     //auto.startBucket();
                     auto.follower.followPath(auto.score3);
-                    setPathState(8);
+                    setPathState(11);
                 }
                 break;
             case 11:

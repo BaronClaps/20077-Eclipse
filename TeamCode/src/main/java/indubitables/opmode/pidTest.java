@@ -47,7 +47,7 @@ public class pidTest extends OpMode {
     public RunAction toZero, toHighBucket, toHighChamber, toHumanPlayer, toTransfer, toPark;
     public PIDController liftPID;
     public static int target;
-    public static double p = 0.04, i = 0, d = 0;
+    public static double p = 0.03, i = 0, d = 0;
     public static double f = 0.003;
     private Gamepad currentGamepad2 = new Gamepad(), previousGamepad2 = new Gamepad();
 
@@ -73,13 +73,12 @@ public class pidTest extends OpMode {
 
     @Override
     public void loop() {
+
         if (!baron) {
             if ((gamepad2.right_trigger >= 0.05) || (gamepad2.left_trigger >= 0.05)) {
                 manual(gamepad2.right_trigger - (gamepad2.left_trigger * .75));
             } else {
-                if ((!(currentGamepad2.right_trigger >= 0.05) && (previousGamepad2.right_trigger >= 0.05)) || (!(currentGamepad2.left_trigger >= 0.05) && (previousGamepad2.right_trigger >= 0.05))) {
-                    targetCurrent();
-                }
+                targetCurrent();
             }
         } else {
             setTarget(target);
