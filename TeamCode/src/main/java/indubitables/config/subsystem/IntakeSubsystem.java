@@ -71,7 +71,7 @@ public class IntakeSubsystem {
         leftSpin.setPower(intakeSpinInPwr);
         rightSpin.setPower(-intakeSpinInPwr);
         if(pivotState == IntakePivotState.TRANSFER) {
-            backSpin.setPower(-intakeSpinInPwr);
+            backSpin.setPower(intakeSpinInPwr);
         }
         this.spinState = IntakeSpinState.IN;
     }

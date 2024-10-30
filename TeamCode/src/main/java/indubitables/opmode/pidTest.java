@@ -29,33 +29,27 @@
 
 package indubitables.opmode;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import indubitables.config.util.action.RunAction;
 
 @Config
 @TeleOp(name="PID_Test", group="z")
-public class PID_Test extends OpMode {
+public class pidTest extends OpMode {
     public DcMotor rightLift, leftLift;
-    public boolean manual = false;
-    public int pos, bottom;
+    public static boolean manual = false, baron = true;
+    public static int pos, bottom;
     public RunAction toZero, toHighBucket, toHighChamber, toHumanPlayer, toTransfer, toPark;
     public PIDController liftPID;
     public static int target;
     public static double p = 0.04, i = 0, d = 0.000001;
     public static double f = 0.01;
-    private Gamepad currentGamepad2, previousGamepad2;
+    private Gamepad currentGamepad2 = new Gamepad(), previousGamepad2 = new Gamepad();
 
     @Override
     public void init() {
@@ -64,6 +58,7 @@ public class PID_Test extends OpMode {
 
         rightLift.setDirection(DcMotor.Direction.FORWARD);
         leftLift.setDirection(DcMotor.Direction.REVERSE);
+        rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -78,20 +73,24 @@ public class PID_Test extends OpMode {
 
     @Override
     public void loop() {
-        previousGamepad2.copy(currentGamepad2);
-        currentGamepad2.copy(gamepad2);
-
-        if(gamepad2.right_trigger >= 0.05 || gamepad2.left_trigger >= 0.05){
-            manual(gamepad2.right_trigger - (gamepad2.left_trigger * .75));
-        }
-
-        if ((!(currentGamepad2.right_trigger >= 0.05) && (previousGamepad2.right_trigger >= 0.05)) || (!(currentGamepad2.left_trigger >= 0.05) && (previousGamepad2.right_trigger >= 0.05))) {
-            targetCurrent();
+        if (!baron) {
+            if ((gamepad2.right_trigger >= 0.05) || (gamepad2.left_trigger >= 0.05)) {
+                manual(gamepad2.right_trigger - (gamepad2.left_trigger * .75));
+            } else {
+                if ((!(currentGamepad2.right_trigger >= 0.05) && (previousGamepad2.right_trigger >= 0.05)) || (!(currentGamepad2.left_trigger >= 0.05) && (previousGamepad2.right_trigger >= 0.05))) {
+                    targetCurrent();
+                }
+            }
+        } else {
+            setTarget(target);
         }
 
         updatePIDF();
 
         telemetry.addData("manual", manual);
+        telemetry.addData("pos", getPos());
+        telemetry.addData("baron", baron);
+        telemetry.addData("target", target);
         telemetry.update();
     }
 
