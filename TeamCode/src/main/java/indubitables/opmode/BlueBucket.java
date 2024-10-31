@@ -72,6 +72,7 @@ public class BlueBucket extends OpMode {
             case 4:
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
                     ///auto.startBucket();
+                    auto.follower.setMaxPower(0.5);
                     auto.follower.followPath(auto.score1);
                     setPathState(5);
                 }
@@ -79,6 +80,7 @@ public class BlueBucket extends OpMode {
             case 5:
                 if(!auto.follower.isBusy() && auto.actionNotBusy()) {
                     //auto.startIntake();
+                    auto.follower.setMaxPower(0.5);
                     auto.follower.followPath(auto.element2);
                     setPathState(6);
                 }
@@ -92,6 +94,7 @@ public class BlueBucket extends OpMode {
             case 7:
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
                     //auto.startBucket();
+                    auto.follower.setMaxPower(0.5);
                     auto.follower.followPath(auto.score2);
                     setPathState(8);
                 }
@@ -99,6 +102,7 @@ public class BlueBucket extends OpMode {
             case 8:
                 if(!auto.follower.isBusy() && auto.actionNotBusy()) {
                     //auto.startIntake();
+                    auto.follower.setMaxPower(0.5);
                     auto.follower.followPath(auto.element3);
                     setPathState(9);
                 }
@@ -112,6 +116,7 @@ public class BlueBucket extends OpMode {
             case 10:
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
                     //auto.startBucket();
+                    auto.follower.setMaxPower(0.5);
                     auto.follower.followPath(auto.score3);
                     setPathState(11);
                 }
@@ -119,6 +124,7 @@ public class BlueBucket extends OpMode {
             case 11:
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
                     //auto.startPark();
+                    auto.follower.setMaxPower(0.9);
                     auto.follower.followPath(auto.park);
                     setPathState(-1);
                 }

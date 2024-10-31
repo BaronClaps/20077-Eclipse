@@ -65,8 +65,8 @@ public class Auto {
 
     public void init() {
         claw.init();
-        lift.init();
-        extend.init();
+    //    lift.init();
+        extend.toZero();
         intake.init();
         arm.init();
     }
@@ -75,6 +75,7 @@ public class Auto {
         claw.start();
         lift.start();
         extend.start();
+        extend.toZero();
         intake.start();
         arm.start();
     }
