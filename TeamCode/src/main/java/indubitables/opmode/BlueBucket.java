@@ -47,14 +47,15 @@ public class BlueBucket extends OpMode {
     public void pathUpdate() {
         switch (pathState) {
             case 0:
+                auto.follower.setMaxPower(0.7);
                 auto.startChamber();
                 auto.follower.followPath(auto.preload);
                 setPathState(1);
                 break;
             case 1:
-                if(!auto.follower.isBusy()){// && auto.actionNotBusy()) {
+                if(!auto.follower.isBusy() && auto.actionNotBusy()) {
                     auto.follower.followPath(auto.element1);
-                    setPathState(2);
+                    setPathState(-1);
                 }
                 break;
             case 2:

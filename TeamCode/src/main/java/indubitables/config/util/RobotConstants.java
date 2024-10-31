@@ -11,6 +11,7 @@ public class RobotConstants {
     public static double clawScore = 0.4;
     public static double clawChamber = 0.5;
     public static double clawSpecimenScore = 0.4;
+    public static double clawInit = 0.8;
 
     public static double intakeSpinInPwr = -1;
     public static double intakeSpinOutPwr = -0.25;
@@ -24,12 +25,13 @@ public class RobotConstants {
     public static double armScoring = 0.5;
     public static double armSpecimen = 0.825;
     public static double armChamber = 0.6;
+    public static double armInit = 0.15;
 
-    public static int liftToZero = 0;
+    public static int liftToZero = 100;
     public static int liftToHumanPlayer = 0;
-    public static int liftToHighChamber = 0;
+    public static int liftToHighChamber = 315;
     public static int liftToHighBucket = 0;
-    public static int liftToTransfer = 0;
+    public static int liftToTransfer = 250;
     public static int liftToPark = 0;
 
 

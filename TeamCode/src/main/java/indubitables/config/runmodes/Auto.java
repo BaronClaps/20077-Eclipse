@@ -65,19 +65,19 @@ public class Auto {
 
     public void init() {
         claw.init();
-    //    lift.init();
+        lift.init();
         extend.toZero();
         intake.init();
         arm.init();
+
     }
 
     public void start() {
-        claw.start();
         lift.start();
         extend.start();
         extend.toZero();
         intake.start();
-        arm.start();
+        claw.close();
     }
 
     public void update() {
@@ -261,6 +261,11 @@ public class Auto {
                 break;
             case 3:
                 if (chamberTimer.getElapsedTimeSeconds() > 1) {
+                    lift.toTransfer();
+                    setChamberState(4);
+                }
+            case 4:
+                if(chamberTimer.getElapsedTimeSeconds() > 1) {
                     claw.open();
                     claw.transfer();
                     arm.transfer();

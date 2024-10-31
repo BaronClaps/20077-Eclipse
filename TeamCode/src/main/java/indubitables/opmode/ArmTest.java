@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import indubitables.config.subsystem.ArmSubsystem;
+import indubitables.config.subsystem.ClawSubsystem;
 import indubitables.config.util.RobotConstants;
 
 @Config
@@ -12,28 +13,42 @@ import indubitables.config.util.RobotConstants;
 public class ArmTest extends OpMode {
 
     private ArmSubsystem arm;
+    private ClawSubsystem claw;
+    private ClawSubsystem.ClawGrabState clawGrabState;
+    private ClawSubsystem.ClawPivotState clawPivotState;
     private ArmSubsystem.ArmState armState;
 
     @Override
     public void init() {
         arm = new ArmSubsystem(hardwareMap, armState);
+        claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
         arm.init();
+        claw.init();
     }
 
     @Override
     public void loop() {
-        if(gamepad1.x)
+        if(gamepad1.x) {
             //arm.setState(ArmSubsystem.ArmState.SCORING);
             arm.left.setPosition(RobotConstants.armScoring);
             arm.right.setPosition(RobotConstants.armScoring);
+        }
 
-        if(gamepad1.y)
+        if(gamepad1.y) {
             arm.left.setPosition(RobotConstants.armTransfer);
             arm.right.setPosition(RobotConstants.armTransfer);
+        }
+
+        if(gamepad1.a) {
+            arm.left.setPosition(RobotConstants.armInit);
+            arm.right.setPosition(RobotConstants.armInit);
+            claw.pivot.setPosition(RobotConstants.clawScore);
+        }
 
 
       //  telemetry.addData("armState", arm.state);
         telemetry.addData("left", arm.left.getPosition());
         telemetry.addData("right", arm.right.getPosition());
+        telemetry.addData("pivot", claw.pivot.getPosition());
     }
 }
