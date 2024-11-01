@@ -54,7 +54,7 @@ public class BlueObservation extends OpMode {
                 break;
             case 1:
                 if(!auto.follower.isBusy() && auto.actionNotBusy()) {
-                    auto.follower.followPath(auto.pushSamples.build());
+                    auto.follower.followPath(auto.pushSamples);
                     setPathState(-1);
                 }
                 break;
