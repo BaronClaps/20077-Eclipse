@@ -34,6 +34,15 @@ public class FieldConstants {
     public static final Pose blueBucketRightSampleControlPose = new Pose(20, 96);
 
     // Blue Observation Poses
+    public static final Pose blueObservationHumanPlayerPose = new Pose(22, 22, 0);
+    public static final Pose blueObservationElement1Pose = new Pose(20, 96, Math.toRadians(180));
+    public static final Pose blueObservationElement1ControlPose = new Pose(20, 110);
+    public static final Pose blueObservationElement2Pose = new Pose(20, 86, Math.toRadians(180));
+    public static final Pose blueObservationElement2ControlPose = new Pose(20, 96);
+    public static final Pose blueObservationElement3Pose = new Pose(20, 96, Math.toRadians(180));
+    public static final Pose blueObservationElement3ControlPose = new Pose(20, 110);
+    public static final Pose blueObservationParkPose = new Pose(10, 24, 0);
+    public static final Pose blueObservationParkControlPose = new Pose(20, 96);
 
 
     public static final Pose blueBucketScorePose = new Pose(20, 128, Math.toRadians(-45));

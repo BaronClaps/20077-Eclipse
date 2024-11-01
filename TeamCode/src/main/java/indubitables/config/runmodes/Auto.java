@@ -13,6 +13,7 @@ import indubitables.pedroPathing.follower.Follower;
 import indubitables.pedroPathing.localization.Pose;
 import indubitables.pedroPathing.pathGeneration.BezierLine;
 import indubitables.pedroPathing.pathGeneration.Path;
+import indubitables.pedroPathing.pathGeneration.PathBuilder;
 import indubitables.pedroPathing.pathGeneration.PathChain;
 import indubitables.pedroPathing.pathGeneration.Point;
 import indubitables.pedroPathing.util.Timer;
@@ -42,8 +43,8 @@ public class Auto {
     public int transferState = -1, bucketState = -1, chamberState = -1, intakeState = -1, parkState = -1;
 
     public Path preload, element1, score1, element2, score2, element3, score3, park;
-    public PathChain pushSamples;
-    private Pose startPose, preloadPose, element1Pose, element1ControlPose, element2Pose, element2ControlPose, element3Pose, element3ControlPose, elementScorePose, parkControlPose, parkPose;
+    public PathBuilder pushSamples;
+    private Pose startPose, preloadPose, element1Pose, element1ControlPose, element2Pose, element2ControlPose, element3Pose, element3ControlPose, elementScorePose, parkControlPose, parkPose, humanPlayerPose;
 
     public Auto(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, boolean isBlue, boolean isBucket) {
         claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
@@ -111,6 +112,13 @@ public class Auto {
             case BLUE_OBSERVATION:
                 startPose = blueObservationStartPose;
                 preloadPose = blueObservationPreloadPose;
+                humanPlayerPose = blueObservationHumanPlayerPose;
+                element1ControlPose = blueObservationElement1ControlPose;
+                element1Pose = blueObservationElement1Pose;
+                element2ControlPose = blueObservationElement2ControlPose;
+                element2Pose = blueObservationElement2Pose;
+                element3ControlPose = blueObservationElement3ControlPose;
+                element3Pose = blueObservationElement3Pose;
                 break;
 
             case RED_BUCKET:
@@ -157,6 +165,69 @@ public class Auto {
         }
 
         if (startLocation == RobotStart.BLUE_OBSERVATION || startLocation == RobotStart.RED_OBSERVATION) {
+            preload = new Path(new BezierLine(new Point(startPose), new Point(preloadPose)));
+            preload.setLinearHeadingInterpolation(startPose.getHeading(), preloadPose.getHeading());
+
+            pushSamples.addPath(
+                            // Line 1
+                            new BezierCurve(
+                                    new Point(preloadPose),
+                                    new Point(16.088, 22.000, Point.CARTESIAN),
+                                    new Point(57.345, 50.496, Point.CARTESIAN),
+                                    new Point(56.000, 24.000, Point.CARTESIAN)
+                            )
+                    )
+                    .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(90))
+                    .addPath(
+                            // Line 2
+                            new BezierLine(
+                                    new Point(56.000, 24.000, Point.CARTESIAN),
+                                    new Point(13.000, 24.000, Point.CARTESIAN)
+                            )
+                    )
+                    .setConstantHeadingInterpolation(Math.toRadians(90))
+                    .addPath(
+                            // Line 3
+                            new BezierCurve(
+                                    new Point(13.000, 24.000, Point.CARTESIAN),
+                                    new Point(56.000, 50.000, Point.CARTESIAN),
+                                    new Point(56.000, 14.000, Point.CARTESIAN)
+                            )
+                    )
+                    .setConstantHeadingInterpolation(Math.toRadians(90))
+                    .addPath(
+                            // Line 4
+                            new BezierLine(
+                                    new Point(56.000, 14.000, Point.CARTESIAN),
+                                    new Point(13.000, 14.000, Point.CARTESIAN)
+                            )
+                    )
+                    .setConstantHeadingInterpolation(Math.toRadians(90))
+                    .addPath(
+                            // Line 5
+                            new BezierCurve(
+                                    new Point(13.000, 14.000, Point.CARTESIAN),
+                                    new Point(56.000, 40.000, Point.CARTESIAN),
+                                    new Point(56.000, 9.000, Point.CARTESIAN)
+                            )
+                    )
+                    .setConstantHeadingInterpolation(Math.toRadians(90))
+                    .addPath(
+                            // Line 6
+                            new BezierLine(
+                                    new Point(56.000, 9.000, Point.CARTESIAN),
+                                    new Point(13.000, 9.000, Point.CARTESIAN)
+                            )
+                    )
+                    .setConstantHeadingInterpolation(Math.toRadians(90))
+                    .addPath(
+                            // Line 7
+                            new BezierLine(
+                                    new Point(13.000, 9.000, Point.CARTESIAN),
+                                    new Point(humanPlayerPose)
+                            )
+                    )
+                    .setLinearHeadingInterpolation(Math.toRadians(90), humanPlayerPose.getHeading());
 
         }
     }
