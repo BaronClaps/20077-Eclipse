@@ -47,13 +47,14 @@ public class BlueObservation extends OpMode {
     public void pathUpdate() {
         switch (pathState) {
             case 0:
-                auto.follower.setMaxPower(0.7);
+                auto.follower.setMaxPower(0.5);
                 auto.startChamber();
                 auto.follower.followPath(auto.preload);
                 setPathState(1);
                 break;
             case 1: 
                 if(!auto.follower.isBusy() && auto.actionNotBusy()) {
+                    auto.follower.setMaxPower(0.8);
                     auto.follower.followPath(auto.pushSamples);
                     setPathState(-1);
                 }

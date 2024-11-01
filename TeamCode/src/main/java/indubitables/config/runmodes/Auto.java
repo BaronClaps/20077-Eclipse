@@ -170,21 +170,21 @@ public class Auto {
             preload = new Path(new BezierLine(new Point(startPose), new Point(preloadPose)));
             preload.setLinearHeadingInterpolation(startPose.getHeading(), preloadPose.getHeading());
 
-            pushSamples = follower.pathBuilder(
-                    .addPath(new BezierCurve(new Point(preloadPose), new Point(16.088, 22.000, Point.CARTESIAN), new Point(57.345, 50.496, Point.CARTESIAN), new Point(56.000, 24.000, Point.CARTESIAN)))
-                    .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(90))
-                    .addPath(new BezierLine(new Point(56.000, 24.000, Point.CARTESIAN), new Point(13.000, 24.000, Point.CARTESIAN)))
-                    .setConstantHeadingInterpolation(Math.toRadians(90))
-                    .addPath(new BezierCurve(new Point(13.000, 24.000, Point.CARTESIAN), new Point(56.000, 50.000, Point.CARTESIAN), new Point(56.000, 14.000, Point.CARTESIAN)))
-                    .setConstantHeadingInterpolation(Math.toRadians(90))
-                    .addPath(new BezierLine(new Point(56.000, 14.000, Point.CARTESIAN),new Point(13.000, 14.000, Point.CARTESIAN)))
-                    .setConstantHeadingInterpolation(Math.toRadians(90))
-                    .addPath(new BezierCurve(new Point(13.000, 14.000, Point.CARTESIAN), new Point(56.000, 40.000, Point.CARTESIAN), new Point(56.000, 9.000, Point.CARTESIAN)))
-                    .setConstantHeadingInterpolation(Math.toRadians(90))
-                    .addPath(new BezierLine(new Point(56.000, 9.000, Point.CARTESIAN), new Point(13.000, 9.000, Point.CARTESIAN)))
-                    .setConstantHeadingInterpolation(Math.toRadians(90))
-                    .addPath(new BezierLine(new Point(13.000, 9.000, Point.CARTESIAN), new Point(humanPlayerWaitPose)))
-                    .setLinearHeadingInterpolation(Math.toRadians(90), humanPlayerWaitPose.getHeading())
+            pushSamples = follower.pathBuilder()
+                    .addPath(new BezierCurve(new Point(preloadPose), new Point(16.088, 22.000, Point.CARTESIAN), new Point(57.345, 50.496, Point.CARTESIAN), new Point(56.000, 28.000, Point.CARTESIAN)))
+                    .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(0))
+                    .addPath(new BezierLine(new Point(56.000, 24.000, Point.CARTESIAN), new Point(20, 28.000, Point.CARTESIAN)))
+                    .setConstantHeadingInterpolation(Math.toRadians(0))
+                    .addPath(new BezierCurve(new Point(20, 28.000, Point.CARTESIAN), new Point(56.000, 50.000, Point.CARTESIAN), new Point(56.000, 18.000, Point.CARTESIAN)))
+                    .setConstantHeadingInterpolation(Math.toRadians(0))
+                    .addPath(new BezierLine(new Point(56.000, 18.000, Point.CARTESIAN),new Point(20, 18.000, Point.CARTESIAN)))
+                    .setConstantHeadingInterpolation(Math.toRadians(0))
+                    .addPath(new BezierCurve(new Point(20, 18.000, Point.CARTESIAN), new Point(56.000, 40.000, Point.CARTESIAN), new Point(56.000, 13.000, Point.CARTESIAN)))
+                    .setConstantHeadingInterpolation(Math.toRadians(0))
+                    .addPath(new BezierLine(new Point(56.000, 10.00, Point.CARTESIAN), new Point(20, 9, Point.CARTESIAN)))
+                    .setConstantHeadingInterpolation(Math.toRadians(0))
+                    .addPath(new BezierLine(new Point(20, 9, Point.CARTESIAN), new Point(humanPlayerWaitPose)))
+                    .setLinearHeadingInterpolation(Math.toRadians(0), humanPlayerWaitPose.getHeading())
                     .build();
 
         }
