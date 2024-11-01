@@ -56,35 +56,32 @@ public class BlueObservation extends OpMode {
                 if(!auto.follower.isBusy() && auto.actionNotBusy()) {
                     auto.follower.setMaxPower(0.8);
                     auto.follower.followPath(auto.pushSamples);
-                    setPathState(-1);
+                    setPathState(2);
                 }
                 break;
             case 2:
                 if(!auto.follower.isBusy()) {
-                    //auto.startIntake();
+                    auto.follower.setMaxPower(0.5);
+                    auto.startSpecimen();
+                    auto.follower.followPath(auto.grab1);
                     setPathState(3);
                 }
                 break;
             case 3:
-                if(/*auto.actionNotBusy() && */!auto.follower.isBusy()) {
-                    //auto.startTransfer();
+                if(auto.actionNotBusy() && !auto.follower.isBusy()) {
+                    auto.follower.followPath(auto.specimen1);
                     setPathState(4);
                 }
                 break;
             case 4:
-                if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    ///auto.startBucket();
-                    auto.follower.setMaxPower(0.5);
-                    auto.follower.followPath(auto.score1);
+                if(auto.actionNotBusy()) {
+                    auto.startChamber();
                     setPathState(5);
                 }
                 break;
             case 5:
                 if(!auto.follower.isBusy() && auto.actionNotBusy()) {
-                    //auto.startIntake();
-                    auto.follower.setMaxPower(0.5);
-                    auto.follower.followPath(auto.element2);
-                    setPathState(6);
+                    setPathState(-1);
                 }
                 break;
             case 6:

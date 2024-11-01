@@ -39,12 +39,12 @@ public class Auto {
 
     public boolean actionBusy;
 
-    public Timer transferTimer = new Timer(), bucketTimer = new Timer(), chamberTimer = new Timer(), intakeTimer = new Timer(), parkTimer = new Timer();
-    public int transferState = -1, bucketState = -1, chamberState = -1, intakeState = -1, parkState = -1;
+    public Timer transferTimer = new Timer(), bucketTimer = new Timer(), chamberTimer = new Timer(), intakeTimer = new Timer(), parkTimer = new Timer(), specimenTimer = new Timer();
+    public int transferState = -1, bucketState = -1, chamberState = -1, intakeState = -1, parkState = -1, specimenState = -1;
 
-    public Path preload, element1, score1, element2, score2, element3, score3, park;
+    public Path preload, element1, score1, element2, score2, element3, score3, grab1, specimen1, grab2, specimen2, grab3, specimen3, park;
     public PathChain pushSamples;
-    private Pose startPose, preloadPose, element1Pose, element1ControlPose, element2Pose, element2ControlPose, element3Pose, element3ControlPose, elementScorePose, parkControlPose, parkPose, humanPlayerPose, humanPlayerWaitPose;
+    private Pose startPose, preloadPose, element1Pose, element1ControlPose, element2Pose, element2ControlPose, element3Pose, element3ControlPose, elementScorePose, parkControlPose, parkPose, humanPlayerPose, humanPlayerWaitPose, grab1Pose, specimen1Pose;
 
     public Auto(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, boolean isBlue, boolean isBucket) {
         claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
@@ -120,6 +120,8 @@ public class Auto {
                 element2Pose = blueObservationElement2Pose;
                 element3ControlPose = blueObservationElement3ControlPose;
                 element3Pose = blueObservationElement3Pose;
+                grab1Pose = blueObservationSpecimenPickupPose;
+                specimen1Pose = preloadPose;
                 parkControlPose = blueObservationParkControlPose;
                 parkPose = blueObservationParkPose;
                 break;
@@ -162,6 +164,12 @@ public class Auto {
             score3 = new Path(new BezierLine(new Point(element3Pose), new Point(elementScorePose)));
             score3.setLinearHeadingInterpolation(element3Pose.getHeading(), elementScorePose.getHeading());
 
+            grab1 = new Path(new BezierLine(new Point(humanPlayerWaitPose), new Point(blueObservationSpecimenPickupPose)));
+            grab1.setLinearHeadingInterpolation(humanPlayerWaitPose.getHeading(), blueObservationSpecimenPickupPose.getHeading());
+
+            specimen1 = new Path(new BezierLine(new Point(blueObservationSpecimenPickupPose), new Point(preloadPose)));
+            specimen1.setLinearHeadingInterpolation(blueObservationSpecimenPickupPose.getHeading(), preloadPose.getHeading());
+
             park = new Path(new BezierCurve(new Point(elementScorePose), new Point(parkControlPose), new Point(parkPose)));
             park.setLinearHeadingInterpolation(elementScorePose.getHeading(), parkPose.getHeading());
         }
@@ -173,17 +181,17 @@ public class Auto {
             pushSamples = follower.pathBuilder()
                     .addPath(new BezierCurve(new Point(preloadPose), new Point(16.088, 22.000, Point.CARTESIAN), new Point(57.345, 50.496, Point.CARTESIAN), new Point(56.000, 28.000, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(0))
-                    .addPath(new BezierLine(new Point(56.000, 24.000, Point.CARTESIAN), new Point(20, 28.000, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(56.000, 26.000, Point.CARTESIAN), new Point(20, 26.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierCurve(new Point(20, 28.000, Point.CARTESIAN), new Point(56.000, 50.000, Point.CARTESIAN), new Point(56.000, 18.000, Point.CARTESIAN)))
+                    .addPath(new BezierCurve(new Point(20, 26.000, Point.CARTESIAN), new Point(56.000, 26.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierLine(new Point(56.000, 18.000, Point.CARTESIAN),new Point(20, 18.000, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(56.000, 16.000, Point.CARTESIAN),new Point(20, 16.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierCurve(new Point(20, 18.000, Point.CARTESIAN), new Point(56.000, 40.000, Point.CARTESIAN), new Point(56.000, 13.000, Point.CARTESIAN)))
+                    .addPath(new BezierCurve(new Point(20, 16.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN), new Point(56.000, 8.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierLine(new Point(56.000, 10.00, Point.CARTESIAN), new Point(20, 9, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(56.000, 8.00, Point.CARTESIAN), new Point(20, 8, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierLine(new Point(20, 9, Point.CARTESIAN), new Point(humanPlayerWaitPose)))
+                    .addPath(new BezierLine(new Point(20, 8, Point.CARTESIAN), new Point(humanPlayerWaitPose)))
                     .setLinearHeadingInterpolation(Math.toRadians(0), humanPlayerWaitPose.getHeading())
                     .build();
 
@@ -304,9 +312,9 @@ public class Auto {
                 }
             case 4:
                 if(chamberTimer.getElapsedTimeSeconds() > 1) {
+                    claw.initClaw();
+                    arm.initArm();
                     claw.open();
-                    claw.transfer();
-                    arm.transfer();
                     actionBusy = false;
                     setChamberState(-1);
                 }
@@ -320,6 +328,49 @@ public class Auto {
     public void startChamber() {
         if(actionNotBusy()) {
             setChamberState(1);
+        }
+    }
+
+    public void specimen() {
+        switch (specimenState) {
+            case 1:
+                actionBusy = true;
+                claw.open();
+                lift.toZero();
+                extend.toZero();
+                arm.specimen();
+                claw.specimen();
+                specimenTimer.resetTimer();
+                setSpecimenState(2);
+                break;
+            case 2:
+                if (specimenTimer.getElapsedTimeSeconds() > 2) {
+                    claw.close();
+                    chamberTimer.resetTimer();
+                    setChamberState(3);
+                }
+                break;
+            case 3:
+                if (chamberTimer.getElapsedTimeSeconds() > 1) {
+                    lift.toHighChamber();
+                    setChamberState(4);
+                }
+            case 4:
+                if(chamberTimer.getElapsedTimeSeconds() > 1) {
+                    claw.open();
+                    actionBusy = false;
+                    setChamberState(-1);
+                }
+        }
+    }
+
+    public void setSpecimenState(int x) {
+        specimenState = x;
+    }
+
+    public void startSpecimen() {
+        if(actionNotBusy()) {
+            setSpecimenState(1);
         }
     }
 
