@@ -91,6 +91,7 @@ public class Auto {
         chamber();
         intake();
         park();
+        specimen();
     }
 
     public void createPoses() {
@@ -120,8 +121,6 @@ public class Auto {
                 element2Pose = blueObservationElement2Pose;
                 element3ControlPose = blueObservationElement3ControlPose;
                 element3Pose = blueObservationElement3Pose;
-                grab1Pose = blueObservationSpecimenPickupPose;
-                specimen1Pose = preloadPose;
                 parkControlPose = blueObservationParkControlPose;
                 parkPose = blueObservationParkPose;
                 break;
@@ -164,12 +163,6 @@ public class Auto {
             score3 = new Path(new BezierLine(new Point(element3Pose), new Point(elementScorePose)));
             score3.setLinearHeadingInterpolation(element3Pose.getHeading(), elementScorePose.getHeading());
 
-            grab1 = new Path(new BezierLine(new Point(humanPlayerWaitPose), new Point(blueObservationSpecimenPickupPose)));
-            grab1.setLinearHeadingInterpolation(humanPlayerWaitPose.getHeading(), blueObservationSpecimenPickupPose.getHeading());
-
-            specimen1 = new Path(new BezierLine(new Point(blueObservationSpecimenPickupPose), new Point(preloadPose)));
-            specimen1.setLinearHeadingInterpolation(blueObservationSpecimenPickupPose.getHeading(), preloadPose.getHeading());
-
             park = new Path(new BezierCurve(new Point(elementScorePose), new Point(parkControlPose), new Point(parkPose)));
             park.setLinearHeadingInterpolation(elementScorePose.getHeading(), parkPose.getHeading());
         }
@@ -194,6 +187,12 @@ public class Auto {
                     .addPath(new BezierLine(new Point(20, 8, Point.CARTESIAN), new Point(humanPlayerWaitPose)))
                     .setLinearHeadingInterpolation(Math.toRadians(0), humanPlayerWaitPose.getHeading())
                     .build();
+
+            grab1 = new Path(new BezierLine(new Point(humanPlayerWaitPose), new Point(blueObservationSpecimenPickupPose)));
+            grab1.setLinearHeadingInterpolation(humanPlayerWaitPose.getHeading(), blueObservationSpecimenPickupPose.getHeading());
+
+            specimen1 = new Path(new BezierLine(new Point(blueObservationSpecimenPickupPose), new Point(preloadPose)));
+            specimen1.setLinearHeadingInterpolation(blueObservationSpecimenPickupPose.getHeading(), preloadPose.getHeading());
 
         }
     }
@@ -356,7 +355,12 @@ public class Auto {
                     setChamberState(4);
                 }
             case 4:
-                if(chamberTimer.getElapsedTimeSeconds() > 1) {
+                if (chamberTimer.getElapsedTimeSeconds() > 1) {
+                    lift.toHighChamber();
+                    setChamberState(5);
+                }
+            case 5:
+                if(chamberTimer.getElapsedTimeSeconds() > 2) {
                     claw.open();
                     actionBusy = false;
                     setChamberState(-1);

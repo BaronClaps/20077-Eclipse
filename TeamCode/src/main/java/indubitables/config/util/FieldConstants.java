@@ -42,7 +42,7 @@ public class FieldConstants {
     public static final Pose blueObservationElement2ControlPose = new Pose(20, 96);
     public static final Pose blueObservationElement3Pose = new Pose(20, 96, Math.toRadians(180));
     public static final Pose blueObservationElement3ControlPose = new Pose(20, 110);
-    public static final Pose blueObservationSpecimenPickupPose = new Pose(20, 25, Math.toRadians(180));
+    public static final Pose blueObservationSpecimenPickupPose = new Pose(20, 25, Math.toRadians(0));
     public static final Pose blueObservationParkPose = new Pose(10, 24, 0);
     public static final Pose blueObservationParkControlPose = new Pose(20, 50);
 
