@@ -43,7 +43,7 @@ public class Auto {
     public int transferState = -1, bucketState = -1, chamberState = -1, intakeState = -1, parkState = -1;
 
     public Path preload, element1, score1, element2, score2, element3, score3, park;
-    public PathBuilder pushSamples;
+    public PathChain pushSamples;
     private Pose startPose, preloadPose, element1Pose, element1ControlPose, element2Pose, element2ControlPose, element3Pose, element3ControlPose, elementScorePose, parkControlPose, parkPose, humanPlayerPose, humanPlayerWaitPose;
 
     public Auto(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, boolean isBlue, boolean isBucket) {
@@ -140,7 +140,6 @@ public class Auto {
 
     public void buildPaths() {
 
-
         if((startLocation == RobotStart.BLUE_BUCKET) || (startLocation == RobotStart.RED_BUCKET)) {
             preload = new Path(new BezierLine(new Point(startPose), new Point(preloadPose)));
             preload.setLinearHeadingInterpolation(startPose.getHeading(), preloadPose.getHeading());
@@ -171,32 +170,14 @@ public class Auto {
             preload = new Path(new BezierLine(new Point(startPose), new Point(preloadPose)));
             preload.setLinearHeadingInterpolation(startPose.getHeading(), preloadPose.getHeading());
 
-            pushSamples.addPath(
-                            // Line 1
-                            new BezierCurve(
-                                    new Point(preloadPose),
-                                    new Point(16.088, 22.000, Point.CARTESIAN),
-                                    new Point(57.345, 50.496, Point.CARTESIAN),
-                                    new Point(56.000, 24.000, Point.CARTESIAN)
-                            )
-                    )
+            pushSamples = follower.pathBuilder(
+                    .addPath(new BezierCurve(new Point(preloadPose), new Point(16.088, 22.000, Point.CARTESIAN), new Point(57.345, 50.496, Point.CARTESIAN), new Point(56.000, 24.000, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(90))
-                    .addPath(
-                            // Line 2
-                            new BezierLine(
-                                    new Point(56.000, 24.000, Point.CARTESIAN),
-                                    new Point(13.000, 24.000, Point.CARTESIAN)
-                            )
-                    )
+                    .addPath(new BezierLine(new Point(56.000, 24.000, Point.CARTESIAN), new Point(13.000, 24.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(90))
-                    .addPath(
-                            // Line 3
-                            new BezierCurve(
-                                    new Point(13.000, 24.000, Point.CARTESIAN),
-                                    new Point(56.000, 50.000, Point.CARTESIAN),
-                                    new Point(56.000, 14.000, Point.CARTESIAN)
-                            )
-                    )
+                    .addPath(new BezierCurve(
+new Point(13.000, 24.000, Point.CARTESIAN), new Point(56.000, 50.000, Point.CARTESIAN),
+                                    new Point(56.000, 14.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(90))
                     .addPath(
                             // Line 4
