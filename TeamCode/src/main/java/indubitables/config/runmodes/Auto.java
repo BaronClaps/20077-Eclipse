@@ -44,7 +44,7 @@ public class Auto {
 
     public Path preload, element1, score1, element2, score2, element3, score3, park;
     public PathBuilder pushSamples;
-    private Pose startPose, preloadPose, element1Pose, element1ControlPose, element2Pose, element2ControlPose, element3Pose, element3ControlPose, elementScorePose, parkControlPose, parkPose, humanPlayerPose;
+    private Pose startPose, preloadPose, element1Pose, element1ControlPose, element2Pose, element2ControlPose, element3Pose, element3ControlPose, elementScorePose, parkControlPose, parkPose, humanPlayerPose, humanPlayerWaitPose;
 
     public Auto(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, boolean isBlue, boolean isBucket) {
         claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
@@ -113,12 +113,15 @@ public class Auto {
                 startPose = blueObservationStartPose;
                 preloadPose = blueObservationPreloadPose;
                 humanPlayerPose = blueObservationHumanPlayerPose;
+                humanPlayerWaitPose = blueObservationHumanPlayerWaitPose;
                 element1ControlPose = blueObservationElement1ControlPose;
                 element1Pose = blueObservationElement1Pose;
                 element2ControlPose = blueObservationElement2ControlPose;
                 element2Pose = blueObservationElement2Pose;
                 element3ControlPose = blueObservationElement3ControlPose;
                 element3Pose = blueObservationElement3Pose;
+                parkControlPose = blueObservationParkControlPose;
+                parkPose = blueObservationParkPose;
                 break;
 
             case RED_BUCKET:
@@ -224,10 +227,10 @@ public class Auto {
                             // Line 7
                             new BezierLine(
                                     new Point(13.000, 9.000, Point.CARTESIAN),
-                                    new Point(humanPlayerPose)
+                                    new Point(humanPlayerWaitPose)
                             )
                     )
-                    .setLinearHeadingInterpolation(Math.toRadians(90), humanPlayerPose.getHeading());
+                    .setLinearHeadingInterpolation(Math.toRadians(90), humanPlayerWaitPose.getHeading());
 
         }
     }
