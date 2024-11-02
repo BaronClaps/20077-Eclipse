@@ -1,6 +1,8 @@
 package indubitables.config.runmodes;
 
 import static indubitables.config.util.FieldConstants.*;
+
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import indubitables.pedroPathing.pathGeneration.BezierCurve;
@@ -42,9 +44,9 @@ public class Auto {
     public Timer transferTimer = new Timer(), bucketTimer = new Timer(), chamberTimer = new Timer(), intakeTimer = new Timer(), parkTimer = new Timer(), specimenTimer = new Timer();
     public int transferState = -1, bucketState = -1, chamberState = -1, intakeState = -1, parkState = -1, specimenState = -1;
 
-    public Path preload, element1, score1, element2, score2, element3, score3, grab1, specimen1, grab2, specimen2, grab3, specimen3, park;
-    public PathChain pushSamples;
-    private Pose startPose, preloadPose, element1Pose, element1ControlPose, element2Pose, element2ControlPose, element3Pose, element3ControlPose, elementScorePose, parkControlPose, parkPose, humanPlayerPose, humanPlayerWaitPose, grab1Pose, specimen1Pose;
+    public Path element1, score1, element2, score2, element3, score3, grab2, grab3, align2, align3, park;
+    public PathChain pushSamples, preload,specimen1, specimen2, specimen3, grab1, align1;
+    public Pose startPose, preloadPose, element1Pose, element1ControlPose, element2Pose, element2ControlPose, element3Pose, element3ControlPose, elementScorePose, parkControlPose, parkPose, humanPlayerPose, humanPlayerWaitPose, grab1Pose, align1Pose, specimen1Pose;
 
     public Auto(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, boolean isBlue, boolean isBucket) {
         claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
@@ -122,6 +124,8 @@ public class Auto {
                 element3ControlPose = blueObservationElement3ControlPose;
                 element3Pose = blueObservationElement3Pose;
                 parkControlPose = blueObservationParkControlPose;
+                grab1Pose = blueObservationSpecimenPickupPose;
+                align1Pose = blueObservationSpecimenSetPose;
                 parkPose = blueObservationParkPose;
                 break;
 
@@ -142,8 +146,10 @@ public class Auto {
     public void buildPaths() {
 
         if((startLocation == RobotStart.BLUE_BUCKET) || (startLocation == RobotStart.RED_BUCKET)) {
-            preload = new Path(new BezierLine(new Point(startPose), new Point(preloadPose)));
-            preload.setLinearHeadingInterpolation(startPose.getHeading(), preloadPose.getHeading());
+            preload = follower.pathBuilder()
+                    .addPath(new BezierLine(new Point(startPose), new Point(preloadPose)))
+                    .setLinearHeadingInterpolation(startPose.getHeading(), preloadPose.getHeading())
+                    .build();
 
             element1 = new Path(new BezierCurve(new Point(preloadPose), new Point(element1ControlPose), new Point(element1Pose)));
             element1.setLinearHeadingInterpolation(preloadPose.getHeading(), element1Pose.getHeading());
@@ -151,7 +157,7 @@ public class Auto {
             score1 = new Path(new BezierLine(new Point(element1Pose), new Point(elementScorePose)));
             score1.setLinearHeadingInterpolation(element1Pose.getHeading(), elementScorePose.getHeading());
 
-            element2 = new Path(new BezierCurve(new Point(element1Pose), new Point(element2ControlPose), new Point(element2Pose)));
+            element2 = new Path(new BezierCurve(new Point(elementScorePose), new Point(element2ControlPose), new Point(element2Pose)));
             element2.setLinearHeadingInterpolation(element1Pose.getHeading(), element2Pose.getHeading());
 
             score2 = new Path(new BezierLine(new Point(element2Pose), new Point(elementScorePose)));
@@ -168,11 +174,13 @@ public class Auto {
         }
 
         if (startLocation == RobotStart.BLUE_OBSERVATION || startLocation == RobotStart.RED_OBSERVATION) {
-            preload = new Path(new BezierLine(new Point(startPose), new Point(preloadPose)));
-            preload.setLinearHeadingInterpolation(startPose.getHeading(), preloadPose.getHeading());
+            preload = follower.pathBuilder()
+                    .addPath(new BezierLine(new Point(startPose), new Point(preloadPose)))
+                    .setLinearHeadingInterpolation(startPose.getHeading(), preloadPose.getHeading())
+                    .build();
 
             pushSamples = follower.pathBuilder()
-                    .addPath(new BezierCurve(new Point(preloadPose), new Point(16.088, 22.000, Point.CARTESIAN), new Point(57.345, 50.496, Point.CARTESIAN), new Point(56.000, 28.000, Point.CARTESIAN)))
+                    .addPath(new BezierCurve(new Point(preloadPose), new Point(16.088, 22.000, Point.CARTESIAN), new Point(57.345, 50.496, Point.CARTESIAN), new Point(56.000, 26.000, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(0))
                     .addPath(new BezierLine(new Point(56.000, 26.000, Point.CARTESIAN), new Point(20, 26.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(0))
@@ -188,11 +196,21 @@ public class Auto {
                     .setLinearHeadingInterpolation(Math.toRadians(0), humanPlayerWaitPose.getHeading())
                     .build();
 
-            grab1 = new Path(new BezierLine(new Point(humanPlayerWaitPose), new Point(blueObservationSpecimenPickupPose)));
-            grab1.setLinearHeadingInterpolation(humanPlayerWaitPose.getHeading(), blueObservationSpecimenPickupPose.getHeading());
+            align1 = follower.pathBuilder()
 
-            specimen1 = new Path(new BezierLine(new Point(blueObservationSpecimenPickupPose), new Point(preloadPose)));
-            specimen1.setLinearHeadingInterpolation(blueObservationSpecimenPickupPose.getHeading(), preloadPose.getHeading());
+                    .addPath(new BezierLine(new Point(humanPlayerWaitPose), new Point(blueObservationSpecimenSetPose)))
+                    .setLinearHeadingInterpolation(humanPlayerWaitPose.getHeading(), blueObservationSpecimenSetPose.getHeading())
+                    .build();
+
+            grab1 = follower.pathBuilder()
+                    .addPath(new BezierLine(new Point(blueObservationSpecimenSetPose), new Point(blueObservationSpecimenPickupPose)))
+                    .setLinearHeadingInterpolation(blueObservationSpecimenSetPose.getHeading(), blueObservationSpecimenPickupPose.getHeading())
+                    .build();
+
+            specimen1 = follower.pathBuilder()
+                    .addPath(new BezierLine(new Point(blueObservationSpecimenPickupPose), new Point(blueObservationSpecimen1Pose)))
+                    .setLinearHeadingInterpolation(blueObservationSpecimenPickupPose.getHeading(), blueObservationSpecimen1Pose.getHeading())
+                    .build();
 
         }
     }
@@ -335,36 +353,18 @@ public class Auto {
             case 1:
                 actionBusy = true;
                 claw.open();
-                lift.toZero();
+                lift.toHumanPlayer();
                 extend.toZero();
                 arm.specimen();
                 claw.specimen();
                 specimenTimer.resetTimer();
                 setSpecimenState(2);
-                break;
             case 2:
-                if (specimenTimer.getElapsedTimeSeconds() > 2) {
-                    claw.close();
-                    chamberTimer.resetTimer();
-                    setChamberState(3);
+                if(specimenTimer.getElapsedTimeSeconds() > 0.5) {
+                    actionBusy = false;
+                    setSpecimenState(-1);
                 }
                 break;
-            case 3:
-                if (chamberTimer.getElapsedTimeSeconds() > 1) {
-                    lift.toHighChamber();
-                    setChamberState(4);
-                }
-            case 4:
-                if (chamberTimer.getElapsedTimeSeconds() > 1) {
-                    lift.toHighChamber();
-                    setChamberState(5);
-                }
-            case 5:
-                if(chamberTimer.getElapsedTimeSeconds() > 2) {
-                    claw.open();
-                    actionBusy = false;
-                    setChamberState(-1);
-                }
         }
     }
 

@@ -7,11 +7,14 @@ import indubitables.pedroPathing.follower.Follower;
 import indubitables.config.runmodes.Auto;
 import indubitables.config.util.action.Actions;
 import indubitables.config.util.action.SequentialAction;
+import indubitables.pedroPathing.util.Timer;
 
 @Autonomous(name="BlueObservation", group="A")
 public class BlueObservation extends OpMode {
     public int pathState;
     public Auto auto;
+
+    public Timer pathTimer = new Timer();
 
     @Override
     public void init() {
@@ -48,65 +51,71 @@ public class BlueObservation extends OpMode {
         switch (pathState) {
             case 0:
                 auto.follower.setMaxPower(0.5);
-                auto.startChamber();
-                auto.follower.followPath(auto.preload);
+                auto.follower.followPath(auto.preload, true);
                 setPathState(1);
                 break;
-            case 1: 
-                if(!auto.follower.isBusy() && auto.actionNotBusy()) {
-                    auto.follower.setMaxPower(0.8);
-                    auto.follower.followPath(auto.pushSamples);
+            case 1:
+                if(auto.follower.getPose().getX() > auto.preloadPose.getX()) {
+                    auto.startChamber();
                     setPathState(2);
                 }
                 break;
             case 2:
-                if(!auto.follower.isBusy()) {
-                    auto.follower.setMaxPower(0.5);
-                    auto.startSpecimen();
-                    auto.follower.followPath(auto.grab1);
+                if(auto.actionNotBusy()) {
+                    auto.follower.setMaxPower(0.8);
+                    auto.follower.followPath(auto.pushSamples);
                     setPathState(3);
                 }
                 break;
             case 3:
-                if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    auto.follower.followPath(auto.specimen1);
+                if(!auto.follower.isBusy()) {
+                    auto.follower.setMaxPower(0.5);
+                    auto.startSpecimen();
                     setPathState(4);
                 }
                 break;
             case 4:
-                if(auto.actionNotBusy()) {
-                    auto.startChamber();
+                if(auto.actionNotBusy() && !auto.follower.isBusy()) {
+                    auto.follower.followPath(auto.align1, true);
                     setPathState(5);
                 }
                 break;
             case 5:
-                if(!auto.follower.isBusy() && auto.actionNotBusy()) {
-                    setPathState(-1);
+                if(auto.follower.getPose().getX() > auto.align1Pose.getX()) {
+                    auto.follower.followPath(auto.grab1, true);
+                    setPathState(6);
                 }
                 break;
             case 6:
-                if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    //auto.startTransfer();
+                if(auto.follower.getPose().getX() < auto.grab1Pose.getX()) {
+                    auto.claw.close();
                     setPathState(7);
                 }
                 break;
             case 7:
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    //auto.startBucket();
-                    auto.follower.setMaxPower(0.5);
-                    auto.follower.followPath(auto.score2);
+                    auto.init();
                     setPathState(8);
                 }
                 break;
             case 8:
-                if(!auto.follower.isBusy() && auto.actionNotBusy()) {
-                    //auto.startIntake();
-                    auto.follower.setMaxPower(0.5);
-                    auto.follower.followPath(auto.element3);
+                if(auto.actionNotBusy()) {
+                    auto.follower.setMaxPower(1);
+                    auto.follower.followPath(auto.specimen1, true);
                     setPathState(9);
                 }
-                break;
             case 9:
+                if(auto.follower.getPose().getX() > auto.preloadPose.getX()) {
+                    auto.startChamber();
+                    setPathState(-1);
+                }
+                break;
+            case 1000000:
+                if(!auto.follower.isBusy() && auto.actionNotBusy()) {
+                    setPathState(-1);
+                }
+                break;
+            case 100000000:
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
                     //auto.startTransfer();
                     setPathState(10);
