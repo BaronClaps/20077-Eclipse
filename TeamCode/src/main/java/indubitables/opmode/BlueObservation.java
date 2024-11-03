@@ -2,6 +2,7 @@ package indubitables.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import indubitables.pedroPathing.follower.Follower;
 import indubitables.config.runmodes.Auto;
@@ -63,7 +64,7 @@ public class BlueObservation extends OpMode {
             case 2:
                 if(auto.actionNotBusy()) {
                     auto.follower.setMaxPower(0.8);
-                    auto.follower.followPath(auto.pushSamples);
+                    auto.follower.followPath(auto.pushSamples, true);
                     setPathState(3);
                 }
                 break;
@@ -76,15 +77,12 @@ public class BlueObservation extends OpMode {
                 break;
             case 4:
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    auto.follower.followPath(auto.align1, true);
                     setPathState(5);
                 }
                 break;
             case 5:
-                if(auto.follower.getPose().getX() > auto.align1Pose.getX()) {
                     auto.follower.followPath(auto.grab1, true);
                     setPathState(6);
-                }
                 break;
             case 6:
                 if(auto.follower.getPose().getX() < auto.grab1Pose.getX()) {
@@ -93,47 +91,70 @@ public class BlueObservation extends OpMode {
                 }
                 break;
             case 7:
-                if(auto.actionNotBusy() && !auto.follower.isBusy()) {
+                if(!auto.follower.isBusy()) {
                     auto.init();
+                    auto.lift.toZero();
                     setPathState(8);
                 }
                 break;
             case 8:
                 if(auto.actionNotBusy()) {
+                    auto.lift.rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    auto.lift.rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     auto.follower.setMaxPower(1);
                     auto.follower.followPath(auto.specimen1, true);
                     setPathState(9);
                 }
+                break;
             case 9:
-                if(auto.follower.getPose().getX() > auto.preloadPose.getX()) {
+                if((auto.follower.getPose().getX() > auto.specimen1Pose.getX()) && (auto.follower.getPose().getY() >= auto.specimen1Pose.getY())) {
                     auto.startChamber();
-                    setPathState(-1);
-                }
-                break;
-            case 1000000:
-                if(!auto.follower.isBusy() && auto.actionNotBusy()) {
-                    setPathState(-1);
-                }
-                break;
-            case 100000000:
-                if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    //auto.startTransfer();
-                    setPathState(10);
-                }
-                break;
-            case 10:
-                if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    //auto.startBucket();
-                    auto.follower.setMaxPower(0.5);
-                    auto.follower.followPath(auto.score3);
                     setPathState(11);
                 }
                 break;
             case 11:
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    //auto.startPark();
-                    auto.follower.setMaxPower(0.9);
-                    auto.follower.followPath(auto.park);
+                    auto.lift.toZero();
+                    auto.follower.setMaxPower(0.7);
+                    auto.follower.followPath(auto.lineUp2);
+                    auto.startSpecimen();
+                    setPathState(12);
+                }
+                break;
+            case 12:
+                if(!auto.follower.isBusy()) {
+                    auto.lift.rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    auto.lift.rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    auto.follower.followPath(auto.grab2, true);
+                    setPathState(13);
+                }
+                break;
+            case 13:
+                if(auto.actionNotBusy() && auto.follower.getPose().getX() < auto.grab2Pose.getX()) {
+                    auto.claw.close();
+                    setPathState(14);
+                }
+                break;
+            case 14:
+                if(pathTimer.getElapsedTimeSeconds() > 0.5)
+                    auto.init();
+                    setPathState(15);
+                break;
+            case 15:
+                if(auto.actionNotBusy()) {
+                    auto.follower.setMaxPower(1);
+                    auto.follower.followPath(auto.specimen2, true);
+                    setPathState(16);
+                }
+                break;
+            case 16:
+                if(auto.follower.getPose().getX() > auto.preloadPose.getX()) {
+                    auto.startChamber();
+                    setPathState(17);
+                }
+                break;
+            case 17:
+                if(auto.actionNotBusy()) {
                     setPathState(-1);
                 }
                 break;
@@ -142,5 +163,6 @@ public class BlueObservation extends OpMode {
 
     public void setPathState(int x) {
         pathState = x;
+        pathTimer.resetTimer();
     }
 }

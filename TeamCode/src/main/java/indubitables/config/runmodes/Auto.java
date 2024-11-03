@@ -41,12 +41,12 @@ public class Auto {
 
     public boolean actionBusy;
 
-    public Timer transferTimer = new Timer(), bucketTimer = new Timer(), chamberTimer = new Timer(), intakeTimer = new Timer(), parkTimer = new Timer(), specimenTimer = new Timer();
-    public int transferState = -1, bucketState = -1, chamberState = -1, intakeState = -1, parkState = -1, specimenState = -1;
+    public Timer transferTimer = new Timer(), bucketTimer = new Timer(), chamberTimer = new Timer(), intakeTimer = new Timer(), parkTimer = new Timer(), specimenTimer = new Timer(), chamberTimer2 = new Timer();
+    public int transferState = -1, bucketState = -1, chamberState = -1, intakeState = -1, parkState = -1, specimenState = -1, chamberState2 = -1;
 
-    public Path element1, score1, element2, score2, element3, score3, grab2, grab3, align2, align3, park;
-    public PathChain pushSamples, preload,specimen1, specimen2, specimen3, grab1, align1;
-    public Pose startPose, preloadPose, element1Pose, element1ControlPose, element2Pose, element2ControlPose, element3Pose, element3ControlPose, elementScorePose, parkControlPose, parkPose, humanPlayerPose, humanPlayerWaitPose, grab1Pose, align1Pose, specimen1Pose;
+    public Path element1, score1, element2, score2, element3, score3, grab3, align2, align3, park;
+    public PathChain pushSamples, preload,specimen1, specimen2, specimen3, grab1, align1, lineUp2, grab2;
+    public Pose startPose, preloadPose, element1Pose, element1ControlPose, element2Pose, element2ControlPose, element3Pose, element3ControlPose, elementScorePose, parkControlPose, parkPose, grab1Pose, align1Pose, specimen1Pose, grab2Pose;
 
     public Auto(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, boolean isBlue, boolean isBucket) {
         claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
@@ -115,8 +115,6 @@ public class Auto {
             case BLUE_OBSERVATION:
                 startPose = blueObservationStartPose;
                 preloadPose = blueObservationPreloadPose;
-                humanPlayerPose = blueObservationHumanPlayerPose;
-                humanPlayerWaitPose = blueObservationHumanPlayerWaitPose;
                 element1ControlPose = blueObservationElement1ControlPose;
                 element1Pose = blueObservationElement1Pose;
                 element2ControlPose = blueObservationElement2ControlPose;
@@ -126,6 +124,8 @@ public class Auto {
                 parkControlPose = blueObservationParkControlPose;
                 grab1Pose = blueObservationSpecimenPickupPose;
                 align1Pose = blueObservationSpecimenSetPose;
+                specimen1Pose = blueObservationSpecimen1Pose;
+                grab2Pose = blueObservationSpecimenPickup2Pose;
                 parkPose = blueObservationParkPose;
                 break;
 
@@ -182,24 +182,18 @@ public class Auto {
             pushSamples = follower.pathBuilder()
                     .addPath(new BezierCurve(new Point(preloadPose), new Point(16.088, 22.000, Point.CARTESIAN), new Point(57.345, 50.496, Point.CARTESIAN), new Point(56.000, 26.000, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(0))
-                    .addPath(new BezierLine(new Point(56.000, 26.000, Point.CARTESIAN), new Point(20, 26.000, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(56.000, 26.000, Point.CARTESIAN), new Point(24, 26.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierCurve(new Point(20, 26.000, Point.CARTESIAN), new Point(56.000, 26.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN)))
+                    .addPath(new BezierCurve(new Point(24, 26.000, Point.CARTESIAN), new Point(56.000, 26.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierLine(new Point(56.000, 16.000, Point.CARTESIAN),new Point(20, 16.000, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(56.000, 16.000, Point.CARTESIAN),new Point(24, 16.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierCurve(new Point(20, 16.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN), new Point(56.000, 8.000, Point.CARTESIAN)))
+                    .addPath(new BezierCurve(new Point(24, 16.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN), new Point(56.000, 8.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierLine(new Point(56.000, 8.00, Point.CARTESIAN), new Point(20, 8, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(56.000, 8.00, Point.CARTESIAN), new Point(24, 8, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierLine(new Point(20, 8, Point.CARTESIAN), new Point(humanPlayerWaitPose)))
-                    .setLinearHeadingInterpolation(Math.toRadians(0), humanPlayerWaitPose.getHeading())
-                    .build();
-
-            align1 = follower.pathBuilder()
-
-                    .addPath(new BezierLine(new Point(humanPlayerWaitPose), new Point(blueObservationSpecimenSetPose)))
-                    .setLinearHeadingInterpolation(humanPlayerWaitPose.getHeading(), blueObservationSpecimenSetPose.getHeading())
+                    .addPath(new BezierLine(new Point(24, 8, Point.CARTESIAN), new Point(blueObservationSpecimenSetPose)))
+                    .setLinearHeadingInterpolation(Math.toRadians(0), blueObservationSpecimenSetPose.getHeading())
                     .build();
 
             grab1 = follower.pathBuilder()
@@ -210,6 +204,21 @@ public class Auto {
             specimen1 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(blueObservationSpecimenPickupPose), new Point(blueObservationSpecimen1Pose)))
                     .setLinearHeadingInterpolation(blueObservationSpecimenPickupPose.getHeading(), blueObservationSpecimen1Pose.getHeading())
+                    .build();
+
+            lineUp2 = follower.pathBuilder()
+                    .addPath(new BezierLine(new Point(blueObservationSpecimen1Pose), new Point(blueObservationSpecimenSetPose)))
+                    .setLinearHeadingInterpolation(blueObservationSpecimen1Pose.getHeading(), blueObservationSpecimenSetPose.getHeading())
+                    .build();
+
+            grab2 = follower.pathBuilder()
+                    .addPath(new BezierLine(new Point(blueObservationSpecimenSetPose), new Point(blueObservationSpecimenPickup2Pose)))
+                    .setLinearHeadingInterpolation(blueObservationSpecimenSetPose.getHeading(), blueObservationSpecimenPickup2Pose.getHeading())
+                    .build();
+
+            specimen2 = follower.pathBuilder()
+                    .addPath(new BezierLine(new Point(blueObservationSpecimenPickup2Pose), new Point(blueObservationSpecimen2Pose)))
+                    .setLinearHeadingInterpolation(blueObservationSpecimenPickup2Pose.getHeading(), blueObservationSpecimen2Pose.getHeading())
                     .build();
 
         }
@@ -319,14 +328,9 @@ public class Auto {
                     arm.chamber();
                     claw.chamber();
                     chamberTimer.resetTimer();
-                    setChamberState(3);
-                }
-                break;
-            case 3:
-                if (chamberTimer.getElapsedTimeSeconds() > 1) {
-                    lift.toTransfer();
                     setChamberState(4);
                 }
+                break;
             case 4:
                 if(chamberTimer.getElapsedTimeSeconds() > 1) {
                     claw.initClaw();
@@ -360,7 +364,7 @@ public class Auto {
                 specimenTimer.resetTimer();
                 setSpecimenState(2);
             case 2:
-                if(specimenTimer.getElapsedTimeSeconds() > 0.5) {
+                if(specimenTimer.getElapsedTimeSeconds() > 1.5) {
                     actionBusy = false;
                     setSpecimenState(-1);
                 }

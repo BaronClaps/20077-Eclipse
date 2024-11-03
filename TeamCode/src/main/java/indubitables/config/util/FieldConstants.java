@@ -34,19 +34,18 @@ public class FieldConstants {
     public static final Pose blueBucketRightSampleControlPose = new Pose(20, 96);
 
     // Blue Observation Poses
-    public static final Pose blueObservationHumanPlayerWaitPose = new Pose(23, 16, 0);
-    public static final Pose blueObservationHumanPlayerPose = new Pose(20, 22, 0);
     public static final Pose blueObservationElement1Pose = new Pose(20, 96, Math.toRadians(180));
     public static final Pose blueObservationElement1ControlPose = new Pose(20, 110);
     public static final Pose blueObservationElement2Pose = new Pose(20, 86, Math.toRadians(180));
     public static final Pose blueObservationElement2ControlPose = new Pose(20, 96);
     public static final Pose blueObservationElement3Pose = new Pose(20, 96, Math.toRadians(180));
     public static final Pose blueObservationElement3ControlPose = new Pose(20, 110);
-    public static final Pose blueObservationSpecimenSetPose = new Pose(16.5, 23, Math.toRadians(0));
-    public static final Pose blueObservationSpecimenPickupPose = new Pose(17, 25, Math.toRadians(0));
-    public static final Pose blueObservationSpecimen1Pose = new Pose(31.25, 70.625, Math.toRadians(180));
-    public static final Pose blueObservationSpecimen2Pose = new Pose(26.25, 73.625, Math.toRadians(180));
-    public static final Pose blueObservationSpecimen3Pose = new Pose(26.25, 76.625, Math.toRadians(180));
+    public static final Pose blueObservationSpecimenSetPose = new Pose(20, 25, Math.toRadians(0));
+    public static final Pose blueObservationSpecimenPickupPose = new Pose(17, 27.25, Math.toRadians(0));
+    public static final Pose blueObservationSpecimenPickup2Pose = new Pose(17, 27.25, Math.toRadians(0));
+    public static final Pose blueObservationSpecimen1Pose = new Pose(30.25, 70.625, Math.toRadians(180));
+    public static final Pose blueObservationSpecimen2Pose = new Pose(30.25, 73.625, Math.toRadians(180));
+    public static final Pose blueObservationSpecimen3Pose = new Pose(30.25, 76.625, Math.toRadians(180));
     public static final Pose blueObservationParkPose = new Pose(10, 24, 0);
     public static final Pose blueObservationParkControlPose = new Pose(20, 50);
 

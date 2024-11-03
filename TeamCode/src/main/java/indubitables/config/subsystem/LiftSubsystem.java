@@ -111,6 +111,10 @@ public class LiftSubsystem {
         setTarget(liftToHighBucket);
     }
 
+    public void toHighChamber2() {
+        setTarget(liftToHighChamber2);
+    }
+
     public void toHighChamber() {
         setTarget(liftToHighChamber);
     }

@@ -29,7 +29,9 @@ public class RobotConstants {
 
     public static int liftToZero = 100;
     public static int liftToHumanPlayer = 150;
-    public static int liftToHighChamber = 300;
+    public static int liftToHighChamber = 275;
+    public static int liftToHighChamber2 = 350;
+    public static int liftToHighChamber3 = 350;
     public static int liftToHighBucket = 0;
     public static int liftToTransfer = 200;
     public static int liftToPark = 0;
