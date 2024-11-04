@@ -39,7 +39,8 @@ public class Auto {
     public Follower follower;
     public Telemetry telemetry;
 
-    public boolean actionBusy;
+    public boolean actionBusy, liftPIDF = true;
+    public double liftManual = 0;
 
     public Timer transferTimer = new Timer(), bucketTimer = new Timer(), chamberTimer = new Timer(), intakeTimer = new Timer(), parkTimer = new Timer(), specimenTimer = new Timer(), chamberTimer2 = new Timer();
     public int transferState = -1, bucketState = -1, chamberState = -1, intakeState = -1, parkState = -1, specimenState = -1, chamberState2 = -1;
@@ -87,7 +88,10 @@ public class Auto {
 
     public void update() {
         follower.update();
-        lift.updatePIDF();
+        if(!liftPIDF)
+            lift.manual(liftManual);
+        else
+            lift.updatePIDF();
         transfer();
         bucket();
         chamber();

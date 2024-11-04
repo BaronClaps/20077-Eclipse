@@ -85,11 +85,14 @@ public class BlueObservation extends OpMode {
             case 6: //Sets the arm to a neutral position and puts lifts to zero;
                 if(pathTimer.getElapsedTimeSeconds() > 0.25) {
                     auto.init();
-                    auto.lift.toZero();
+                    auto.liftPIDF = false;
+                    auto.liftManual = -0.5;
                     setPathState(7); }
                 break;
             case 7: //Resets the encoders and begins driving to the chamber
-                if(auto.actionNotBusy()) {
+                if(pathTimer.getElapsedTimeSeconds() > 1) {
+                    auto.liftPIDF = true;
+                    auto.liftManual = 0;
                     auto.lift.rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     auto.lift.rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     auto.follower.setMaxPower(1);
@@ -110,8 +113,6 @@ public class BlueObservation extends OpMode {
                 break;
             case 10: //Resets the lifts and starts the Specimen State Machine
                 if(pathTimer.getElapsedTimeSeconds() > 1) {
-                    auto.lift.rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    auto.lift.rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     auto.startSpecimen();
                     setPathState(11); }
                 break;
@@ -119,7 +120,7 @@ public class BlueObservation extends OpMode {
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
                     auto.follower.followPath(auto.grab2, true);
                     pathTimer.resetTimer();
-                    if(pathTimer.getElapsedTimeSeconds() > 0.75 && auto.actionNotBusy() && (auto.follower.getPose().getX() < auto.grab2Pose.getX())) {
+                    if(pathTimer.getElapsedTimeSeconds() > 0.75) {
                         auto.claw.close();
                         setPathState(12); } }
                 break;
