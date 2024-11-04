@@ -46,7 +46,7 @@ public class Auto {
 
     public Path element1, score1, element2, score2, element3, score3, grab3, align2, align3, park;
     public PathChain pushSamples, preload,specimen1, specimen2, specimen3, grab1, align1, lineUp2, grab2;
-    public Pose startPose, preloadPose, element1Pose, element1ControlPose, element2Pose, element2ControlPose, element3Pose, element3ControlPose, elementScorePose, parkControlPose, parkPose, grab1Pose, align1Pose, specimen1Pose, grab2Pose;
+    public Pose startPose, preloadPose, element1Pose, element1ControlPose, element2Pose, element2ControlPose, element3Pose, element3ControlPose, elementScorePose, parkControlPose, parkPose, grab1Pose, align1Pose, specimen1Pose, grab2Pose, specimen2Pose;
 
     public Auto(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, boolean isBlue, boolean isBucket) {
         claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
@@ -125,6 +125,7 @@ public class Auto {
                 grab1Pose = blueObservationSpecimenPickupPose;
                 align1Pose = blueObservationSpecimenSetPose;
                 specimen1Pose = blueObservationSpecimen1Pose;
+                specimen2Pose = blueObservationSpecimen2Pose;
                 grab2Pose = blueObservationSpecimenPickup2Pose;
                 parkPose = blueObservationParkPose;
                 break;
@@ -364,7 +365,7 @@ public class Auto {
                 specimenTimer.resetTimer();
                 setSpecimenState(2);
             case 2:
-                if(specimenTimer.getElapsedTimeSeconds() > 1.5) {
+                if(specimenTimer.getElapsedTimeSeconds() > 0.5) {
                     actionBusy = false;
                     setSpecimenState(-1);
                 }
