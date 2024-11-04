@@ -62,18 +62,18 @@ public class BlueObservation extends OpMode {
                 break;
             case 2: //Once Chamber State Machine Machine finishes, begins Pathchain to push elements to the submersible
                 if(auto.actionNotBusy()) {
-                    auto.follower.setMaxPower(0.8);
+                    auto.follower.setMaxPower(0.7);
                     auto.follower.followPath(auto.pushSamples, true);
                     setPathState(3); }
                 break;
             case 3: //Waits until follower reaches it's position then begins the Specimen State Machine
                 if(!auto.follower.isBusy()) {
-                    auto.follower.setMaxPower(0.5);
                     auto.startSpecimen();
                     setPathState(4); }
                 break;
             case 4: //Runs to the position of the grab1 and holds it's point at full power
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
+                    auto.follower.setMaxPower(0.5);
                     auto.follower.followPath(auto.grab1, true);
                     setPathState(5); }
                 break;
@@ -91,8 +91,8 @@ public class BlueObservation extends OpMode {
                 break;
             case 7: //Resets the encoders and begins driving to the chamber
                 if(pathTimer.getElapsedTimeSeconds() > 1) {
-                    auto.liftPIDF = true;
                     auto.liftManual = 0;
+                    auto.liftPIDF = true;
                     auto.lift.rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     auto.lift.rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     auto.follower.setMaxPower(1);
@@ -100,14 +100,15 @@ public class BlueObservation extends OpMode {
                     setPathState(8); }
                 break;
             case 8: //Waits until follower reaches it's position then begins the Chamber State Machine
-                if((auto.follower.getPose().getX() > auto.specimen1Pose.getX()) && (auto.follower.getPose().getY() >= auto.specimen1Pose.getY())) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
+                    auto.liftPIDF = true;
                     auto.startChamber();
                     setPathState(9); }
                 break;
             case 9: //Runs to the position of the where it will pick up and holds it's point at 0.7 power
                 if(auto.actionNotBusy()) {
                     auto.lift.toZero();
-                    auto.follower.setMaxPower(0.7);
+                    auto.follower.setMaxPower(0.5);
                     auto.follower.followPath(auto.lineUp2);
                     setPathState(10); }
                 break;
@@ -118,9 +119,9 @@ public class BlueObservation extends OpMode {
                 break;
             case 11: //Begins the path for grab 2 & closes the claw once it reaches position and passes 0.75 seconds
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
+                    auto.follower.setMaxPower(0.7);
                     auto.follower.followPath(auto.grab2, true);
-                    pathTimer.resetTimer();
-                    if(pathTimer.getElapsedTimeSeconds() > 0.75) {
+                    if(pathTimer.getElapsedTimeSeconds() > 2.5) {
                         auto.claw.close();
                         setPathState(12); } }
                 break;
@@ -130,13 +131,12 @@ public class BlueObservation extends OpMode {
                     setPathState(13); }
                 break;
             case 13: //Drives to chamber once action finishes
-                if(auto.actionNotBusy()) {
                     auto.follower.setMaxPower(1);
                     auto.follower.followPath(auto.specimen2, true);
-                    setPathState(14); }
+                    setPathState(14);
                 break;
             case 14: //Starts the Chamber State Machine
-                if(auto.follower.getPose().getX() > auto.specimen2Pose.getX()) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
                     auto.startChamber();
                     setPathState(15); }
                 break;

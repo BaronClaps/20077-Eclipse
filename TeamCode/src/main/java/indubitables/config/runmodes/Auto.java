@@ -193,11 +193,11 @@ public class Auto {
                     .setConstantHeadingInterpolation(Math.toRadians(0))
                     .addPath(new BezierLine(new Point(56.000, 16.000, Point.CARTESIAN),new Point(24, 16.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierCurve(new Point(24, 16.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN), new Point(56.000, 8.000, Point.CARTESIAN)))
+                    .addPath(new BezierCurve(new Point(24, 16.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN), new Point(56.000, 9.50, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierLine(new Point(56.000, 8.00, Point.CARTESIAN), new Point(24, 8, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(56.000, 9.50, Point.CARTESIAN), new Point(24, 9.5, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierLine(new Point(24, 8, Point.CARTESIAN), new Point(blueObservationSpecimenSetPose)))
+                    .addPath(new BezierLine(new Point(24, 9.5, Point.CARTESIAN), new Point(blueObservationSpecimenSetPose)))
                     .setLinearHeadingInterpolation(Math.toRadians(0), blueObservationSpecimenSetPose.getHeading())
                     .build();
 
@@ -320,6 +320,7 @@ public class Auto {
         switch (chamberState) {
             case 1:
                 actionBusy = true;
+                lift.manual = false;
                 intake.pivotTransfer();
                 intake.spinStop();
                 claw.close();
@@ -361,6 +362,7 @@ public class Auto {
         switch (specimenState) {
             case 1:
                 actionBusy = true;
+                lift.manual = false;
                 claw.open();
                 lift.toHumanPlayer();
                 extend.toZero();
