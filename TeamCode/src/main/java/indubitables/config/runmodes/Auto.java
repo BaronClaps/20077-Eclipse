@@ -338,7 +338,7 @@ public class Auto {
                 }
                 break;
             case 4:
-                if(chamberTimer.getElapsedTimeSeconds() > 1) {
+                if(chamberTimer.getElapsedTimeSeconds() > 0.5) {
                     claw.initClaw();
                     arm.initArm();
                     claw.open();

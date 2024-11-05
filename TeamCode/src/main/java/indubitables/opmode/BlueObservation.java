@@ -73,8 +73,8 @@ public class BlueObservation extends OpMode {
                 break;
             case 4: //Runs to the position of the grab1 and holds it's point at full power
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    auto.follower.setMaxPower(0.5);
-                    auto.follower.followPath(auto.grab1, true);
+                    auto.follower.setMaxPower(0.65);
+                    auto.follower.followPath(auto.grab1, false);
                     setPathState(5); }
                 break;
             case 5: //Closes the claw when the follower reaches the grab1 position
@@ -86,7 +86,9 @@ public class BlueObservation extends OpMode {
                 if(pathTimer.getElapsedTimeSeconds() > 0.25) {
                     auto.init();
                     auto.liftPIDF = false;
-                    auto.liftManual = -0.5;
+                    auto.liftManual = -0.25;
+                    auto.follower.setMaxPower(0.9);
+                    auto.follower.followPath(auto.specimen1, true);
                     setPathState(7); }
                 break;
             case 7: //Resets the encoders and begins driving to the chamber
@@ -95,13 +97,10 @@ public class BlueObservation extends OpMode {
                     auto.liftPIDF = true;
                     auto.lift.rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     auto.lift.rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    auto.follower.setMaxPower(0.8);
-                    auto.follower.followPath(auto.specimen1, true);
                     setPathState(8); }
                 break;
             case 8: //Waits until follower reaches it's position then begins the Chamber State Machine
                 if(pathTimer.getElapsedTimeSeconds() > 0.5) {
-                    auto.liftPIDF = true;
                     auto.startChamber();
                     setPathState(9); }
                 break;
@@ -120,7 +119,7 @@ public class BlueObservation extends OpMode {
             case 11: //Begins the path for grab 2 & closes the claw once it reaches position and passes 0.75 seconds
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
                     auto.follower.setMaxPower(0.65);
-                    auto.follower.followPath(auto.grab2, true);
+                    auto.follower.followPath(auto.grab2, false);
                     if(pathTimer.getElapsedTimeSeconds() > 2.75) {
                         auto.claw.close();
                         setPathState(12); } }
@@ -128,12 +127,21 @@ public class BlueObservation extends OpMode {
             case 12: //Waits 0.25 seconds and puts robot in neutral position
                 if(pathTimer.getElapsedTimeSeconds() > 0.5) {
                     auto.init();
+                    auto.liftPIDF = false;
+                    auto.liftManual = -0.25;
                     setPathState(13); }
                 break;
             case 13: //Drives to chamber once action finishes
-                    auto.follower.setMaxPower(0.8);
+                    auto.follower.setMaxPower(0.9);
                     auto.follower.followPath(auto.specimen2, true);
-                    setPathState(14);
+                    if(pathTimer.getElapsedTimeSeconds() > 1)
+                    {
+                        auto.liftManual = 0;
+                        auto.liftPIDF = true;
+                        auto.lift.rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        auto.lift.rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                        setPathState(14);
+                    }
                 break;
             case 14: //Starts the Chamber State Machine
                 if(pathTimer.getElapsedTimeSeconds() > 1.5) {
