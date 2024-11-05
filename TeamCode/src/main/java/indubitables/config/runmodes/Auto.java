@@ -193,11 +193,11 @@ public class Auto {
                     .setConstantHeadingInterpolation(Math.toRadians(0))
                     .addPath(new BezierLine(new Point(56.000, 16.000, Point.CARTESIAN),new Point(24, 16.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierCurve(new Point(24, 16.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN), new Point(56.000, 9.50, Point.CARTESIAN)))
-                    .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierLine(new Point(56.000, 9.50, Point.CARTESIAN), new Point(24, 9.5, Point.CARTESIAN)))
-                    .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierLine(new Point(24, 9.5, Point.CARTESIAN), new Point(blueObservationSpecimenSetPose)))
+             //       .addPath(new BezierCurve(new Point(24, 16.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN), new Point(56.000, 9.50, Point.CARTESIAN)))
+               //     .setConstantHeadingInterpolation(Math.toRadians(0))
+              //      .addPath(new BezierLine(new Point(56.000, 9.50, Point.CARTESIAN), new Point(24, 9.5, Point.CARTESIAN)))
+                //    .setConstantHeadingInterpolation(Math.toRadians(0))
+                    .addPath(new BezierLine(new Point(24, 16, Point.CARTESIAN), new Point(blueObservationSpecimenSetPose)))
                     .setLinearHeadingInterpolation(Math.toRadians(0), blueObservationSpecimenSetPose.getHeading())
                     .build();
 
