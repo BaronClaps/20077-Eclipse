@@ -62,7 +62,7 @@ public class BlueObservation extends OpMode {
                 break;
             case 2: //Once Chamber State Machine Machine finishes, begins Pathchain to push elements to the submersible
                 if(auto.actionNotBusy()) {
-                    auto.follower.setMaxPower(0.7);
+                    auto.follower.setMaxPower(0.5);
                     auto.follower.followPath(auto.pushSamples, true);
                     setPathState(3); }
                 break;
@@ -74,7 +74,7 @@ public class BlueObservation extends OpMode {
             case 4: //Runs to the position of the grab1 and holds it's point at full power
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
                     auto.follower.setMaxPower(0.65);
-                    auto.follower.followPath(auto.grab1, false);
+                    auto.follower.followPath(auto.grab1, true);
                     setPathState(5); }
                 break;
             case 5: //Closes the claw when the follower reaches the grab1 position
@@ -101,7 +101,7 @@ public class BlueObservation extends OpMode {
                 break;
             case 8: //Waits until follower reaches it's position then begins the Chamber State Machine
                 if(pathTimer.getElapsedTimeSeconds() > 0.5) {
-                    auto.startChamber();
+                    auto.startChamber2();
                     setPathState(9); }
                 break;
             case 9: //Runs to the position of the where it will pick up and holds it's point at 0.7 power
@@ -119,8 +119,8 @@ public class BlueObservation extends OpMode {
             case 11: //Begins the path for grab 2 & closes the claw once it reaches position and passes 0.75 seconds
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
                     auto.follower.setMaxPower(0.65);
-                    auto.follower.followPath(auto.grab2, false);
-                    if(pathTimer.getElapsedTimeSeconds() > 2.75) {
+                    auto.follower.followPath(auto.grab2, true);
+                    if(pathTimer.getElapsedTimeSeconds() > 3) {
                         auto.claw.close();
                         setPathState(12); } }
                 break;
@@ -145,7 +145,7 @@ public class BlueObservation extends OpMode {
                 break;
             case 14: //Starts the Chamber State Machine
                 if(pathTimer.getElapsedTimeSeconds() > 1.5) {
-                    auto.startChamber();
+                    auto.startChamber2();
                     setPathState(15); }
                 break;
             case 15: //Ends the autonomous

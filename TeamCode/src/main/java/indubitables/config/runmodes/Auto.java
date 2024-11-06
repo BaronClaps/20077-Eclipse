@@ -98,6 +98,7 @@ public class Auto {
         intake();
         park();
         specimen();
+        chamber2();
     }
 
     public void createPoses() {
@@ -330,7 +331,7 @@ public class Auto {
                 setChamberState(2);
                 break;
             case 2:
-                if (chamberTimer.getElapsedTimeSeconds() > 2) {
+                if (chamberTimer.getElapsedTimeSeconds() > 1) {
                     arm.chamber();
                     claw.chamber();
                     chamberTimer.resetTimer();
@@ -353,6 +354,48 @@ public class Auto {
     }
 
     public void startChamber() {
+        if(actionNotBusy()) {
+            setChamberState(1);
+        }
+    }
+
+    public void chamber2() {
+        switch (chamberState2) {
+            case 1:
+                actionBusy = true;
+                lift.manual = false;
+                intake.pivotTransfer();
+                intake.spinStop();
+                claw.close();
+                lift.toHighChamber2();
+                extend.toZero();
+                chamberTimer.resetTimer();
+                setChamberState2(2);
+                break;
+            case 2:
+                if (chamberTimer2.getElapsedTimeSeconds() > 2) {
+                    arm.chamber();
+                    claw.chamber();
+                    chamberTimer.resetTimer();
+                    setChamberState2(4);
+                }
+                break;
+            case 4:
+                if(chamberTimer2.getElapsedTimeSeconds() > 0.5) {
+                    claw.initClaw();
+                    arm.initArm();
+                    claw.open();
+                    actionBusy = false;
+                    setChamberState2(-1);
+                }
+        }
+    }
+
+    public void setChamberState2(int x) {
+        chamberState = x;
+    }
+
+    public void startChamber2() {
         if(actionNotBusy()) {
             setChamberState(1);
         }
