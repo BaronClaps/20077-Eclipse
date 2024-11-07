@@ -40,14 +40,14 @@ public class FieldConstants {
     public static final Pose blueObservationElement2ControlPose = new Pose(20, 96);
     public static final Pose blueObservationElement3Pose = new Pose(20, 96, Math.toRadians(180));
     public static final Pose blueObservationElement3ControlPose = new Pose(20, 110);
-    public static final Pose blueObservationSpecimenSetPose = new Pose(21, 25.5, Math.toRadians(0));
-    public static final Pose blueObservationSpecimenPickupPose = new Pose(17.25, 25.5, Math.toRadians(0));
-    public static final Pose blueObservationSpecimenPickup2Pose = new Pose(17.25, 25.5, Math.toRadians(0));
-    public static final Pose blueObservationSpecimen1Pose = new Pose(28, 68.625, Math.toRadians(180));
-    public static final Pose blueObservationSpecimen2Pose = new Pose(28.25, 71.625, Math.toRadians(180));
+    public static final Pose blueObservationSpecimenSetPose = new Pose(16, 25.5, Math.toRadians(180));
+    public static final Pose blueObservationSpecimenPickupPose = new Pose(7.75, 24.75, Math.toRadians(180));
+    public static final Pose blueObservationSpecimenPickup2Pose = new Pose(7.75, 24.75, Math.toRadians(180));
+    public static final Pose blueObservationSpecimen1Pose = new Pose(32, 68.625, Math.toRadians(180));
+    public static final Pose blueObservationSpecimen2Pose = new Pose(32, 71.625, Math.toRadians(180));
     public static final Pose blueObservationSpecimen3Pose = new Pose(30.25, 76.625, Math.toRadians(180));
-    public static final Pose blueObservationParkPose = new Pose(16, 48, 0);
-    public static final Pose blueObservationParkControlPose = new Pose(20, 50);
+    public static final Pose blueObservationParkPose = new Pose(16, 24, 0);
+    public static final Pose blueObservationParkControlPose = new Pose(16, 65);
 
 
     public static final Pose blueBucketScorePose = new Pose(20, 128, Math.toRadians(-45));

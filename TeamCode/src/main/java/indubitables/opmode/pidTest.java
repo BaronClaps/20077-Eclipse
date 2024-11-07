@@ -47,8 +47,8 @@ public class pidTest extends OpMode {
     public RunAction toZero, toHighBucket, toHighChamber, toHumanPlayer, toTransfer, toPark;
     public PIDController liftPID;
     public static int target;
-    public static double p = 0.03, i = 0, d = 0;
-    public static double f = 0.01;
+    public static double p = 0.01, i = 0, d = 0;
+    public static double f = 0.05;
     private Gamepad currentGamepad2 = new Gamepad(), previousGamepad2 = new Gamepad();
 
     @Override
@@ -95,7 +95,7 @@ public class pidTest extends OpMode {
 
     public void updatePIDF(){
         if (!manual) {
-            lift.setPID(p,i,d);
+            liftPID.setPID(p,i,d);
             rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             double pid = liftPID.calculate(getPos(), target);

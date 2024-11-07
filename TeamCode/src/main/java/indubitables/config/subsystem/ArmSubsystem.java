@@ -10,7 +10,7 @@ import indubitables.config.util.action.RunAction;
 public class ArmSubsystem {
 
     public enum ArmState {
-        TRANSFER, SCORING, SPECIMEN, CHAMBER, INIT
+        TRANSFER, SCORING, SPECIMEN, CHAMBER, INIT, SPECIMENGRAB, SPECIMENCSCORE
     }
 
     public Servo left, right;
@@ -48,6 +48,14 @@ public class ArmSubsystem {
             left.setPosition(armInit);
             right.setPosition(armInit);
             this.state = ArmState.INIT;
+        } else if (armState == ArmState.SPECIMENGRAB) {
+            left.setPosition(armSpecimenGrab);
+            right.setPosition(armSpecimenGrab);
+            this.state = ArmState.SPECIMENGRAB;
+        } else if (armState == ArmState.SPECIMENCSCORE) {
+            left.setPosition(armSpecimenScore);
+            right.setPosition(armSpecimenScore);
+            this.state = ArmState.SPECIMENCSCORE;
         }
     }
 
@@ -71,6 +79,14 @@ public class ArmSubsystem {
 
     public void specimen() {
         setState(ArmState.SPECIMEN);
+    }
+
+    public void specimenGrab() {
+        setState(ArmState.SPECIMENGRAB);
+    }
+
+    public void specimenScore() {
+        setState(ArmState.SPECIMENCSCORE);
     }
 
     public void chamber() {

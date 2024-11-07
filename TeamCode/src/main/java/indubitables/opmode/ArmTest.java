@@ -29,7 +29,7 @@ public class ArmTest extends OpMode {
     @Override
     public void loop() {
         if(gamepad1.x) {
-            //arm.setState(ArmSubsystem.ArmState.SCORING);
+            claw.pivot.setPosition(RobotConstants.clawScore);
             arm.left.setPosition(RobotConstants.armScoring);
             arm.right.setPosition(RobotConstants.armScoring);
         }
@@ -43,6 +43,18 @@ public class ArmTest extends OpMode {
             arm.left.setPosition(RobotConstants.armInit);
             arm.right.setPosition(RobotConstants.armInit);
             claw.pivot.setPosition(RobotConstants.clawScore);
+        }
+
+        if(gamepad1.b) {
+            arm.left.setPosition(RobotConstants.armInit);
+            arm.right.setPosition(RobotConstants.armInit);
+            claw.pivot.setPosition(RobotConstants.clawSpecimenGrab);
+        }
+
+        if(gamepad1.right_bumper) {
+            claw.close();
+        } else if (gamepad1.left_bumper) {
+            claw.open();
         }
 
 

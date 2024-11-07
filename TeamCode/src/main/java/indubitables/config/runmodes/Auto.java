@@ -192,7 +192,7 @@ public class Auto {
                     .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(90))
                     .addPath(new BezierLine(new Point(56.000, 26.000, Point.CARTESIAN), new Point(24, 26.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(90))
-                    .addPath(new BezierCurve(new Point(24, 26.000, Point.CARTESIAN), new Point(56.000, 26.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN)))
+                    .addPath(new BezierCurve(new Point(24, 26.000, Point.CARTESIAN), new Point(56.000, 30.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(90))
                     .addPath(new BezierLine(new Point(56.000, 16.000, Point.CARTESIAN),new Point(24, 16.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(90))
@@ -214,14 +214,9 @@ public class Auto {
                     .setLinearHeadingInterpolation(blueObservationSpecimenPickupPose.getHeading(), blueObservationSpecimen1Pose.getHeading())
                     .build();
 
-            lineUp2 = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(blueObservationSpecimen1Pose), new Point(blueObservationSpecimenSetPose)))
-                    .setLinearHeadingInterpolation(blueObservationSpecimen1Pose.getHeading(), blueObservationSpecimenSetPose.getHeading())
-                    .build();
-
             grab2 = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(blueObservationSpecimenSetPose), new Point(blueObservationSpecimenPickup2Pose)))
-                    .setLinearHeadingInterpolation(blueObservationSpecimenSetPose.getHeading(), blueObservationSpecimenPickup2Pose.getHeading())
+                    .addPath(new BezierLine(new Point(blueObservationSpecimen1Pose), new Point(blueObservationSpecimenPickup2Pose)))
+                    .setLinearHeadingInterpolation(blueObservationSpecimen1Pose.getHeading(), blueObservationSpecimenPickup2Pose.getHeading())
                     .build();
 
             specimen2 = follower.pathBuilder()
@@ -371,18 +366,17 @@ public class Auto {
             case 1:
                 actionBusy = true;
                 lift.manual = false;
-                intake.pivotTransfer();
-                intake.spinStop();
+                arm.specimenScore();
                 claw.close();
-                lift.toHighChamber2();
+                claw.score();
+                lift.toZero();
                 extend.toZero();
                 chamberTimer.resetTimer();
                 setChamberState2(2);
                 break;
             case 2:
-                if (chamberTimer2.getElapsedTimeSeconds() > 2) {
-                    arm.chamber();
-                    claw.chamber();
+                if (chamberTimer2.getElapsedTimeSeconds() > 3) {
+                    claw.specimenScore();
                     chamberTimer.resetTimer();
                     setChamberState2(4);
                 }
@@ -390,7 +384,7 @@ public class Auto {
             case 4:
                 if(chamberTimer2.getElapsedTimeSeconds() > 0.5) {
                     claw.initClaw();
-                    arm.initArm();
+                    arm.specimen();
                     claw.open();
                     actionBusy = false;
                     setChamberState2(-1);
@@ -404,7 +398,7 @@ public class Auto {
 
     public void startChamber2() {
         if(actionNotBusy()) {
-            setChamberState(1);
+            setChamberState2(1);
         }
     }
 
@@ -414,10 +408,10 @@ public class Auto {
                 actionBusy = true;
                 lift.manual = false;
                 claw.open();
-                lift.toHumanPlayer();
+                lift.toZero();
                 extend.toZero();
-                arm.specimen();
-                claw.specimen();
+                arm.specimenGrab();
+                claw.specimenGrab();
                 specimenTimer.resetTimer();
                 setSpecimenState(2);
             case 2:

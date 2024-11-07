@@ -85,34 +85,17 @@ public class BlueObservation extends OpMode {
             case 6: //Sets the arm to a neutral position and puts lifts to zero;
                 if(pathTimer.getElapsedTimeSeconds() > 0.25) {
                     auto.init();
-                    auto.liftPIDF = false;
-                    auto.liftManual = -0.25;
                     auto.follower.setMaxPower(0.9);
                     auto.follower.followPath(auto.specimen1, true);
-                    setPathState(7); }
-                break;
-            case 7: //Resets the encoders and begins driving to the chamber
-                if(pathTimer.getElapsedTimeSeconds() > 1) {
-                    auto.liftManual = 0;
-                    auto.liftPIDF = true;
-                    auto.lift.rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    auto.lift.rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     setPathState(8); }
                 break;
             case 8: //Waits until follower reaches it's position then begins the Chamber State Machine
                 if(pathTimer.getElapsedTimeSeconds() > 0.5) {
                     auto.startChamber2();
-                    setPathState(9); }
-                break;
-            case 9: //Runs to the position of the where it will pick up and holds it's point at 0.7 power
-                if(auto.actionNotBusy()) {
-                    auto.lift.toZero();
-                    auto.follower.setMaxPower(0.5);
-                    auto.follower.followPath(auto.lineUp2);
                     setPathState(10); }
                 break;
             case 10: //Resets the lifts and starts the Specimen State Machine
-                if(pathTimer.getElapsedTimeSeconds() > 1) {
+                if(auto.actionNotBusy()) {
                     auto.startSpecimen();
                     setPathState(11); }
                 break;
@@ -127,21 +110,12 @@ public class BlueObservation extends OpMode {
             case 12: //Waits 0.25 seconds and puts robot in neutral position
                 if(pathTimer.getElapsedTimeSeconds() > 0.5) {
                     auto.init();
-                    auto.liftPIDF = false;
-                    auto.liftManual = -0.15;
                     setPathState(13); }
                 break;
             case 13: //Drives to chamber once action finishes
                     auto.follower.setMaxPower(0.9);
                     auto.follower.followPath(auto.specimen2, true);
-                    if(pathTimer.getElapsedTimeSeconds() > 1)
-                    {
-                        auto.liftManual = 0;
-                        auto.liftPIDF = true;
-                        auto.lift.rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                        auto.lift.rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                        setPathState(14);
-                    }
+                    setPathState(14);
                 break;
             case 14: //Starts the Chamber State Machine
                 if(pathTimer.getElapsedTimeSeconds() > 1.5) {
@@ -151,7 +125,7 @@ public class BlueObservation extends OpMode {
                 break;
             case 15: //Park and End the autonomous
                 if(auto.actionNotBusy()) {
-                    auto.follower.followPath(park, true);
+                    auto.follower.followPath(auto.park, true);
                     setPathState(-1); 
                 }
                 break;
