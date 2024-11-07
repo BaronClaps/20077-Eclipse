@@ -45,8 +45,8 @@ public class Auto {
     public Timer transferTimer = new Timer(), bucketTimer = new Timer(), chamberTimer = new Timer(), intakeTimer = new Timer(), parkTimer = new Timer(), specimenTimer = new Timer(), chamberTimer2 = new Timer();
     public int transferState = -1, bucketState = -1, chamberState = -1, intakeState = -1, parkState = -1, specimenState = -1, chamberState2 = -1;
 
-    public Path element1, score1, element2, score2, element3, score3, grab3, align2, align3, park;
-    public PathChain pushSamples, preload,specimen1, specimen2, specimen3, grab1, align1, lineUp2, grab2;
+    public Path element1, score1, element2, score2, element3, score3, grab3, align2, align3;
+    public PathChain pushSamples, preload,specimen1, specimen2, specimen3, grab1, align1, lineUp2, grab2, park;
     public Pose startPose, preloadPose, element1Pose, element1ControlPose, element2Pose, element2ControlPose, element3Pose, element3ControlPose, elementScorePose, parkControlPose, parkPose, grab1Pose, align1Pose, specimen1Pose, grab2Pose, specimen2Pose;
 
     public Auto(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, boolean isBlue, boolean isBucket) {
@@ -175,8 +175,10 @@ public class Auto {
             score3 = new Path(new BezierLine(new Point(element3Pose), new Point(elementScorePose)));
             score3.setLinearHeadingInterpolation(element3Pose.getHeading(), elementScorePose.getHeading());
 
-            park = new Path(new BezierCurve(new Point(elementScorePose), new Point(parkControlPose), new Point(parkPose)));
-            park.setLinearHeadingInterpolation(elementScorePose.getHeading(), parkPose.getHeading());
+            park = follower.pathBuilder()
+                    .addPath(new BezierCurve(new Point(elementScorePose), new Point(parkControlPose), new Point(parkPose)))
+                    .setLinearHeadingInterpolation(elementScorePose.getHeading(), parkPose.getHeading())
+                    .build();
         }
 
         if (startLocation == RobotStart.BLUE_OBSERVATION || startLocation == RobotStart.RED_OBSERVATION) {
@@ -226,6 +228,11 @@ public class Auto {
                     .addPath(new BezierLine(new Point(blueObservationSpecimenPickup2Pose), new Point(blueObservationSpecimen2Pose)))
                     .setLinearHeadingInterpolation(blueObservationSpecimenPickup2Pose.getHeading(), blueObservationSpecimen2Pose.getHeading())
                     .build();
+
+            park = follower.pathBuilder()
+                    .addPath(new BezierLine(new Point(blueObservationSpecimen2Pose), new Point(blueObservationParkPose)))
+                    .setLinearHeadingInterpolation(blueObservationSpecimen2Pose.getHeading(), blueObservationParkPose.getHeading())  
+                    .build();      
 
         }
     }

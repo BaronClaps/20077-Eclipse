@@ -65,8 +65,6 @@ public class pidTest extends OpMode {
         bottom = getPos();
 
         liftPID = new PIDController(p, i, d);
-        liftPID.setPID(p,i,d);
-
     }
 
     @Override
@@ -97,6 +95,7 @@ public class pidTest extends OpMode {
 
     public void updatePIDF(){
         if (!manual) {
+            lift.setPID(p,i,d);
             rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             double pid = liftPID.calculate(getPos(), target);

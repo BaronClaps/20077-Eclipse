@@ -51,6 +51,8 @@ public class LiftSubsystem {
 
     public void updatePIDF(){
         if (!manual) {
+            liftPID.setPID(p,i,d);
+            
             rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
