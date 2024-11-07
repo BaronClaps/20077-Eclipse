@@ -30,8 +30,8 @@ public class ArmTest extends OpMode {
     public void loop() {
         if(gamepad1.x) {
             claw.pivot.setPosition(RobotConstants.clawScore);
-            arm.left.setPosition(RobotConstants.armScoring);
-            arm.right.setPosition(RobotConstants.armScoring);
+            arm.left.setPosition(RobotConstants.armSpecimenScore);
+            arm.right.setPosition(RobotConstants.armSpecimenScore);
         }
 
         if(gamepad1.y) {

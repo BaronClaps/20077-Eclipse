@@ -345,6 +345,7 @@ public class Auto {
                     claw.initClaw();
                     arm.initArm();
                     claw.open();
+                    lift.toZero();
                     actionBusy = false;
                     setChamberState(-1);
                 }
@@ -371,20 +372,26 @@ public class Auto {
                 claw.score();
                 lift.toZero();
                 extend.toZero();
-                chamberTimer.resetTimer();
+                chamberTimer2.resetTimer();
                 setChamberState2(2);
                 break;
             case 2:
-                if (chamberTimer2.getElapsedTimeSeconds() > 3) {
+                if ((follower.getPose().getX() > (specimen1Pose.getX())) && (follower.getPose().getY() > (specimen1Pose.getY()))) {
+                    chamberTimer2.resetTimer();
+                    setChamberState2(3);
+                }
+                break;
+            case 3:
+                if(chamberTimer2.getElapsedTimeSeconds() > 0.5) {
                     claw.specimenScore();
-                    chamberTimer.resetTimer();
+                    chamberTimer2.resetTimer();
                     setChamberState2(4);
                 }
                 break;
             case 4:
                 if(chamberTimer2.getElapsedTimeSeconds() > 0.5) {
-                    claw.initClaw();
-                    arm.specimen();
+                    claw.init();
+                    arm.init();
                     claw.open();
                     actionBusy = false;
                     setChamberState2(-1);
@@ -393,7 +400,7 @@ public class Auto {
     }
 
     public void setChamberState2(int x) {
-        chamberState = x;
+        chamberState2 = x;
     }
 
     public void startChamber2() {

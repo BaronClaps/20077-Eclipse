@@ -41,8 +41,8 @@ public class FieldConstants {
     public static final Pose blueObservationElement3Pose = new Pose(20, 96, Math.toRadians(180));
     public static final Pose blueObservationElement3ControlPose = new Pose(20, 110);
     public static final Pose blueObservationSpecimenSetPose = new Pose(16, 25.5, Math.toRadians(180));
-    public static final Pose blueObservationSpecimenPickupPose = new Pose(7.75, 24.75, Math.toRadians(180));
-    public static final Pose blueObservationSpecimenPickup2Pose = new Pose(7.75, 24.75, Math.toRadians(180));
+    public static final Pose blueObservationSpecimenPickupPose = new Pose(7.75, 25.5, Math.toRadians(180));
+    public static final Pose blueObservationSpecimenPickup2Pose = new Pose(8, 25.75, Math.toRadians(180));
     public static final Pose blueObservationSpecimen1Pose = new Pose(32, 68.625, Math.toRadians(180));
     public static final Pose blueObservationSpecimen2Pose = new Pose(32, 71.625, Math.toRadians(180));
     public static final Pose blueObservationSpecimen3Pose = new Pose(30.25, 76.625, Math.toRadians(180));
