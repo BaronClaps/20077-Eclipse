@@ -61,8 +61,6 @@ public class pidTest extends OpMode {
         rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         bottom = getPos();
 
@@ -90,11 +88,17 @@ public class pidTest extends OpMode {
         telemetry.addData("pos", getPos());
         telemetry.addData("baron", baron);
         telemetry.addData("target", target);
+        telemetry.addData("P:", p);
+        telemetry.addData("I:", i);
+        telemetry.addData("D:", d);
+        telemetry.addData("F:", f);
         telemetry.update();
     }
 
     public void updatePIDF(){
         if (!manual) {
+            rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             double pid = liftPID.calculate(getPos(), target);
             double ticks_in_degrees = 537.7 / 360.0;
             double ff = Math.cos(Math.toRadians(target / ticks_in_degrees)) * f;

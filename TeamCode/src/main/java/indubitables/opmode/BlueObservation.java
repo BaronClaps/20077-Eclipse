@@ -128,7 +128,7 @@ public class BlueObservation extends OpMode {
                 if(pathTimer.getElapsedTimeSeconds() > 0.5) {
                     auto.init();
                     auto.liftPIDF = false;
-                    auto.liftManual = -0.25;
+                    auto.liftManual = -0.15;
                     setPathState(13); }
                 break;
             case 13: //Drives to chamber once action finishes

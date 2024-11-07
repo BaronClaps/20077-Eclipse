@@ -37,8 +37,7 @@ public class LiftSubsystem {
         leftLift.setDirection(DcMotor.Direction.REVERSE);
         rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         liftPID = new PIDController(p, i, d);
 
@@ -52,6 +51,9 @@ public class LiftSubsystem {
 
     public void updatePIDF(){
         if (!manual) {
+            rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
             double pid = liftPID.calculate(getPos(), target);
             double ticks_in_degrees = 537.7 / 360.0;
             double ff = Math.cos(Math.toRadians(target / ticks_in_degrees)) * f;
@@ -66,7 +68,8 @@ public class LiftSubsystem {
     }
 
     public void manual(double n){
-        manual = true;
+        rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         rightLift.setPower(n);
         leftLift.setPower(n);
