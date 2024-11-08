@@ -211,7 +211,7 @@ public class Auto {
                     .build();
 
             specimen1 = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(blueObservationSpecimenPickupPose), new Point(blueObservationSpecimen1Pose)))
+                    .addPath(new BezierCurve(new Point(blueObservationSpecimenPickupPose), new Point(blueObservationSpecimen1Pose.getX()-10, blueObservationSpecimen1Pose.getY(), Point.CARTESIAN), new Point(blueObservationSpecimen1Pose)))
                     .setLinearHeadingInterpolation(blueObservationSpecimenPickupPose.getHeading(), blueObservationSpecimen1Pose.getHeading())
                     .build();
 
@@ -221,7 +221,7 @@ public class Auto {
                     .build();
 
             specimen2 = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(blueObservationSpecimenPickup2Pose), new Point(blueObservationSpecimen2Pose)))
+                    .addPath(new BezierCurve(new Point(blueObservationSpecimenPickup2Pose), new Point(blueObservationSpecimen2Pose.getX() - 10, blueObservationSpecimen2Pose.getY(), Point.CARTESIAN),new Point(blueObservationSpecimen2Pose)))
                     .setLinearHeadingInterpolation(blueObservationSpecimenPickup2Pose.getHeading(), blueObservationSpecimen2Pose.getHeading())
                     .build();
 
