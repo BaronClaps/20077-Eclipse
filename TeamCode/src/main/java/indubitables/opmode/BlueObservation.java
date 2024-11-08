@@ -63,7 +63,7 @@ public class BlueObservation extends OpMode {
                 break;
             case 2: //Once Chamber State Machine Machine finishes, begins Pathchain to push elements to the submersible
                 if(auto.actionNotBusy()) {
-                    auto.follower.setMaxPower(0.5);
+                    auto.follower.setMaxPower(0.7);
                     auto.follower.followPath(auto.pushSamples, true);
                     setPathState(3); }
                 break;
@@ -81,7 +81,7 @@ public class BlueObservation extends OpMode {
                 break;
             case 4: //Runs to the position of the grab1 and holds it's point at full power
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    auto.follower.setMaxPower(0.65);
+                    auto.follower.setMaxPower(0.7);
                     auto.follower.followPath(auto.grab1, true);
                     setPathState(5); }
                 break;
@@ -98,7 +98,7 @@ public class BlueObservation extends OpMode {
                     setPathState(8); }
                 break;
             case 8: //Waits until follower reaches it's position then begins the Chamber State Machine
-                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
+                if(pathTimer.getElapsedTimeSeconds() > 0) {
                     auto.startChamber2();
                     setPathState(9); }
                 break;
@@ -109,7 +109,7 @@ public class BlueObservation extends OpMode {
                 break;
             case 10: //Begins the path for grab 2 & closes the claw once it reaches position and passes 0.75 seconds
                 if(pathTimer.getElapsedTimeSeconds() > 0) {
-                    auto.follower.setMaxPower(0.5);
+                    auto.follower.setMaxPower(0.7);
                     auto.follower.followPath(auto.grab2, true);
                     setPathState(11);
                 }
@@ -131,13 +131,14 @@ public class BlueObservation extends OpMode {
                     setPathState(14);
                 break;
             case 14: //Starts the Chamber State Machine
-                if(pathTimer.getElapsedTimeSeconds() > 1.25) {
+                if(pathTimer.getElapsedTimeSeconds() > 0) {
                     auto.startChamber2();
                     setPathState(15); 
                 }
                 break;
             case 15: //Park and End the autonomous
                 if(auto.actionNotBusy()) {
+                    auto.follower.setMaxPower(1);
                     auto.follower.followPath(auto.park, true);
                     setPathState(-1); 
                 }
