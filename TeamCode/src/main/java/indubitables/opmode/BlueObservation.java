@@ -75,11 +75,9 @@ public class BlueObservation extends OpMode {
                     setPathState(10001); }
                 break;
             case 10001:
-                if(pathTimer.getElapsedTimeSeconds() > 0.5)
-                {
+                if(pathTimer.getElapsedTimeSeconds() > 0.25) {
                     auto.lift.manual(0);
-                    setPathState(4);
-                }
+                    setPathState(4); }
                 break;
             case 4: //Runs to the position of the grab1 and holds it's point at full power
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
@@ -107,12 +105,15 @@ public class BlueObservation extends OpMode {
             case 9: //Resets the lifts and starts the Specimen State Machine
                 if(auto.actionNotBusy()) {
                     auto.startSpecimen();
-                    setPathState(11); }
+                    setPathState(10); }
                 break;
             case 10: //Begins the path for grab 2 & closes the claw once it reaches position and passes 0.75 seconds
+                if(pathTimer.getElapsedTimeSeconds() > 0) {
                     auto.follower.setMaxPower(0.5);
                     auto.follower.followPath(auto.grab2, true);
                     setPathState(11);
+                }
+                break;
             case 11:
                     if(pathTimer.getElapsedTimeSeconds() > 3) {
                         auto.claw.close();
