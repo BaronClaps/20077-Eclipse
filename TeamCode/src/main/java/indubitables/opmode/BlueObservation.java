@@ -75,7 +75,7 @@ public class BlueObservation extends OpMode {
                     setPathState(10001); }
                 break;
             case 10001:
-                if(pathTimer.getElapsedTimeSeconds() > 0.25) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
                     auto.lift.manual(0);
                     setPathState(4); }
                 break;
