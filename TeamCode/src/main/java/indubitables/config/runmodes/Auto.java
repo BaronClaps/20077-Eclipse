@@ -381,7 +381,7 @@ public class Auto {
                 }
                 break;
             case 3:
-                if(chamberTimer2.getElapsedTimeSeconds() > 0.5) {
+                if(chamberTimer2.getElapsedTimeSeconds() > 1.5) {
                     claw.specimenScore();
                     chamberTimer2.resetTimer();
                     setChamberState2(4);
