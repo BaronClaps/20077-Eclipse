@@ -115,13 +115,13 @@ public class BlueObservation extends OpMode {
                 }
                 break;
             case 11:
-                    if(pathTimer.getElapsedTimeSeconds() > 3) {
+                    if(pathTimer.getElapsedTimeSeconds() > 3.5) {
                         auto.claw.close();
                         setPathState(12);
                     }
                 break;
             case 12: //Waits 0.25 seconds and puts robot in neutral position
-                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.25) {
                     auto.init();
                     setPathState(13); }
                 break;
@@ -131,7 +131,7 @@ public class BlueObservation extends OpMode {
                     setPathState(14);
                 break;
             case 14: //Starts the Chamber State Machine
-                if(pathTimer.getElapsedTimeSeconds() > 1.5) {
+                if(pathTimer.getElapsedTimeSeconds() > 1.25) {
                     auto.startChamber2();
                     setPathState(15); 
                 }

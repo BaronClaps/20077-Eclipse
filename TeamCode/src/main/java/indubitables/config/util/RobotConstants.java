@@ -27,7 +27,7 @@ public class RobotConstants {
     public static double armSpecimen = 0.875;
     public static double armChamber = 0.625;
     public static double armInit = 0.15;
-    public static double armSpecimenGrab = 0.1175;
+    public static double armSpecimenGrab = 0.1225;
     public static double armSpecimenScore = 0.6;
 
     public static int liftToZero = 100;
