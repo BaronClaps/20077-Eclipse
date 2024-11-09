@@ -107,7 +107,7 @@ public class Teleop {
         else
             speed = 0.75;
 
-        lift.manual(gamepad2.right_trigger - (gamepad2.left_trigger * .75));
+        lift.manual(gamepad2.right_trigger - gamepad2.left_trigger );
 
         double max;
         double axial = -gamepad1.left_stick_y;  //Pushing stick forward gives negative value
@@ -173,6 +173,14 @@ public class Teleop {
 
         if (currentGamepad1.b && !previousGamepad1.b)
             intake.setPivotState(IntakeSubsystem.IntakePivotState.TRANSFER);
+
+        if(gamepad2.left_stick_button) {
+            lift.hang = true;
+        }
+
+        if(gamepad2.right_stick_button) {
+            lift.hang = false;
+        }
 
         //follower.setTeleOpMovementVectors(-gamepad1.left_stick_y * speed, -gamepad1.left_stick_x * speed, -gamepad1.right_stick_x * speed, !fieldCentric);
         //follower.update();

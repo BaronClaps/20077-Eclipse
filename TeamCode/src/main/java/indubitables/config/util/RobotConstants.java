@@ -4,7 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class RobotConstants {
-    public static double clawClose = 0.1;
+    public static double clawClose = 0.09;
     public static double clawOpen = 0.34;
     public static double clawSpecimen = 0.19;
     public static double clawTransfer = 0.2;
@@ -18,7 +18,7 @@ public class RobotConstants {
     public static double intakeSpinOutPwr = -0.25;
     public static double intakeSpinStopPwr = 0;
 
-    public static double intakePivotTransfer= 0.0425;
+    public static double intakePivotTransfer= 0.045;
     public static double intakePivotGround = 0;
     public static double intakePivotSubmersible = 0.05;
 
@@ -27,12 +27,12 @@ public class RobotConstants {
     public static double armSpecimen = 0.875;
     public static double armChamber = 0.625;
     public static double armInit = 0.15;
-    public static double armSpecimenGrab = 0.1225;
+    public static double armSpecimenGrab = 0.1175;
     public static double armSpecimenScore = 0.6;
 
     public static int liftToZero = 100;
     public static int liftToHumanPlayer = 200;
-    public static int liftToHighChamber = 275;
+    public static int liftToHighChamber = 200;
     public static int liftToHighChamber2 = 225;
     public static int liftToHighChamber3 = 350;
     public static int liftToHighBucket = 0;

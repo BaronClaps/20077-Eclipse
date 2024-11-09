@@ -18,6 +18,7 @@ public class LiftSubsystem {
 
     public DcMotor rightLift, leftLift;
     public boolean manual = false;
+    public boolean hang = false;
     public int pos, bottom;
     public RunAction toZero, toHighBucket, toHighChamber, toHumanPlayer, toTransfer, toPark;
     public PIDController liftPID;
@@ -73,6 +74,10 @@ public class LiftSubsystem {
     public void manual(double n){
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        if(hang) {
+            n = 0.75;
+        }
 
         rightLift.setPower(n);
         leftLift.setPower(n);
