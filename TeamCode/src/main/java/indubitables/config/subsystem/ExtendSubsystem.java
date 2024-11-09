@@ -15,6 +15,7 @@ public class ExtendSubsystem {
 
     public Servo leftExtend, rightExtend;
     private double pos = 0;
+    public double extendLimit = extendFullSample;
     public RunAction toZero, toHalf, toFull;
 
     public ExtendSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -32,7 +33,7 @@ public class ExtendSubsystem {
     public void manual(int direction) {
         double rightPos = rightExtend.getPosition();
 
-        if (rightPos <= extendFull || direction < 0) {
+        if (rightPos <= extendLimit || direction < 0) {
             rightPos += (extendManualIncrements * direction);
         } else {
             rightPos = rightExtend.getPosition();
@@ -40,8 +41,6 @@ public class ExtendSubsystem {
 
         leftExtend.setPosition(rightPos);
         rightExtend.setPosition(rightPos);
-
-
     }
 
     public void setTarget(double b) {
@@ -55,11 +54,11 @@ public class ExtendSubsystem {
     }
 
     public void toHalf() {
-        setTarget(extendHalf);
+        setTarget(extendLimit/2);
     }
 
     public void toFull() {
-        setTarget(extendFull);
+        setTarget(extendLimit);
     }
 
     // Util //
@@ -72,6 +71,13 @@ public class ExtendSubsystem {
         pos = ((leftExtend.getPosition() + rightExtend.getPosition()) / 2);
     }
 
+    public void setLimitToSpecimen() {
+        extendLimit = extendFullSpecimen;
+    }
+
+    public void setLimitToSample() {
+        extendLimit = extendFullSample;
+    }
 
     // Init + Start //
     public void init() {

@@ -10,7 +10,7 @@ import indubitables.config.util.RobotConstants;
 
 @Config
 @TeleOp(name="armTest", group="a")
-public class ArmTest extends OpMode {
+public class armTest extends OpMode {
 
     private ArmSubsystem arm;
     private ClawSubsystem claw;

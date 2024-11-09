@@ -81,12 +81,17 @@ public class Teleop {
         this.gamepad2 = gamepad2;
     }
 
-    public void init() {
+    public void init() {}
+
+    public void start() {
+        extend.setLimitToSample();
         claw.init();
-        extend.init();
-        intake.init();
         arm.init();
-        //initPos();
+        //lift.start();
+        extend.start();
+        intake.start();
+        //follower.setPose(startPose);
+        //follower.startTeleopDrive();
     }
 
     public void update() {
@@ -176,53 +181,43 @@ public class Teleop {
         //telemetry.addData("Y", follower.getPose().getY());
         //telemetry.addData("Heading", Math.toDegrees(follower.getPose().getHeading()));
 
-        telemetry.addData("Left Lift Pos", lift.leftLift.getCurrentPosition());
-        telemetry.addData("Right Lift Pos", lift.rightLift.getCurrentPosition());
-telemetry.addData(" Extend Pos", extend.leftExtend.getPosition());
+        telemetry.addData("Lift Pos", lift.getPos());
+        telemetry.addData("Extend Pos", extend.leftExtend.getPosition());
+        telemetry.addData("Extend Limit", extend.extendLimit);
         telemetry.addData("Claw Grab State", claw.grabState);
         telemetry.addData("Claw Pivot State", claw.pivotState);
-     //   telemetry.addData("Intake Spin State", intakeSpinState);
-     //   telemetry.addData("Intake Pivot State", intakePivotState);
-        telemetry.addData("arm State", arm.state);
+        telemetry.addData("Intake Spin State", intakeSpinState);
+        telemetry.addData("Intake Pivot State", intakePivotState);
+        telemetry.addData("Arm State", arm.state);
         telemetry.update();
     }
 
-    public void start() {
-        claw.start();
-        //lift.start();
-        extend.start();
-        intake.start();
-        arm.start();
-        //follower.setPose(startPose);
-        //follower.startTeleopDrive();
-    }
-
     private void scoringPos() {
+        extend.setLimitToSample();
         claw.score();
         claw.close();
         arm.score();
     }
 
     private void transferPos() {
+        extend.setLimitToSample();
         claw.transfer();
         claw.open();
         arm.transfer();
     }
 
     private void specimenPos() {
+        extend.setLimitToSpecimen();
         claw.specimen();
         claw.open();
         arm.specimen();
     }
 
     private void chamberPos() {
+        extend.setLimitToSpecimen();
         claw.specimen();
         claw.close();
         arm.specimen();
-    }
-
-    private void initPos() {
-        transferPos();
     }
 
 }

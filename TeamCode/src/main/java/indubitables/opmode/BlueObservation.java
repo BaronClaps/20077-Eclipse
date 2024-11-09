@@ -20,13 +20,6 @@ public class BlueObservation extends OpMode {
     @Override
     public void init() {
         auto = new Auto(hardwareMap, telemetry, new Follower(hardwareMap), true, false);
-
-        telemetry.addData("State: ", pathState);
-        telemetry.addData("X: ", auto.follower.getPose().getX());
-        telemetry.addData("Y: ", auto.follower.getPose().getY());
-        telemetry.addData("Heading: ", auto.follower.getPose().getHeading());
-        telemetry.addData("Action Busy?: ", auto.actionBusy);
-        telemetry.update();
     }
 
     @Override
@@ -37,15 +30,12 @@ public class BlueObservation extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addData("State: ", pathState);
+        telemetry.addData("Path Timer: ", pathTimer.getElapsedTimeSeconds());
+        telemetry.update();
+
         auto.update();
         pathUpdate();
-
-        telemetry.addData("State: ", pathState);
-        telemetry.addData("X: ", auto.follower.getPose().getX());
-        telemetry.addData("Y: ", auto.follower.getPose().getY());
-        telemetry.addData("Heading: ", auto.follower.getPose().getHeading());
-        telemetry.addData("Action Busy?: ", auto.actionBusy);
-        telemetry.update();
     }
 
     public void pathUpdate() {
@@ -59,53 +49,62 @@ public class BlueObservation extends OpMode {
             case 1: //Waits until follower reaches it's position then begins the Chamber State Machine
                 if(auto.follower.getPose().getX() > auto.preloadPose.getX()) {
                     auto.startChamber();
-                    setPathState(2); }
+                    setPathState(2);
+                }
                 break;
             case 2: //Once Chamber State Machine Machine finishes, begins Pathchain to push elements to the submersible
                 if(auto.actionNotBusy()) {
                     auto.follower.setMaxPower(0.7);
                     auto.follower.followPath(auto.pushSamples, true);
-                    setPathState(3); }
+                    setPathState(3);
+                }
                 break;
             case 3: //Waits until follower reaches it's position then begins the Specimen State Machine
                 if(!auto.follower.isBusy()) {
                     auto.startSpecimen();
                     auto.liftPIDF = false;
                     auto.lift.manual(-0.7);
-                    setPathState(10001); }
+                    setPathState(4);
+                }
                 break;
-            case 10001:
+            case 4:
                 if(pathTimer.getElapsedTimeSeconds() > 0.5) {
                     auto.lift.manual(0);
-                    setPathState(4); }
+                    setPathState(5);
+                }
                 break;
-            case 4: //Runs to the position of the grab1 and holds it's point at full power
+            case 5: //Runs to the position of the grab1 and holds it's point at full power
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
                     auto.follower.setMaxPower(0.7);
                     auto.follower.followPath(auto.grab1, true);
-                    setPathState(5); }
+                    setPathState(6);
+                }
                 break;
-            case 5: //Closes the claw when the follower reaches the grab1 position
+            case 6: //Closes the claw when the follower reaches the grab1 position
                 if(pathTimer.getElapsedTimeSeconds() > 1.5) {
                     auto.claw.close();
-                    setPathState(6); }
+                    setPathState(7);
+                }
                 break;
-            case 6: //Sets the arm to a neutral position and puts lifts to zero;
+            case 7: //Sets the arm to a neutral position and puts lifts to zero;
                 if(pathTimer.getElapsedTimeSeconds() > 0.25) {
                     auto.init();
                     auto.follower.setMaxPower(0.9);
                     auto.follower.followPath(auto.specimen1, true);
-                    setPathState(8); }
+                    setPathState(8);
+                }
                 break;
             case 8: //Waits until follower reaches it's position then begins the Chamber State Machine
                 if(pathTimer.getElapsedTimeSeconds() > 0) {
                     auto.startChamber2();
-                    setPathState(9); }
+                    setPathState(9);
+                }
                 break;
-            case 9: //Resets the lifts and starts the Specimen State Machine
+            case 9: //Starts the Specimen State Machine
                 if(auto.actionNotBusy()) {
                     auto.startSpecimen();
-                    setPathState(10); }
+                    setPathState(10);
+                }
                 break;
             case 10: //Begins the path for grab 2 & closes the claw once it reaches position and passes 0.75 seconds
                 if(pathTimer.getElapsedTimeSeconds() > 0) {
@@ -115,28 +114,65 @@ public class BlueObservation extends OpMode {
                 }
                 break;
             case 11:
-                    if(pathTimer.getElapsedTimeSeconds() > 3.5) {
+                if(pathTimer.getElapsedTimeSeconds() > 3.5) {
                         auto.claw.close();
                         setPathState(12);
-                    }
+                }
                 break;
             case 12: //Waits 0.25 seconds and puts robot in neutral position
                 if(pathTimer.getElapsedTimeSeconds() > 0.25) {
                     auto.init();
-                    setPathState(13); }
+                    setPathState(13);
+                }
                 break;
             case 13: //Drives to chamber once action finishes
-                    auto.follower.setMaxPower(0.9);
-                    auto.follower.followPath(auto.specimen2, true);
-                    setPathState(14);
+                 auto.follower.setMaxPower(0.9);
+                 auto.follower.followPath(auto.specimen2, true);
+                 setPathState(14);
                 break;
             case 14: //Starts the Chamber State Machine
                 if(pathTimer.getElapsedTimeSeconds() > 0) {
                     auto.startChamber2();
-                    setPathState(15); 
+                    setPathState(15);
                 }
                 break;
-            case 15: //Park and End the autonomous
+            case 15: //Starts the Specimen State Machine
+                if(auto.actionNotBusy()) {
+                    auto.startSpecimen();
+                    setPathState(16);
+                }
+                break;
+            case 16: //Begins the path for grab 2 & closes the claw once it reaches position and passes 0.75 seconds
+                if(pathTimer.getElapsedTimeSeconds() > 0) {
+                    auto.follower.setMaxPower(0.7);
+                    auto.follower.followPath(auto.grab3, true);
+                    setPathState(17);
+                }
+                break;
+            case 17:
+                if(pathTimer.getElapsedTimeSeconds() > 3.5) {
+                    auto.claw.close();
+                    setPathState(18);
+                }
+                break;
+            case 18: //Waits 0.25 seconds and puts robot in neutral position
+                if(pathTimer.getElapsedTimeSeconds() > 0.25) {
+                    auto.init();
+                    setPathState(19);
+                }
+                break;
+            case 19: //Drives to chamber once action finishes
+                auto.follower.setMaxPower(0.9);
+                auto.follower.followPath(auto.specimen3, true);
+                setPathState(20);
+                break;
+            case 20: //Starts the Chamber State Machine
+                if(pathTimer.getElapsedTimeSeconds() > 0) {
+                    auto.startChamber2();
+                    setPathState(21);
+                }
+                break;
+            case 21: //Park and End the autonomous
                 if(auto.actionNotBusy()) {
                     auto.follower.setMaxPower(1);
                     auto.follower.followPath(auto.park, true);

@@ -40,8 +40,9 @@ public class RobotConstants {
     public static int liftToPark = 0;
 
 
-    public static double extendZero = 0;
-    public static double extendFull = 0.175;
-    public static double extendHalf = extendFull/2;
     public static double extendManualIncrements = 0.01; //0.05
+    public static double extendZero = 0;
+    public static double extendFullSample = 0.175;
+    public static double extendFullSpecimen = 0.1;
+
 }

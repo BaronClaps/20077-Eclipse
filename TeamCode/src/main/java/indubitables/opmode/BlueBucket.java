@@ -1,6 +1,7 @@
 package indubitables.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import indubitables.pedroPathing.follower.Follower;
@@ -8,7 +9,8 @@ import indubitables.config.runmodes.Auto;
 import indubitables.config.util.action.Actions;
 import indubitables.config.util.action.SequentialAction;
 
-@Autonomous(name="BlueBucket", group="B")
+@Disabled
+@Autonomous(name="BlueBucket", group="A")
 public class BlueBucket extends OpMode {
     public int pathState;
     public Auto auto;
