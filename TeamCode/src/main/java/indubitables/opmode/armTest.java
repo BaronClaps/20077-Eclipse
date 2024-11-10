@@ -46,8 +46,8 @@ public class armTest extends OpMode {
         }
 
         if(gamepad1.b) {
-            arm.left.setPosition(RobotConstants.armInit);
-            arm.right.setPosition(RobotConstants.armInit);
+            arm.left.setPosition(RobotConstants.armSpecimenGrab);
+            arm.right.setPosition(RobotConstants.armSpecimenGrab);
             claw.pivot.setPosition(RobotConstants.clawSpecimenGrab);
         }
 

@@ -186,53 +186,60 @@ public class Auto {
             preload = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(startPose), new Point(preloadPose)))
                     .setLinearHeadingInterpolation(startPose.getHeading(), preloadPose.getHeading())
+                    .setZeroPowerAccelerationMultiplier(1)
                     .build();
 
             pushSamples = follower.pathBuilder()
-                    .addPath(new BezierCurve(new Point(preloadPose), new Point(16.088, 22.000, Point.CARTESIAN), new Point(57.345, 50.496, Point.CARTESIAN), new Point(59.000, 25.000, Point.CARTESIAN)))
-                    .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(90))
-                    .addPath(new BezierLine(new Point(59.000, 25.000, Point.CARTESIAN), new Point(24, 25.000, Point.CARTESIAN)))
-                    .setConstantHeadingInterpolation(Math.toRadians(90))
-                    .addPath(new BezierCurve(new Point(24, 25.000, Point.CARTESIAN), new Point(56.000, 30.000, Point.CARTESIAN), new Point(60.000, 14.000, Point.CARTESIAN)))
-                    .setConstantHeadingInterpolation(Math.toRadians(90))
-                    .addPath(new BezierLine(new Point(60.000, 14.000, Point.CARTESIAN),new Point(24, 14.000, Point.CARTESIAN)))
-                    .setConstantHeadingInterpolation(Math.toRadians(90))
+                    .addPath(new BezierCurve(new Point(preloadPose), new Point(12.088, 16.000, Point.CARTESIAN), new Point(57.345, 40.496, Point.CARTESIAN), new Point(59.000, 24.000, Point.CARTESIAN)))
+                    .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                    .addPath(new BezierLine(new Point(59.000, 24.000, Point.CARTESIAN), new Point(24, 24.000, Point.CARTESIAN)))
+                    .setConstantHeadingInterpolation(Math.toRadians(180))
+                    .addPath(new BezierCurve(new Point(24, 24.000, Point.CARTESIAN), new Point(52.000, 30.000, Point.CARTESIAN), new Point(58.000, 16.000, Point.CARTESIAN)))
+                    .setConstantHeadingInterpolation(Math.toRadians(180))
+                    .addPath(new BezierLine(new Point(58.000, 16.000, Point.CARTESIAN),new Point(24, 16.000, Point.CARTESIAN)))
+                    .setConstantHeadingInterpolation(Math.toRadians(180))
              //       .addPath(new BezierCurve(new Point(24, 16.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN), new Point(56.000, 9.50, Point.CARTESIAN)))
                //     .setConstantHeadingInterpolation(Math.toRadians(0))
               //      .addPath(new BezierLine(new Point(56.000, 9.50, Point.CARTESIAN), new Point(24, 9.5, Point.CARTESIAN)))
                 //    .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierLine(new Point(24, 14, Point.CARTESIAN), new Point(specimenSetPose)))
-                    .setLinearHeadingInterpolation(Math.toRadians(90), specimenSetPose.getHeading())
+                    .addPath(new BezierLine(new Point(24, 16, Point.CARTESIAN), new Point(specimenSetPose)))
+                    .setLinearHeadingInterpolation(Math.toRadians(180), specimenSetPose.getHeading())
                     .build();
 
             grab1 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimenSetPose), new Point(grab1Pose)))
                     .setLinearHeadingInterpolation(specimenSetPose.getHeading(), grab1Pose.getHeading())
+                    .setZeroPowerAccelerationMultiplier(1)
                     .build();
 
             specimen1 = follower.pathBuilder()
                     .addPath(new BezierCurve(new Point(grab1Pose), new Point(specimen1Pose.getX()-10, specimen1Pose.getY(), Point.CARTESIAN), new Point(specimen1Pose)))
                     .setLinearHeadingInterpolation(grab1Pose.getHeading(), specimen1Pose.getHeading())
+                    .setZeroPowerAccelerationMultiplier(0.5)
                     .build();
 
             grab2 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimen1Pose), new Point(grab2Pose)))
                     .setLinearHeadingInterpolation(specimen1Pose.getHeading(), grab2Pose.getHeading())
+                    .setZeroPowerAccelerationMultiplier(1)
                     .build();
 
             specimen2 = follower.pathBuilder()
                     .addPath(new BezierCurve(new Point(grab2Pose), new Point(specimen2Pose.getX() - 10, specimen2Pose.getY(), Point.CARTESIAN),new Point(specimen2Pose)))
                     .setLinearHeadingInterpolation(grab2Pose.getHeading(), specimen2Pose.getHeading())
+                    .setZeroPowerAccelerationMultiplier(0.5)
                     .build();
 
             grab3 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimen2Pose), new Point(grab3Pose)))
                     .setLinearHeadingInterpolation(specimen2Pose.getHeading(), grab3Pose.getHeading())
+                    .setZeroPowerAccelerationMultiplier(1)
                     .build();
 
             specimen3 = follower.pathBuilder()
                     .addPath(new BezierCurve(new Point(grab3Pose), new Point(specimen3Pose.getX() - 10, specimen3Pose.getY(), Point.CARTESIAN),new Point(specimen3Pose)))
                     .setLinearHeadingInterpolation(grab3Pose.getHeading(), specimen3Pose.getHeading())
+                    .setZeroPowerAccelerationMultiplier(0.5)
                     .build();
 
             park = follower.pathBuilder()
@@ -393,6 +400,7 @@ public class Auto {
             case 3:
                 if(chamberTimer2.getElapsedTimeSeconds() > 1.5) {
                     claw.specimenScore();
+                    arm.score();
                     chamberTimer2.resetTimer();
                     setChamberState2(4);
                 }
