@@ -53,6 +53,10 @@ public class ExtendSubsystem {
         setTarget(extendZero);
     }
 
+    public void toQuarter() {
+        setTarget(extendLimit/4);
+    }
+
     public void toHalf() {
         setTarget(extendLimit/2);
     }
