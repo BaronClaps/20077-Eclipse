@@ -215,7 +215,7 @@ public class Auto {
             specimen1 = follower.pathBuilder()
                     .addPath(new BezierCurve(new Point(grab1Pose), new Point(specimen1Pose.getX()-10, specimen1Pose.getY(), Point.CARTESIAN), new Point(specimen1Pose)))
                     .setLinearHeadingInterpolation(grab1Pose.getHeading(), specimen1Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(0.5)
+                    .setZeroPowerAccelerationMultiplier(0.25)
                     .build();
 
             grab2 = follower.pathBuilder()
@@ -399,7 +399,7 @@ public class Auto {
                 }
                 break;
             case 3:
-                if(chamberTimer2.getElapsedTimeSeconds() > 0.5) {
+                if(chamberTimer2.getElapsedTimeSeconds() > 0.35) {
                     claw.specimenScore();
                     arm.score();
                     chamberTimer2.resetTimer();

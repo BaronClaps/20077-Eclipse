@@ -61,27 +61,27 @@ public class BlueObservation extends OpMode {
                 break;
             case 3: //Waits until follower reaches it's position then begins the Specimen State Machine
                 if(!auto.follower.isBusy()) {
-                    auto.startSpecimen();
                     auto.liftPIDF = false;
-                    auto.lift.manual(-0.7);
+                    auto.lift.manual(-0.4);
                     setPathState(4);
                 }
                 break;
             case 4:
                 if(pathTimer.getElapsedTimeSeconds() > 0.5) {
-                    auto.lift.manual(-0.05);
+                    auto.lift.manual(0);
+                    auto.startSpecimen();
                     setPathState(5);
                 }
                 break;
             case 5: //Runs to the position of the grab1 and holds it's point at full power
                 if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    auto.follower.setMaxPower(0.7);
-                    auto.follower.followPath(auto.grab1, true);
+                    auto.follower.setMaxPower(0.75);
+                    auto.follower.followPath(auto.grab1, false);
                     setPathState(6);
                 }
                 break;
             case 6: //Closes the claw when the follower reaches the grab1 position
-                if(pathTimer.getElapsedTimeSeconds() > 1.5) {
+                if(pathTimer.getElapsedTimeSeconds() > 1.75) {
                     auto.claw.close();
                     setPathState(7);
                 }
@@ -109,7 +109,7 @@ public class BlueObservation extends OpMode {
             case 10: //Begins the path for grab 2 & closes the claw once it reaches position and passes 0.75 seconds
                 if(pathTimer.getElapsedTimeSeconds() > 0) {
                     auto.follower.setMaxPower(0.75);
-                    auto.follower.followPath(auto.grab2, true);
+                    auto.follower.followPath(auto.grab2, false);
                     setPathState(11);
                 }
                 break;
@@ -145,7 +145,7 @@ public class BlueObservation extends OpMode {
             case 16: //Begins the path for grab 2 & closes the claw once it reaches position and passes 0.75 seconds
                 if(pathTimer.getElapsedTimeSeconds() > 0) {
                     auto.follower.setMaxPower(0.75);
-                    auto.follower.followPath(auto.grab3, true);
+                    auto.follower.followPath(auto.grab3, false);
                     setPathState(17);
                 }
                 break;
