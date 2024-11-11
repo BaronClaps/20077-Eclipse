@@ -23,7 +23,7 @@ public class RobotConstants {
     public static double intakePivotSubmersible = 0.05;
 
     public static double armTransfer= 0.05;
-    public static double armScoring = 0.5;
+    public static double armScoring = 0.475;
     public static double armSpecimen = 0.875;
     public static double armChamber = 0.625;
     public static double armInit = 0.15;
