@@ -7,7 +7,7 @@ public class RobotConstants {
     public static double clawClose = 0.09;
     public static double clawOpen = 0.34;
     public static double clawSpecimen = 0.23;
-    public static double clawTransfer = 0.2;
+    public static double clawTransfer = 0.25;
     public static double clawScore = 0.4;
     public static double clawChamber = 0.5;
     public static double clawSpecimenScore = 0;
