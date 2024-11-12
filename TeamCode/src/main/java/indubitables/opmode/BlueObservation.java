@@ -177,6 +177,7 @@ public class BlueObservation extends OpMode {
                 if(pathTimer.getElapsedTimeSeconds() > 0.5) {
                     auto.intake.pivotGround();
                     auto.intake.spinIn();
+
                     setPathState(22);
                 }
             case 22: //Park and End the autonomous
