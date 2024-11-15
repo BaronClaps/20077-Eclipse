@@ -169,23 +169,23 @@ public class BlueObservation extends OpMode {
             case 20: //Starts the Chamber State Machine
                 if(pathTimer.getElapsedTimeSeconds() > 0) {
                     auto.startChamber2();
-                    auto.extend.toQuarter();
+                    auto.extend.toHalf();
                     setPathState(21);
                 }
                 break;
-            case 21:
-                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
-                    auto.intake.pivotGround();
-                    auto.intake.spinIn();
-
-                    setPathState(22);
-                }
-            case 22: //Park and End the autonomous
+            case 21: //Park and End the autonomous
                 if(auto.actionNotBusy()) {
                     auto.follower.setMaxPower(1);
                     auto.follower.followPath(auto.park, true);
                     auto.extend.toFull();
-                    setPathState(-1); 
+                    setPathState(22);
+                }
+                break;
+            case 22:
+                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
+                    auto.intake.pivotGround();
+                    auto.intake.spinIn();
+                    setPathState(-1);
                 }
                 break;
         }

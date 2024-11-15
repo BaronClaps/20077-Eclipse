@@ -6,9 +6,9 @@ import com.acmerobotics.dashboard.config.Config;
 public class RobotConstants {
     public static double clawClose = 0.09;
     public static double clawOpen = 0.34;
-    public static double clawSpecimen = 0.23;
-    public static double clawTransfer = 0.25;
-    public static double clawScore = 0.4;
+    public static double clawSpecimen = 0.33; //.23
+    public static double clawTransfer = 0.215; //.25
+    public static double clawScore = 0.5; //.4
     public static double clawChamber = 0.5;
     public static double clawSpecimenScore = 0;
     public static double clawInit = 0.8;
@@ -18,13 +18,13 @@ public class RobotConstants {
     public static double intakeSpinOutPwr = -0.25;
     public static double intakeSpinStopPwr = 0;
 
-    public static double intakePivotTransfer= 0.045;
+    public static double intakePivotTransfer= 0.141; //.12
     public static double intakePivotGround = 0;
     public static double intakePivotSubmersible = 0.05;
 
-    public static double armTransfer= 0.05;
+    public static double armTransfer= 0.06; //.05
     public static double armScoring = 0.475;
-    public static double armSpecimen = 0.875;
+    public static double armSpecimen = 0.8; //.875
     public static double armChamber = 0.625;
     public static double armInit = 0.15;
     public static double armSpecimenGrab = 0.1075;
