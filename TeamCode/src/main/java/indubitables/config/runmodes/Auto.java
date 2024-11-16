@@ -409,9 +409,9 @@ public class Auto {
                 break;
             case 4:
                 if(chamberTimer2.getElapsedTimeSeconds() > 0.5) {
-                    claw.init();
-                    arm.init();
+                    claw.score();
                     claw.open();
+                    arm.score();
                     actionBusy = false;
                     setChamberState2(-1);
                 }
