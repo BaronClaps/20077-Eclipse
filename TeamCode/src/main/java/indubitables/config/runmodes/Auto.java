@@ -210,7 +210,7 @@ public class Auto {
             grab1 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimenSetPose), new Point(grab1Pose)))
                     .setLinearHeadingInterpolation(specimenSetPose.getHeading(), grab1Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(0.5)
+                    .setZeroPowerAccelerationMultiplier(0.25)
                     .build();
 
             specimen1 = follower.pathBuilder()
