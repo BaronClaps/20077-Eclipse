@@ -42,13 +42,13 @@ public class BlueObservation extends OpMode {
         switch (pathState) {
             case 0: //Runs to the position of the preload and holds it's point at 0.5 power
                 auto.extend.toZero();
+                auto.startChamber2();
                 auto.follower.setMaxPower(0.5);
                 auto.follower.followPath(auto.preload, true);
                 setPathState(1);
                 break;
             case 1: //Waits until follower reaches it's position then begins the Chamber State Machine
-                if(auto.follower.getPose().getX() > auto.preloadPose.getX()) {
-                    auto.startChamber();
+                if(auto.actionNotBusy()) {
                     setPathState(2);
                 }
                 break;
@@ -81,7 +81,7 @@ public class BlueObservation extends OpMode {
                 }
                 break;
             case 6: //Closes the claw when the follower reaches the grab1 position
-                if(pathTimer.getElapsedTimeSeconds() > 1.75) {
+                if(pathTimer.getElapsedTimeSeconds() > 1) {
                     auto.claw.close();
                     setPathState(7);
                 }
@@ -114,7 +114,7 @@ public class BlueObservation extends OpMode {
                 }
                 break;
             case 11:
-                if(pathTimer.getElapsedTimeSeconds() > 2.5) {
+                if(pathTimer.getElapsedTimeSeconds() > 2.25) {
                         auto.claw.close();
                         setPathState(12);
                 }
@@ -150,7 +150,7 @@ public class BlueObservation extends OpMode {
                 }
                 break;
             case 17:
-                if(pathTimer.getElapsedTimeSeconds() > 2.75) {
+                if(pathTimer.getElapsedTimeSeconds() > 2.5) {
                    auto.claw.close();
                     setPathState(18);
                 }
@@ -169,19 +169,54 @@ public class BlueObservation extends OpMode {
             case 20: //Starts the Chamber State Machine
                 if(pathTimer.getElapsedTimeSeconds() > 0) {
                     auto.startChamber2();
-                    auto.extend.toHalf();
                     setPathState(21);
                 }
                 break;
-            case 21: //Park and End the autonomous
+            case 21: //Starts the Specimen State Machine
+                if(auto.actionNotBusy()) {
+                    auto.startSpecimen();
+                    setPathState(22);
+                }
+                break;
+            case 22: //Begins the path for grab 2 & closes the claw once it reaches position and passes 0.75 seconds
+                if(pathTimer.getElapsedTimeSeconds() > 0) {
+                    auto.follower.setMaxPower(0.8);
+                    auto.follower.followPath(auto.grab4, true);
+                    setPathState(23);
+                }
+                break;
+            case 23:
+                if(pathTimer.getElapsedTimeSeconds() > 2.5) {
+                    auto.claw.close();
+                    setPathState(24);
+                }
+                break;
+            case 24: //Waits 0.25 seconds and puts robot in neutral position
+                if(pathTimer.getElapsedTimeSeconds() > 0.25) {
+                    auto.init();
+                    setPathState(25);
+                }
+                break;
+            case 25: //Drives to chamber once action finishes
+                auto.follower.setMaxPower(0.8);
+                auto.follower.followPath(auto.specimen4, true);
+                setPathState(26);
+                break;
+            case 26: //Starts the Chamber State Machine
+                if(pathTimer.getElapsedTimeSeconds() > 0) {
+                    auto.startChamber2();
+                    setPathState(27);
+                }
+                break;
+            case 27: //Park and End the autonomous
                 if(auto.actionNotBusy()) {
                     auto.follower.setMaxPower(1);
                     auto.follower.followPath(auto.park, true);
                     auto.extend.toFull();
-                    setPathState(22);
+                    setPathState(28);
                 }
                 break;
-            case 22:
+            case 28:
                 if(pathTimer.getElapsedTimeSeconds() > 0.5) {
                     auto.intake.pivotGround();
                     auto.intake.spinIn();

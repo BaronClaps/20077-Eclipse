@@ -46,8 +46,8 @@ public class Auto {
     public int transferState = -1, bucketState = -1, chamberState = -1, intakeState = -1, parkState = -1, specimenState = -1, chamberState2 = -1;
 
     public Path element1, score1, element2, score2, element3, score3;
-    public PathChain pushSamples, preload,specimen1, specimen2, specimen3, grab1, grab2, grab3, park;
-    public Pose startPose, preloadPose, sample1Pose, sample1ControlPose, sample2Pose, sample2ControlPose, sample3Pose, sample3ControlPose, sampleScorePose, parkControlPose, parkPose, grab1Pose, specimen1Pose, grab2Pose, specimen2Pose, grab3Pose, specimen3Pose, specimenSetPose;
+    public PathChain pushSamples, preload,specimen1, specimen2, specimen3, specimen4, grab1, grab2, grab3, grab4, park;
+    public Pose startPose, preloadPose, sample1Pose, sample1ControlPose, sample2Pose, sample2ControlPose, sample3Pose, sample3ControlPose, sampleScorePose, parkControlPose, parkPose, grab1Pose, specimen1Pose, grab2Pose, specimen2Pose, grab3Pose, specimen3Pose, grab4Pose, specimen4Pose, specimenSetPose;
 
     public Auto(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, boolean isBlue, boolean isBucket) {
         claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
@@ -128,9 +128,11 @@ public class Auto {
                 grab1Pose = blueObservationSpecimenPickupPose;
                 grab2Pose = blueObservationSpecimenPickup2Pose;
                 grab3Pose = blueObservationSpecimenPickup3Pose;
+                grab4Pose = blueObservationSpecimenPickup4Pose;
                 specimen1Pose = blueObservationSpecimen1Pose;
                 specimen2Pose = blueObservationSpecimen2Pose;
                 specimen3Pose = blueObservationSpecimen3Pose;
+                specimen4Pose = blueObservationSpecimen4Pose;
 
 
                 parkPose = blueObservationParkPose;
@@ -190,27 +192,27 @@ public class Auto {
                     .build();
 
             pushSamples = follower.pathBuilder()
-                    .addPath(new BezierCurve(new Point(preloadPose), new Point(21.5, 34.5, Point.CARTESIAN), new Point(61, 36.25, Point.CARTESIAN), new Point(59, 24.000, Point.CARTESIAN)))
+                    .addPath(new BezierCurve(new Point(preloadPose), new Point(21.5, 34.5, Point.CARTESIAN), new Point(61, 36.25, Point.CARTESIAN), new Point(59, 26.000, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
-                    .addPath(new BezierLine(new Point(59.000, 24.000, Point.CARTESIAN), new Point(24, 24.000, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(59.000, 26.000, Point.CARTESIAN), new Point(24, 26.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(180))
-                    .addPath(new BezierCurve(new Point(24, 24.000, Point.CARTESIAN), new Point(52.000, 30.000, Point.CARTESIAN), new Point(58.000, 16.000, Point.CARTESIAN)))
+                    .addPath(new BezierCurve(new Point(24, 26.000, Point.CARTESIAN), new Point(52.000, 30.000, Point.CARTESIAN), new Point(58.000, 18.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(180))
-                    .addPath(new BezierLine(new Point(58.000, 16.000, Point.CARTESIAN),new Point(24, 16.000, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(58.000, 18.000, Point.CARTESIAN),new Point(24, 18.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(180))
-             //       .addPath(new BezierCurve(new Point(24, 16.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN), new Point(56.000, 9.50, Point.CARTESIAN)))
-               //     .setConstantHeadingInterpolation(Math.toRadians(0))
-              //      .addPath(new BezierLine(new Point(56.000, 9.50, Point.CARTESIAN), new Point(24, 9.5, Point.CARTESIAN)))
-                //    .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(new BezierLine(new Point(24, 16, Point.CARTESIAN), new Point(specimenSetPose)))
+                    .addPath(new BezierCurve(new Point(24, 18.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN), new Point(56.000, 10, Point.CARTESIAN)))
+                    .setConstantHeadingInterpolation(Math.toRadians(180))
+                    .addPath(new BezierLine(new Point(56.000, 10, Point.CARTESIAN), new Point(24, 10, Point.CARTESIAN)))
+                    .setConstantHeadingInterpolation(Math.toRadians(180))
+                    .addPath(new BezierLine(new Point(24, 10, Point.CARTESIAN), new Point(specimenSetPose)))
                     .setLinearHeadingInterpolation(Math.toRadians(180), specimenSetPose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(0.5)
+                    //.setZeroPowerAccelerationMultiplier(0.5)
                     .build();
 
             grab1 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimenSetPose), new Point(grab1Pose)))
                     .setLinearHeadingInterpolation(specimenSetPose.getHeading(), grab1Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(0.25)
+                    //.setZeroPowerAccelerationMultiplier(0.25)
                     .build();
 
             specimen1 = follower.pathBuilder()
@@ -222,7 +224,7 @@ public class Auto {
             grab2 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimen1Pose), new Point(grab2Pose)))
                     .setLinearHeadingInterpolation(specimen1Pose.getHeading(), grab2Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(1)
+                    //.setZeroPowerAccelerationMultiplier(1)
                     .build();
 
             specimen2 = follower.pathBuilder()
@@ -234,7 +236,7 @@ public class Auto {
             grab3 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimen2Pose), new Point(grab3Pose)))
                     .setLinearHeadingInterpolation(specimen2Pose.getHeading(), grab3Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(1)
+                    //.setZeroPowerAccelerationMultiplier(1)
                     .build();
 
             specimen3 = follower.pathBuilder()
@@ -243,10 +245,22 @@ public class Auto {
                     .setZeroPowerAccelerationMultiplier(0.25)
                     .build();
 
+            grab4 = follower.pathBuilder()
+                    .addPath(new BezierLine(new Point(specimen3Pose), new Point(grab4Pose)))
+                    .setLinearHeadingInterpolation(specimen3Pose.getHeading(), grab4Pose.getHeading())
+                    //.setZeroPowerAccelerationMultiplier(1)
+                    .build();
+
+            specimen4 = follower.pathBuilder()
+                    .addPath(new BezierCurve(new Point(grab4Pose), new Point(specimen4Pose.getX() - 10, specimen3Pose.getY(), Point.CARTESIAN),new Point(specimen3Pose)))
+                    .setLinearHeadingInterpolation(grab4Pose.getHeading(), specimen4Pose.getHeading())
+                    .setZeroPowerAccelerationMultiplier(0.25)
+                    .build();
+
             park = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(specimen3Pose), new Point(parkPose)))
-                    .setLinearHeadingInterpolation(specimen3Pose.getHeading(), parkPose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(0.5)
+                    .addPath(new BezierLine(new Point(specimen4Pose), new Point(parkPose)))
+                    .setLinearHeadingInterpolation(specimen4Pose.getHeading(), parkPose.getHeading())
+                    //.setZeroPowerAccelerationMultiplier(0.5)
                     .build();      
 
         }
@@ -394,7 +408,7 @@ public class Auto {
                 setChamberState2(2);
                 break;
             case 2:
-                if ((follower.getPose().getX() > (specimen1Pose.getX() - 0.25)) && (follower.getPose().getY() > (specimen1Pose.getY() - 0.25))) {
+                if ((follower.getPose().getX() >= specimen1Pose.getX())) {
                     chamberTimer2.resetTimer();
                     setChamberState2(3);
                 }

@@ -156,7 +156,7 @@ public class FollowerConstants {
     // the translational, heading, and drive PIDs.
     public static boolean useSecondaryTranslationalPID = true;
     public static boolean useSecondaryHeadingPID = true;
-    public static boolean useSecondaryDrivePID = true;
+    public static boolean useSecondaryDrivePID = false;
 
 
     // the limit at which the translational PIDF switches between the main and secondary translational PIDFs,
