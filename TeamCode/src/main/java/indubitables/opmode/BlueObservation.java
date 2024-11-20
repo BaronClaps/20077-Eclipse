@@ -61,15 +61,15 @@ public class BlueObservation extends OpMode {
                 break;
             case 3: //Waits until follower reaches it's position then begins the Specimen State Machine
                 if(!auto.follower.isBusy()) {
-                    auto.liftPIDF = false;
-                    auto.lift.manual(-0.4);
-                    setPathState(4);
+                    //auto.liftPIDF = false;
+                    //auto.lift.manual(-0.4);
+                    setPathState(5);
                 }
                 break;
             case 4:
                 if(pathTimer.getElapsedTimeSeconds() > 0.25) {
-                    auto.lift.manual(0);
-                    auto.startSpecimen();
+                    //auto.lift.manual(0);
+                    //auto.startSpecimen();
                     setPathState(5);
                 }
                 break;
