@@ -43,7 +43,7 @@ public class Auto {
     public double liftManual = 0;
 
     public Timer transferTimer = new Timer(), bucketTimer = new Timer(), chamberTimer = new Timer(), intakeTimer = new Timer(), parkTimer = new Timer(), specimenTimer = new Timer(), chamberTimer2 = new Timer();
-    public int transferState = -1, bucketState = -1, chamberState = -1, intakeState = -1, parkState = -1, specimenState = -1, chamberState2 = -1;
+    public int transferState = -1, bucketState = -1, chamberState = -1, intakeState = -1, parkState = -1, specimenState = -1;
 
     public Path element1, score1, element2, score2, element3, score3;
     public PathChain pushSamples, preload,specimen1, specimen2, specimen3, specimen4, grab1, grab2, grab3, grab4, park;
@@ -100,8 +100,6 @@ public class Auto {
         intake();
         park();
         specimen();
-        chamber2();
-
         telemetryUpdate();
     }
 
@@ -357,29 +355,32 @@ public class Auto {
         switch (chamberState) {
             case 1:
                 actionBusy = true;
-                lift.manual = false;
-                intake.pivotTransfer();
-                intake.spinStop();
+                arm.specimenScore();
                 claw.close();
-                lift.toHighChamber();
+                claw.score();
                 extend.toZero();
                 chamberTimer.resetTimer();
                 setChamberState(2);
                 break;
             case 2:
-                if (chamberTimer.getElapsedTimeSeconds() > 1) {
-                    arm.chamber();
-                    claw.chamber();
+                if ((follower.getPose().getX() >= specimen1Pose.getX())) {
+                    chamberTimer.resetTimer();
+                    setChamberState(3);
+                }
+                break;
+            case 3:
+                if(chamberTimer.getElapsedTimeSeconds() > 0.35) {
+                    claw.specimenScore();
+                    arm.score();
                     chamberTimer.resetTimer();
                     setChamberState(4);
                 }
                 break;
             case 4:
-                if(chamberTimer.getElapsedTimeSeconds() > 0.5) {
-                    claw.initClaw();
-                    arm.initArm();
+                if(chamberTimer.getElapsedTimeSeconds() > 0.25) {
+                    claw.score();
                     claw.open();
-                    lift.toZero();
+                    arm.score();
                     actionBusy = false;
                     setChamberState(-1);
                 }
@@ -390,55 +391,9 @@ public class Auto {
         chamberState = x;
     }
 
-    public void startChamber() {
-        if(actionNotBusy()) {
-            setChamberState(1);
-        }
-    }
-
-    public void chamber2() {
-        switch (chamberState2) {
-            case 1:
-                actionBusy = true;
-                arm.specimenScore();
-                claw.close();
-                claw.score();
-                extend.toZero();
-                chamberTimer2.resetTimer();
-                setChamberState2(2);
-                break;
-            case 2:
-                if ((follower.getPose().getX() >= specimen1Pose.getX())) {
-                    chamberTimer2.resetTimer();
-                    setChamberState2(3);
-                }
-                break;
-            case 3:
-                if(chamberTimer2.getElapsedTimeSeconds() > 0.35) {
-                    claw.specimenScore();
-                    arm.score();
-                    chamberTimer2.resetTimer();
-                    setChamberState2(4);
-                }
-                break;
-            case 4:
-                if(chamberTimer2.getElapsedTimeSeconds() > 0.25) {
-                    claw.score();
-                    claw.open();
-                    arm.score();
-                    actionBusy = false;
-                    setChamberState2(-1);
-                }
-        }
-    }
-
-    public void setChamberState2(int x) {
-        chamberState2 = x;
-    }
-
     public void startChamber2() {
         if(actionNotBusy()) {
-            setChamberState2(1);
+            setChamberState(1);
         }
     }
 

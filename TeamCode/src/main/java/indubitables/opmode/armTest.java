@@ -23,18 +23,18 @@ public class armTest extends OpMode {
         arm = new ArmSubsystem(hardwareMap, armState);
         claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
         arm.init();
-        claw.middle();
+        claw.init();
     }
 
     @Override
     public void loop() {
         if(gamepad1.x) {
-            claw.middle();
-            arm.init();
+            claw.transfer();
+            arm.transfer();
         }
 
         if(gamepad1.y) {
-            claw.top();
+            claw.score();
             arm.score();
         }
         if(gamepad1.right_bumper) {

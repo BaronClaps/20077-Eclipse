@@ -50,7 +50,7 @@ public class BlueBucket extends OpMode {
         switch (pathState) {
             case 0:
                 auto.follower.setMaxPower(0.7);
-                auto.startChamber();
+               // auto.startChamber();
                 auto.follower.followPath(auto.preload);
                 setPathState(1);
                 break;

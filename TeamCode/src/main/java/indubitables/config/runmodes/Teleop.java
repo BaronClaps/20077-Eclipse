@@ -44,6 +44,8 @@ public class Teleop {
     private Gamepad previousGamepad1 = new Gamepad();
     private Gamepad previousGamepad2 = new Gamepad();
 
+    private int flip = 1;
+
     private DcMotor leftFront, rightFront, leftRear, rightRear;
 
     public double speed = 0.75;
@@ -111,7 +113,7 @@ public class Teleop {
 
         double max;
         double axial = -gamepad1.left_stick_y;  //Pushing stick forward gives negative value
-        double lateral = gamepad1.left_stick_x;
+        double lateral = gamepad1.left_stick_x*flip;
         double yaw = gamepad1.right_stick_x;
         double leftFrontPower = axial + lateral + yaw;
         double rightFrontPower = axial - lateral - yaw;
@@ -149,6 +151,14 @@ public class Teleop {
         if(currentGamepad1.a && !previousGamepad1.a)
             intake.switchPivotState();
 
+        if(gamepad1.x) {
+            flip = -1;
+        }
+
+        if(gamepad1.b) {
+            flip = 1;
+        }
+
         if (gamepad2.right_bumper)
             extend.manual(1);
         else if (gamepad2.left_bumper)
@@ -166,10 +176,10 @@ public class Teleop {
             scoringPos();
 
         if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left)
-            specimenPos();
+            specimenGrabPos();
 
         if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right)
-            chamberPos();
+            specimenScorePos();
 
         if (currentGamepad1.b && !previousGamepad1.b)
             intake.setPivotState(IntakeSubsystem.IntakePivotState.TRANSFER);
@@ -214,18 +224,18 @@ public class Teleop {
         arm.transfer();
     }
 
-    private void specimenPos() {
+    private void specimenGrabPos() {
         extend.setLimitToSpecimen();
-        claw.specimen();
+        claw.specimenGrab();
         claw.open();
-        arm.specimen();
+        arm.specimenGrab();
     }
 
-    private void chamberPos() {
+    private void specimenScorePos() {
         extend.setLimitToSpecimen();
-        claw.specimen();
+        claw.specimenScore();
         claw.close();
-        arm.specimen();
+        arm.specimenScore();
     }
 
 }
