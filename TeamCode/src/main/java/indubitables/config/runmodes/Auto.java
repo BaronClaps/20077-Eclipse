@@ -200,11 +200,11 @@ public class Auto {
                     .setConstantHeadingInterpolation(Math.toRadians(180))
                     .addPath(new BezierLine(new Point(58.000, 18.000, Point.CARTESIAN),new Point(28, 18.000, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(180))
-                    .addPath(new BezierCurve(new Point(28, 18.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN), new Point(56.000, 10, Point.CARTESIAN)))
+                    .addPath(new BezierCurve(new Point(28, 18.000, Point.CARTESIAN), new Point(56.000, 16.000, Point.CARTESIAN), new Point(56.000, 11, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(180))
-                    .addPath(new BezierLine(new Point(56.000, 10, Point.CARTESIAN), new Point(28, 10, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(56.000, 11, Point.CARTESIAN), new Point(28, 11, Point.CARTESIAN)))
                     .setConstantHeadingInterpolation(Math.toRadians(180))
-                    .addPath(new BezierLine(new Point(28, 10, Point.CARTESIAN), new Point(specimenSetPose)))
+                    .addPath(new BezierLine(new Point(28, 11, Point.CARTESIAN), new Point(specimenSetPose)))
                     .setLinearHeadingInterpolation(Math.toRadians(180), specimenSetPose.getHeading())
                     .setZeroPowerAccelerationMultiplier(0.5)
                     .build();
@@ -574,8 +574,8 @@ public class Auto {
         telemetry.addData("Extend Limit", extend.extendLimit);
         telemetry.addData("Claw Grab State", claw.grabState);
         telemetry.addData("Claw Pivot State", claw.pivotState);
-        telemetry.addData("Intake Spin State", intakeSpinState);
-        telemetry.addData("Intake Pivot State", intakePivotState);
+     //   telemetry.addData("Intake Spin State", intakeSpinState);
+     //   telemetry.addData("Intake Pivot State", intakePivotState);
         telemetry.addData("arm State", arm.state);
         telemetry.update();
     }

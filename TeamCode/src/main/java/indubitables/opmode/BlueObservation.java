@@ -32,10 +32,10 @@ public class BlueObservation extends OpMode {
     public void loop() {
         telemetry.addData("State: ", pathState);
         telemetry.addData("Path Timer: ", pathTimer.getElapsedTimeSeconds());
-        telemetry.update();
-
         auto.update();
         pathUpdate();
+
+        telemetry.update();
     }
 
     public void pathUpdate() {
@@ -63,13 +63,13 @@ public class BlueObservation extends OpMode {
                 if(!auto.follower.isBusy()) {
                     //auto.liftPIDF = false;
                     //auto.lift.manual(-0.4);
-                    setPathState(5);
+                    setPathState(4);
                 }
                 break;
             case 4:
-                if(pathTimer.getElapsedTimeSeconds() > 0.25) {
+                if(pathTimer.getElapsedTimeSeconds() > 0) {
                     //auto.lift.manual(0);
-                    //auto.startSpecimen();
+                    auto.startSpecimen();
                     setPathState(5);
                 }
                 break;

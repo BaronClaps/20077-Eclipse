@@ -19,17 +19,18 @@ public class ClawSubsystem {
     }
 
     public enum ClawPivotState {
-        TRANSFER, SCORE, SPECIMEN, CHAMBER, INIT, SPECIMENGRAB, SPECIMENSCORE
+        TRANSFER, SCORE, SPECIMEN, CHAMBER, INIT, SPECIMENGRAB, SPECIMENSCORE, MIDDLE, TOP
     }
 
-    public Servo grab, pivot;
+    public Servo grab, leftPivot, rightPivot;
     public ClawGrabState grabState;
     public ClawPivotState pivotState;
     public RunAction open, close, transfer, score, specimen;
 
     public ClawSubsystem(HardwareMap hardwareMap, ClawGrabState clawGrabState, ClawPivotState clawPivotState) {
         grab = hardwareMap.get(Servo.class, "clawGrab");
-        pivot = hardwareMap.get(Servo.class, "clawPivot");
+        leftPivot = hardwareMap.get(Servo.class, "leftPivot");
+        rightPivot = hardwareMap.get(Servo.class, "rightPivot");
         this.grabState = clawGrabState;
         this.pivotState = clawPivotState;
 
@@ -42,26 +43,42 @@ public class ClawSubsystem {
 
     public void setPivotState(ClawPivotState state) {
         if (state == ClawPivotState.TRANSFER) {
-            pivot.setPosition(clawTransfer);
+            leftPivot.setPosition(clawTransfer);
+            rightPivot.setPosition(clawTransfer);
             this.pivotState = ClawPivotState.TRANSFER;
         } else if (state == ClawPivotState.SCORE) {
-            pivot.setPosition(clawScore);
+            leftPivot.setPosition(clawScore);
+            rightPivot.setPosition(clawScore);
+
             this.pivotState = ClawPivotState.SCORE;
         } else if (state == ClawPivotState.SPECIMEN) {
-            pivot.setPosition(clawSpecimen);
+            leftPivot.setPosition(clawSpecimen);
+            rightPivot.setPosition(clawSpecimen);
             this.pivotState = ClawPivotState.SPECIMEN;
         } else if (state == ClawPivotState.CHAMBER) {
-            pivot.setPosition(clawChamber);
+            leftPivot.setPosition(clawChamber);
+            rightPivot.setPosition(clawChamber);
             this.pivotState = ClawPivotState.CHAMBER;
         } else if (state == ClawPivotState.INIT) {
-            pivot.setPosition(clawInit);
+            leftPivot.setPosition(clawInit);
+            rightPivot.setPosition(clawInit);
             this.pivotState = ClawPivotState.INIT;
         } else if (state == ClawPivotState.SPECIMENGRAB) {
-            pivot.setPosition(clawSpecimenGrab);
+            leftPivot.setPosition(clawSpecimenGrab);
+            rightPivot.setPosition(clawSpecimenGrab);
             this.pivotState = ClawPivotState.SPECIMENGRAB;
         } else if (state == ClawPivotState.SPECIMENSCORE) {
-            pivot.setPosition(clawSpecimenScore);
+            leftPivot.setPosition(clawSpecimenScore);
+            rightPivot.setPosition(clawSpecimenScore);
             this.pivotState = ClawPivotState.SPECIMENSCORE;
+        } else if (state == ClawPivotState.MIDDLE) {
+            leftPivot.setPosition(clawMiddle);
+            rightPivot.setPosition(clawMiddle);
+            this.pivotState = ClawPivotState.MIDDLE;
+        } else if (state == ClawPivotState.TOP) {
+            leftPivot.setPosition(clawLeftTop);
+            rightPivot.setPosition(clawRightTop);
+            this.pivotState = ClawPivotState.TOP;
         }
     }
 
@@ -121,6 +138,14 @@ public class ClawSubsystem {
 
     public void chamber() {
         setPivotState(ClawPivotState.CHAMBER);
+    }
+
+    public void middle() {
+        setPivotState(ClawPivotState.MIDDLE);
+    }
+
+    public void top() {
+        setPivotState(ClawPivotState.TOP);
     }
 
     public void initClaw() {

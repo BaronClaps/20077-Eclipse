@@ -23,34 +23,20 @@ public class armTest extends OpMode {
         arm = new ArmSubsystem(hardwareMap, armState);
         claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
         arm.init();
-        claw.init();
+        claw.middle();
     }
 
     @Override
     public void loop() {
         if(gamepad1.x) {
-            claw.pivot.setPosition(RobotConstants.clawScore);
-            arm.left.setPosition(RobotConstants.armSpecimenScore);
-            arm.right.setPosition(RobotConstants.armSpecimenScore);
+            claw.middle();
+            arm.init();
         }
 
         if(gamepad1.y) {
-            arm.left.setPosition(RobotConstants.armTransfer);
-            arm.right.setPosition(RobotConstants.armTransfer);
+            claw.top();
+            arm.score();
         }
-
-        if(gamepad1.a) {
-            arm.left.setPosition(RobotConstants.armInit);
-            arm.right.setPosition(RobotConstants.armInit);
-            claw.pivot.setPosition(RobotConstants.clawScore);
-        }
-
-        if(gamepad1.b) {
-            arm.left.setPosition(RobotConstants.armSpecimenGrab);
-            arm.right.setPosition(RobotConstants.armSpecimenGrab);
-            claw.pivot.setPosition(RobotConstants.clawSpecimenGrab);
-        }
-
         if(gamepad1.right_bumper) {
             claw.close();
         } else if (gamepad1.left_bumper) {
@@ -61,6 +47,9 @@ public class armTest extends OpMode {
       //  telemetry.addData("armState", arm.state);
         telemetry.addData("left", arm.left.getPosition());
         telemetry.addData("right", arm.right.getPosition());
-        telemetry.addData("pivot", claw.pivot.getPosition());
+        telemetry.addData("leftPivot", claw.leftPivot.getPosition());
+        telemetry.addData("rightPivot", claw.rightPivot.getPosition());
+        telemetry.addData("grab", claw.grab.getPosition());
+        telemetry.update();
     }
 }

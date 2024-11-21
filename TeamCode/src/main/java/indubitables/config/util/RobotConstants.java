@@ -14,6 +14,10 @@ public class RobotConstants {
     public static double clawInit = 0.8;
     public static double clawSpecimenGrab = 0.475;
 
+    public static double clawMiddle = 0.5;
+    public static double clawLeftTop = 0.8;
+    public static double clawRightTop = 0.3;
+
     public static double intakeSpinInPwr = -1;
     public static double intakeSpinOutPwr = 1;
     public static double intakeSpinStopPwr = 0;
