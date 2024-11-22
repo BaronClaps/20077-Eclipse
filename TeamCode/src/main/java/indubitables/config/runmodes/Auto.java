@@ -103,7 +103,7 @@ public class Auto {
         telemetryUpdate();
     }
 
-    public void createPoses() {
+    public void createPoses() { //Able to be cut
         switch (startLocation) {
             case BLUE_BUCKET:
                 startPose = blueBucketStartPose;
@@ -151,7 +151,6 @@ public class Auto {
     }
 
     public void buildPaths() {
-
         if((startLocation == RobotStart.BLUE_BUCKET) || (startLocation == RobotStart.RED_BUCKET)) {
             preload = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(startPose), new Point(preloadPose)))
@@ -186,7 +185,7 @@ public class Auto {
             preload = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(startPose), new Point(preloadPose)))
                     .setLinearHeadingInterpolation(startPose.getHeading(), preloadPose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(1)
+                    .setZeroPowerAccelerationMultiplier(0.25)
                     .build();
 
             pushSamples = follower.pathBuilder()
@@ -210,7 +209,7 @@ public class Auto {
             grab1 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimenSetPose), new Point(grab1Pose)))
                     .setLinearHeadingInterpolation(specimenSetPose.getHeading(), grab1Pose.getHeading())
-                    //.setZeroPowerAccelerationMultiplier(0.25)
+                    .setZeroPowerAccelerationMultiplier(0.25)
                     .build();
 
             specimen1 = follower.pathBuilder()
@@ -222,7 +221,7 @@ public class Auto {
             grab2 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimen1Pose), new Point(grab2Pose)))
                     .setLinearHeadingInterpolation(specimen1Pose.getHeading(), grab2Pose.getHeading())
-                    //.setZeroPowerAccelerationMultiplier(1)
+                    .setZeroPowerAccelerationMultiplier(0.25)
                     .build();
 
             specimen2 = follower.pathBuilder()
@@ -234,7 +233,7 @@ public class Auto {
             grab3 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimen2Pose), new Point(grab3Pose)))
                     .setLinearHeadingInterpolation(specimen2Pose.getHeading(), grab3Pose.getHeading())
-                    //.setZeroPowerAccelerationMultiplier(1)
+                    .setZeroPowerAccelerationMultiplier(0.25)
                     .build();
 
             specimen3 = follower.pathBuilder()
@@ -246,7 +245,7 @@ public class Auto {
             grab4 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimen3Pose), new Point(grab4Pose)))
                     .setLinearHeadingInterpolation(specimen3Pose.getHeading(), grab4Pose.getHeading())
-                    //.setZeroPowerAccelerationMultiplier(1)
+                    .setZeroPowerAccelerationMultiplier(0.25)
                     .build();
 
             specimen4 = follower.pathBuilder()
@@ -258,7 +257,7 @@ public class Auto {
             park = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimen4Pose), new Point(parkPose)))
                     .setLinearHeadingInterpolation(specimen4Pose.getHeading(), parkPose.getHeading())
-                    //.setZeroPowerAccelerationMultiplier(0.5)
+                    //.setZeroPowerAccelerationMultiplier(0.25)
                     .build();      
 
         }
@@ -357,7 +356,7 @@ public class Auto {
                 actionBusy = true;
                 arm.specimenScore();
                 claw.close();
-                claw.score();
+                claw.specimenScore();
                 extend.toZero();
                 chamberTimer.resetTimer();
                 setChamberState(2);
@@ -369,21 +368,11 @@ public class Auto {
                 }
                 break;
             case 3:
-                if(chamberTimer.getElapsedTimeSeconds() > 0.35) {
-                    claw.specimenScore();
-                    arm.score();
-                    chamberTimer.resetTimer();
-                    setChamberState(4);
-                }
-                break;
-            case 4:
                 if(chamberTimer.getElapsedTimeSeconds() > 0.25) {
-                    claw.score();
-                    claw.open();
-                    arm.score();
                     actionBusy = false;
                     setChamberState(-1);
                 }
+                break;
         }
     }
 
@@ -391,7 +380,7 @@ public class Auto {
         chamberState = x;
     }
 
-    public void startChamber2() {
+    public void startChamber() {
         if(actionNotBusy()) {
             setChamberState(1);
         }
@@ -524,9 +513,9 @@ public class Auto {
         telemetry.addData("Y: ", follower.getPose().getY());
         telemetry.addData("Heading: ", follower.getPose().getHeading());
         telemetry.addData("Action Busy?: ", actionBusy);
-        telemetry.addData("Lift Pos", lift.getPos());
-        telemetry.addData("Extend Pos", extend.leftExtend.getPosition());
-        telemetry.addData("Extend Limit", extend.extendLimit);
+        //telemetry.addData("Lift Pos", lift.getPos());
+        //telemetry.addData("Extend Pos", extend.leftExtend.getPosition());
+        //telemetry.addData("Extend Limit", extend.extendLimit);
         telemetry.addData("Claw Grab State", claw.grabState);
         telemetry.addData("Claw Pivot State", claw.pivotState);
      //   telemetry.addData("Intake Spin State", intakeSpinState);
