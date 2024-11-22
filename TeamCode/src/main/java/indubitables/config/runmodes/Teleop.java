@@ -112,7 +112,7 @@ public class Teleop {
         lift.manual(gamepad2.right_trigger - gamepad2.left_trigger );
 
         double max;
-        double axial = -gamepad1.left_stick_y;  //Pushing stick forward gives negative value
+        double axial = -gamepad1.left_stick_y*flip;  //Pushing stick forward gives negative value
         double lateral = gamepad1.left_stick_x*flip;
         double yaw = gamepad1.right_stick_x;
         double leftFrontPower = axial + lateral + yaw;

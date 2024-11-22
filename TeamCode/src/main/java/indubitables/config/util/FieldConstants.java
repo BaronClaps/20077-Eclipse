@@ -21,7 +21,7 @@ public class FieldConstants {
 
     // Preload Poses
     public static final Pose blueBucketPreloadPose = new Pose(29.25, 78.375, Math.toRadians(180));
-    public static final Pose blueObservationPreloadPose = new Pose(32, 60.625, Math.toRadians(180));
+    public static final Pose blueObservationPreloadPose = new Pose(37, 68, Math.toRadians(180));
     public static final Pose redBucketPreloadPose = new Pose(144-blueBucketPreloadPose.getX(), blueBucketPreloadPose.getY(), 0);
     public static final Pose redObservationPreloadPose = new Pose(144-blueObservationPreloadPose.getX(), blueObservationPreloadPose.getY(), 0);
 
@@ -36,14 +36,14 @@ public class FieldConstants {
 
     // Blue Observation Specimen Poses
     public static final Pose blueObservationSpecimenSetPose = new Pose(12, 35, Math.toRadians(180));
-    public static final Pose blueObservationSpecimenPickupPose = new Pose(7, 35, Math.toRadians(180));
-    public static final Pose blueObservationSpecimenPickup2Pose = new Pose(7, 35, Math.toRadians(180));
-    public static final Pose blueObservationSpecimenPickup3Pose = new Pose(7, 35, Math.toRadians(180));
-    public static final Pose blueObservationSpecimenPickup4Pose = new Pose(7, 35, Math.toRadians(180));
-    public static final Pose blueObservationSpecimen1Pose = new Pose(32, 66.25, Math.toRadians(180));
-    public static final Pose blueObservationSpecimen2Pose = new Pose(32, 70.75, Math.toRadians(180));
-    public static final Pose blueObservationSpecimen3Pose = new Pose(32, 74.25, Math.toRadians(180));
-    public static final Pose blueObservationSpecimen4Pose = new Pose(32, 78.25, Math.toRadians(180));
+    public static final Pose blueObservationSpecimenPickupPose = new Pose(6.5, 35, Math.toRadians(180));
+    public static final Pose blueObservationSpecimenPickup2Pose = new Pose(6.5, 35, Math.toRadians(180));
+    public static final Pose blueObservationSpecimenPickup3Pose = new Pose(6.5, 35, Math.toRadians(180));
+    public static final Pose blueObservationSpecimenPickup4Pose = new Pose(6.5, 35, Math.toRadians(180));
+    public static final Pose blueObservationSpecimen1Pose = new Pose(36.5, 72.25, Math.toRadians(180));
+    public static final Pose blueObservationSpecimen2Pose = new Pose(36.5, 76.75, Math.toRadians(180));
+    public static final Pose blueObservationSpecimen3Pose = new Pose(36.5, 80.25, Math.toRadians(180));
+    public static final Pose blueObservationSpecimen4Pose = new Pose(36.5, 84.25, Math.toRadians(180));
 
 
     public static final Pose blueBucketParkPose = new Pose(62, 97.75, Math.toRadians(90));

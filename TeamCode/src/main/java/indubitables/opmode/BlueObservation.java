@@ -41,12 +41,18 @@ public class BlueObservation extends OpMode {
                 auto.liftPIDF = false;
                 auto.extend.toZero();
                 auto.startChamber();
-                auto.follower.setMaxPower(0.9);
-                auto.follower.followPath(auto.preload, true);
-                setPathState(1);
+                setPathState(999);
+                break;
+            case 999:
+                if(pathTimer.getElapsedTimeSeconds() > 0.25) {
+                    auto.follower.setMaxPower(0.9);
+                    auto.follower.followPath(auto.preload, true);
+                    setPathState(1);
+                }
                 break;
             case 1: //Once Chamber State Machine finishes, begins Pathchain to push elements to the submersible
                 if(auto.actionNotBusy()) {
+                    auto.claw.open();
                     auto.follower.setMaxPower(0.9);
                     auto.follower.followPath(auto.pushSamples, true);
                     setPathState(2);
@@ -60,13 +66,13 @@ public class BlueObservation extends OpMode {
                 break;
             case 3: //Once the Specimen State Machine finishes, begins the grab path
                 if(auto.actionNotBusy()) {
-                    auto.follower.setMaxPower(0.8);
+                    auto.follower.setMaxPower(0.9);
                     auto.follower.followPath(auto.grab1, false);
                     setPathState(4);
                 }
                 break;
             case 4: //Closes the claw when the follower reaches the grab1 position
-                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.75) {
                     auto.claw.close();
                     setPathState(5);
                 }
