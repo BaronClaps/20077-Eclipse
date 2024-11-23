@@ -1,5 +1,6 @@
 package indubitables.config.subsystem;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -12,6 +13,7 @@ import java.util.List;
 
 import indubitables.pedroPathing.follower.Follower;
 
+@Config
 public class VisionSubsystem {
 
     public enum limelightState {
@@ -23,6 +25,7 @@ public class VisionSubsystem {
     }
 
     private Telemetry telemetry;
+    private ExtendSubsystem extend;
 
     public limelightState state;
     private Limelight3A limelight;
@@ -32,11 +35,14 @@ public class VisionSubsystem {
     private double x = 0;
     private double y = 0;
 
+    public static double extendMultipler = 0.0045;
+
     private DcMotor lf,rf,lb,rb;
 
 
-    public VisionSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
+    public VisionSubsystem(HardwareMap hardwareMap, Telemetry telemetry, ExtendSubsystem extend) {
         this.telemetry = telemetry;
+        this.extend = extend;
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100); // per sec
 
@@ -95,18 +101,20 @@ public class VisionSubsystem {
         }
     }
 
-    public void driveAlign(double power) {
-        if(result.getTx() >= 1) {
-            strafeLeft(power);
-        } else if(result.getTx() <= -1) {
-            strafeLeft(-power);
-        } else {
-            strafeLeft(0);
+    public void extendAlign(double error) {
+        if(error > -20) {
+            double extendDistance = -error * extendMultipler;
+            extend.setTarget(extend.getPos() + extendDistance);
         }
     }
 
     public void update() {
         result = limelight.getLatestResult();
+    }
+
+    public double getTxError() {
+        update();
+        return result.getTx();
     }
 
     public void strafeLeft(double left) {
