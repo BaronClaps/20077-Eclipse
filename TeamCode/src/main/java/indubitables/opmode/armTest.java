@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import indubitables.config.subsystem.ArmSubsystem;
 import indubitables.config.subsystem.ClawSubsystem;
 import indubitables.config.util.RobotConstants;
+import indubitables.pedroPathing.follower.Follower;
 
 @Config
 @TeleOp(name="armTest", group="a")
@@ -17,13 +18,20 @@ public class armTest extends OpMode {
     private ClawSubsystem.ClawGrabState clawGrabState;
     private ClawSubsystem.ClawPivotState clawPivotState;
     private ArmSubsystem.ArmState armState;
+    private Follower follower;
 
     @Override
     public void init() {
         arm = new ArmSubsystem(hardwareMap, armState);
         claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
+        follower = new Follower(hardwareMap);
         arm.init();
         claw.init();
+    }
+
+    @Override
+    public void start() {
+        follower.startTeleopDrive();
     }
 
     @Override
@@ -42,6 +50,9 @@ public class armTest extends OpMode {
         } else if (gamepad1.left_bumper) {
             claw.open();
         }
+
+        follower.setTeleOpMovementVectors(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, true);
+        follower.update();
 
 
       //  telemetry.addData("armState", arm.state);

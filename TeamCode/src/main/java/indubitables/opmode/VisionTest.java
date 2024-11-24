@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import indubitables.config.subsystem.ExtendSubsystem;
 import indubitables.config.subsystem.IntakeSubsystem;
 import indubitables.config.subsystem.VisionSubsystem;
+import indubitables.pedroPathing.follower.Follower;
 
 @TeleOp (name = "visiontest")
 public class VisionTest extends OpMode {
@@ -15,6 +16,7 @@ public class VisionTest extends OpMode {
     IntakeSubsystem.IntakePivotState intakePivotState;
     IntakeSubsystem.IntakeSpinState intakeSpinState;
     boolean pressed = false;
+
 
     @Override
     public void init() {
@@ -34,16 +36,15 @@ public class VisionTest extends OpMode {
     @Override
     public void loop() {
         vision.updateColor();
+
         if(gamepad1.a && pressed == false) {
             vision.extendAlign(vision.getTxError());
+            vision.driveAlign(vision.getTyError());
             pressed = true;
         }
 
         if(gamepad1.dpad_down) {
             extend.toQuarter();
-        }
-
-        if(gamepad1.y) {
             pressed = false;
         }
 
@@ -51,7 +52,7 @@ public class VisionTest extends OpMode {
             intake.spinIn();
         } else if(gamepad1.x) {
             intake.spinOut();
-        } else {
+        } else if (gamepad1.y) {
             intake.spinStop();
         }
     }

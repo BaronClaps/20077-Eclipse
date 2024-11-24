@@ -102,10 +102,24 @@ public class VisionSubsystem {
     }
 
     public void extendAlign(double error) {
-        if(error > -20) {
-            double extendDistance = -error * extendMultipler;
-            extend.setTarget(extend.getPos() + extendDistance);
+        if(error > -25) {
+            extend.setLimitToSample();
+            double extendDistance = -(-25-error) * extendMultipler;
+
+            if(extend.getPos() + extendDistance > extend.extendLimit)
+                extend.setTarget(extend.extendLimit);
+            else
+                extend.setTarget(extend.getPos() + extendDistance);
+
+
         }
+
+
+    }
+
+    public void driveAlign(double error) {
+
+
     }
 
     public void update() {
@@ -115,6 +129,11 @@ public class VisionSubsystem {
     public double getTxError() {
         update();
         return result.getTx();
+    }
+
+    public double getTyError() {
+        update();
+        return result.getTy();
     }
 
     public void strafeLeft(double left) {
