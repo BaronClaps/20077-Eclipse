@@ -76,6 +76,13 @@ public class IntakeSubsystem {
         this.spinState = IntakeSpinState.IN;
     }
 
+    public void spinInBackAlways() {
+        leftSpin.setPower(intakeSpinInPwr);
+        rightSpin.setPower(-intakeSpinInPwr);
+        backSpin.setPower(intakeSpinInPwr);
+        this.spinState = IntakeSpinState.IN;
+    }
+
     public void spinOut() {
         leftSpin.setPower(intakeSpinOutPwr);
         rightSpin.setPower(-intakeSpinOutPwr);

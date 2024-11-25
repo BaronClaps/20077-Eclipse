@@ -72,11 +72,13 @@ public class LiftSubsystem {
     }
 
     public void manual(double n){
+        manual = true;
+
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         if(hang) {
-            n = 0.75;
+            n = -0.75;
         }
 
         rightLift.setPower(n);
@@ -87,6 +89,10 @@ public class LiftSubsystem {
     public void targetCurrent() {
         setTarget(getPos());
         manual = false;
+    }
+
+    public double getTarget() {
+        return target;
     }
 
     public void setTarget(int b) {
@@ -115,10 +121,12 @@ public class LiftSubsystem {
     //Presets
 
     public void toZero() {
+        manual = false;
         setTarget(liftToZero);
     }
 
     public void toHighBucket() {
+        manual = false;
         setTarget(liftToHighBucket);
     }
 

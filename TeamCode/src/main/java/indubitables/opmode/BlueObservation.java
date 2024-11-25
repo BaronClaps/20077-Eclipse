@@ -203,7 +203,7 @@ public class BlueObservation extends OpMode {
                 if(auto.actionNotBusy()) {
                     auto.follower.setMaxPower(1);
                     auto.follower.followPath(auto.park, true);
-                    auto.extend.toFull();
+                    auto.extend.toQuarter();
                     setPathState(26);
                 }
                 break;

@@ -31,12 +31,12 @@ public class RobotConstants {
     public static double armSpecimenGrab = 0.125;
     public static double armSpecimenScore = 0.6;
 
-    public static int liftToZero = 100;
+    public static int liftToZero = 30;
     public static int liftToHumanPlayer = 200;
     public static int liftToHighChamber = 200;
     public static int liftToHighChamber2 = 225;
     public static int liftToHighChamber3 = 350;
-    public static int liftToHighBucket = 0;
+    public static int liftToHighBucket = 1750;
     public static int liftToTransfer = 200;
     public static int liftToPark = 0;
 
