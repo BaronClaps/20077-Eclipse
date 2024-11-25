@@ -7,7 +7,7 @@ import indubitables.pedroPathing.follower.Follower;
 import indubitables.config.runmodes.Auto;
 import indubitables.pedroPathing.util.Timer;
 
-@Autonomous(name="BlueObservation", group="A")
+@Autonomous(name="Observation", group="A")
 public class BlueObservation extends OpMode {
     public int pathState;
     public Auto auto;
