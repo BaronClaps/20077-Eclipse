@@ -64,6 +64,8 @@ public class Teleop {
         this.follower = follower;
         this.startPose = startPose;
 
+        this.startPose = new Pose(56,102.25,Math.toRadians(270));
+
         this.fieldCentric = fieldCentric;
         this.telemetry = telemetry;
         this.gamepad1 = gamepad1;
@@ -154,7 +156,7 @@ public class Teleop {
                 lift.hang = false;
             }
 
-            follower.setTeleOpMovementVectors(flip * -gamepad1.left_stick_y * speed, flip * -gamepad1.left_stick_x * speed, -gamepad1.right_stick_x * speed, !fieldCentric);
+            follower.setTeleOpMovementVectors(flip * -gamepad1.left_stick_y * speed, flip * -gamepad1.left_stick_x * speed, -gamepad1.right_stick_x * speed * 0.5, !fieldCentric);
         } else {
             if(gamepad1.dpad_right) {
                 stopActions();

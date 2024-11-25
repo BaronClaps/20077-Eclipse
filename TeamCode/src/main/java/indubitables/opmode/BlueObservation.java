@@ -44,9 +44,9 @@ public class BlueObservation extends OpMode {
                 setPathState(999);
                 break;
             case 999:
-                if(pathTimer.getElapsedTimeSeconds() > 0.25) {
-                    auto.follower.setMaxPower(0.9);
-                    auto.follower.followPath(auto.preload, true);
+                if(pathTimer.getElapsedTimeSeconds() > 0.375) {
+                    auto.follower.setMaxPower(1);
+                    auto.follower.followPath(auto.preload, false);
                     setPathState(1);
                 }
                 break;
@@ -105,7 +105,7 @@ public class BlueObservation extends OpMode {
                 }
                 break;
             case 9:
-                if(pathTimer.getElapsedTimeSeconds() > 2) {
+                if(pathTimer.getElapsedTimeSeconds() > 2.125) {
                         auto.claw.close();
                         setPathState(10);
                 }
@@ -141,7 +141,7 @@ public class BlueObservation extends OpMode {
                 }
                 break;
             case 15:
-                if(pathTimer.getElapsedTimeSeconds() > 2) {
+                if(pathTimer.getElapsedTimeSeconds() > 2.125) {
                    auto.claw.close();
                     setPathState(16);
                 }
@@ -177,7 +177,7 @@ public class BlueObservation extends OpMode {
                 }
                 break;
             case 21:
-                if(pathTimer.getElapsedTimeSeconds() > 2) {
+                if(pathTimer.getElapsedTimeSeconds() > 2.125) {
                     auto.claw.close();
                     setPathState(22);
                 }
@@ -203,14 +203,14 @@ public class BlueObservation extends OpMode {
                 if(auto.actionNotBusy()) {
                     auto.follower.setMaxPower(1);
                     auto.follower.followPath(auto.park, true);
-                    auto.extend.toQuarter();
+                 //   auto.extend.toFull();
                     setPathState(26);
                 }
                 break;
             case 26:
                 if(pathTimer.getElapsedTimeSeconds() > 0.5) {
-                    auto.intake.pivotGround();
-                    auto.intake.spinIn();
+                   // auto.intake.pivotGround();
+                   // auto.intake.spinIn();
                     setPathState(-1);
                 }
                 break;
