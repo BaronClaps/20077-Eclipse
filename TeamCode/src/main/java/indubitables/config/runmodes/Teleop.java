@@ -64,8 +64,6 @@ public class Teleop {
         this.follower = follower;
         this.startPose = startPose;
 
-        this.startPose = new Pose(56,102.25,Math.toRadians(270));
-
         this.fieldCentric = fieldCentric;
         this.telemetry = telemetry;
         this.gamepad1 = gamepad1;
