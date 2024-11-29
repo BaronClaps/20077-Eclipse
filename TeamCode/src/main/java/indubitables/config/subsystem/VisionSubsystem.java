@@ -16,6 +16,8 @@ import indubitables.pedroPathing.follower.Follower;
 @Config
 public class VisionSubsystem {
 
+    private double tx, ty, ta;
+
     public enum limelightState {
         yellow,
         red,
@@ -80,18 +82,8 @@ public class VisionSubsystem {
         }
     }
 
-    /*public Pose aprilTagPose(Pose currentPose, int id) {
-        switchPipeline(limelightState.aprilTag);
-        List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
-        for (LLResultTypes.FiducialResult fiducial : fiducials) {
-            if (fiducial.getFiducialId() == id) {
-                x = detection.getTargetXDegrees();
-                y = detection.getTargetYDegrees();
-                double StrafeDistance_3D = fiducial.getRobotPoseTargetSpace().getY();
-            }
-        }
-        return new Pose(x, y, heading);
-    }*/
+
+
 
     public void updateColor() {
         update();
@@ -124,6 +116,20 @@ public class VisionSubsystem {
 
     public void update() {
         result = limelight.getLatestResult();
+
+        if (result != null && result.isValid()) {
+            tx = result.getTx(); // How far left or right the target is (degrees)
+            ty = result.getTy(); // How far up or down the target is (degrees)
+            ta = result.getTa(); // How big the target looks (0%-100% of the image)
+
+            telemetry.addData("Target X", tx);
+            telemetry.addData("Target Y", ty);
+            telemetry.addData("Target Area", ta);
+        } else {
+            telemetry.addData("Limelight", "No Targets");
+        }
+
+        telemetry.update();
     }
 
     public double getTxError() {
