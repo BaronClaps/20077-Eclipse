@@ -1,22 +1,129 @@
 package indubitables.config.subsystem;
 
-import static indubitables.config.util.RobotConstants.intakePivotGround;
-import static indubitables.config.util.RobotConstants.intakePivotSubmersible;
-import static indubitables.config.util.RobotConstants.intakePivotTransfer;
-import static indubitables.config.util.RobotConstants.intakeSpinInPwr;
-import static indubitables.config.util.RobotConstants.intakeSpinOutPwr;
-import static indubitables.config.util.RobotConstants.intakeSpinStopPwr;
+import static indubitables.config.util.RobotConstants.*;
 
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import indubitables.config.util.action.Actions;
-import indubitables.config.util.action.ParallelAction;
 import indubitables.config.util.action.RunAction;
+
+/** @author Baron Henderson
+ * @version 1.0 | 7/1/24
+ */
 
 public class IntakeSubsystem {
 
+    public enum grabState {
+        CLOSED, OPEN
+    }
+
+    public enum rotateState {
+        TRANSFER, GROUND, INIT, SUBMERSIBLE
+    }
+
+    public Servo grab, leftPivot, rightPivot;
+    public ClawGrabState grabState;
+    public rotateState pivotState;
+    public RunAction open, close, transfer, score, specimen;
+
+    public IntakeSubsystem(HardwareMap hardwareMap, ClawGrabState clawGrabState, rotateState rotateState) {
+        grab = hardwareMap.get(Servo.class, "iGrab");
+        leftPivot = hardwareMap.get(Servo.class, "ilRotate");
+        rightPivot = hardwareMap.get(Servo.class, "irRotate");
+        this.grabState = clawGrabState;
+        this.pivotState = rotateState;
+
+        open = new RunAction(this::open);
+        close = new RunAction(this::close);
+        transfer = new RunAction(this::transfer);
+        score = new RunAction(this::score);
+    }
+
+    public void setPivotState(rotateState state) {
+        if (state == rotateState.TRANSFER) {
+            leftPivot.setPosition(clawTransfer);
+            rightPivot.setPosition(clawTransfer);
+            this.pivotState = rotateState.TRANSFER;
+        } else if (state == rotateState.SCORE) {
+            leftPivot.setPosition(clawLeftScore);
+            rightPivot.setPosition(clawRightScore);
+            this.pivotState = rotateState.SCORE;
+        } else if (state == rotateState.INIT) {
+            leftPivot.setPosition(clawInit);
+            rightPivot.setPosition(clawInit);
+            this.pivotState = rotateState.INIT;
+        } else if (state == rotateState.SPECIMENGRAB) {
+            leftPivot.setPosition(clawSpecimenGrab);
+            rightPivot.setPosition(clawSpecimenGrab);
+            this.pivotState = rotateState.SPECIMENGRAB;
+        }
+    }
+
+    public void switchPivotState() {
+        if (pivotState == rotateState.TRANSFER) {
+            setPivotState(rotateState.SCORE);
+        } else if (pivotState == rotateState.SCORE) {
+            setPivotState(rotateState.TRANSFER);
+        }
+    }
+
+    public void setGrabState(ClawGrabState clawGrabState) {
+        if (clawGrabState == ClawGrabState.CLOSED) {
+            grab.setPosition(clawClose);
+            this.grabState = ClawGrabState.CLOSED;
+        } else if (clawGrabState == ClawGrabState.OPEN) {
+            grab.setPosition(clawOpen);
+            this.grabState = ClawGrabState.OPEN;
+        }
+    }
+
+    public void switchGrabState() {
+        if (grabState == ClawGrabState.CLOSED) {
+            setGrabState(ClawGrabState.OPEN);
+        } else if (grabState == ClawGrabState.OPEN) {
+            setGrabState(ClawGrabState.CLOSED);
+        }
+    }
+
+    public void open() {
+        setGrabState(ClawGrabState.OPEN);
+    }
+
+    public void close() {
+        setGrabState(ClawGrabState.CLOSED);
+    }
+
+    public void transfer() {
+        setPivotState(rotateState.TRANSFER);
+    }
+
+    public void score() {
+        setPivotState(rotateState.SCORE);
+    }
+
+    public void specimenGrab() {
+        setPivotState(rotateState.SPECIMENGRAB);
+    }
+
+    public void specimenScore() {
+        setPivotState(rotateState.SPECIMENSCORE);
+    }
+
+    public void initClaw() {
+        setPivotState(rotateState.INIT);
+    }
+
+    public void init() {
+        close();
+        initClaw();
+    }
+
+    public void start() {
+        close();
+        transfer();
+    }
+}
+    /*
     public enum IntakeSpinState {
         IN, OUT, STOP
     }
@@ -145,4 +252,6 @@ public class IntakeSubsystem {
         pivotTransfer();
         spinStop();
     }
-}
+}    
+*/
+     

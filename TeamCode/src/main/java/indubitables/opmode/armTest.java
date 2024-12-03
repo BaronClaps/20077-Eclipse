@@ -4,9 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import indubitables.config.subsystem.ArmSubsystem;
-import indubitables.config.subsystem.ClawSubsystem;
-import indubitables.config.util.RobotConstants;
+import indubitables.config.subsystem.OuttakeSubsystem;
 import indubitables.pedroPathing.follower.Follower;
 
 @Config
@@ -14,16 +12,16 @@ import indubitables.pedroPathing.follower.Follower;
 public class armTest extends OpMode {
 
     private ArmSubsystem arm;
-    private ClawSubsystem claw;
-    private ClawSubsystem.ClawGrabState clawGrabState;
-    private ClawSubsystem.ClawPivotState clawPivotState;
+    private OuttakeSubsystem claw;
+    private OuttakeSubsystem.ClawGrabState clawGrabState;
+    private OuttakeSubsystem.ClawPivotState clawPivotState;
     private ArmSubsystem.ArmState armState;
     private Follower follower;
 
     @Override
     public void init() {
         arm = new ArmSubsystem(hardwareMap, armState);
-        claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
+        claw = new OuttakeSubsystem(hardwareMap, clawGrabState, clawPivotState);
         follower = new Follower(hardwareMap);
         arm.init();
         claw.init();
@@ -58,8 +56,8 @@ public class armTest extends OpMode {
       //  telemetry.addData("armState", arm.state);
         telemetry.addData("left", arm.left.getPosition());
         telemetry.addData("right", arm.right.getPosition());
-        telemetry.addData("leftPivot", claw.leftPivot.getPosition());
-        telemetry.addData("rightPivot", claw.rightPivot.getPosition());
+        telemetry.addData("leftPivot", claw.leftRotate.getPosition());
+        telemetry.addData("rightPivot", claw.rightRotate.getPosition());
         telemetry.addData("grab", claw.grab.getPosition());
         telemetry.update();
     }

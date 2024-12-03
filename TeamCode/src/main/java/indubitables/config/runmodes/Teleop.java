@@ -1,7 +1,6 @@
 package indubitables.config.runmodes;
 
-import indubitables.config.subsystem.ArmSubsystem;
-import indubitables.config.subsystem.ClawSubsystem;
+import indubitables.config.subsystem.OuttakeSubsystem;
 import indubitables.config.subsystem.ExtendSubsystem;
 import indubitables.config.subsystem.IntakeSubsystem;
 import indubitables.config.subsystem.LiftSubsystem;
@@ -20,9 +19,9 @@ import indubitables.pedroPathing.util.Timer;
 
 public class Teleop {
 
-    private ClawSubsystem claw;
-    private ClawSubsystem.ClawGrabState clawGrabState;
-    private ClawSubsystem.ClawPivotState clawPivotState;
+    private OuttakeSubsystem claw;
+    private OuttakeSubsystem.ClawGrabState clawGrabState;
+    private OuttakeSubsystem.ClawPivotState clawPivotState;
     private LiftSubsystem lift;
     private ExtendSubsystem extend;
     private IntakeSubsystem intake;
@@ -55,7 +54,7 @@ public class Teleop {
 
 
     public Teleop(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, Pose startPose,  boolean fieldCentric, Gamepad gamepad1, Gamepad gamepad2) {
-        claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
+        claw = new OuttakeSubsystem(hardwareMap, clawGrabState, clawPivotState);
         lift = new LiftSubsystem(hardwareMap, telemetry);
         extend = new ExtendSubsystem(hardwareMap, telemetry);
         intake = new IntakeSubsystem(hardwareMap, intakeSpinState, intakePivotState);
@@ -177,7 +176,7 @@ public class Teleop {
         telemetry.addData("Extend Pos", extend.leftExtend.getPosition());
         telemetry.addData("Extend Limit", extend.extendLimit);
         telemetry.addData("Claw Grab State", claw.grabState);
-        telemetry.addData("Claw Pivot State", claw.pivotState);
+        telemetry.addData("Claw Pivot State", claw.rotateState);
         telemetry.addData("Intake Spin State", intakeSpinState);
         telemetry.addData("Intake Pivot State", intakePivotState);
         telemetry.addData("Arm State", arm.state);
