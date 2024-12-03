@@ -366,13 +366,13 @@ public class Auto {
                 break;
             case 2:
                 if ((follower.getPose().getX() >= specimen1Pose.getX() - 0.5)) {
+                    claw.open();
                     chamberTimer.resetTimer();
                     setChamberState(3);
                 }
                 break;
             case 3:
                 if(chamberTimer.getElapsedTimeSeconds() > 0.25) {
-                    claw.open();
                     actionBusy = false;
                     setChamberState(-1);
                 }
