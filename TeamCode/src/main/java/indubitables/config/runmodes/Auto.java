@@ -371,7 +371,7 @@ public class Auto {
                 }
                 break;
             case 3:
-                if(chamberTimer.getElapsedTimeSeconds() > 0.375) {
+                if(chamberTimer.getElapsedTimeSeconds() > 0.25) {
                     claw.open();
                     actionBusy = false;
                     setChamberState(-1);
