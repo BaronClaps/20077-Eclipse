@@ -4,15 +4,11 @@ import static indubitables.config.util.RobotConstants.*;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-import indubitables.pedroPathing.util.Timer;
-
 
 /** @author Baron Henderson
- * @version 1.0 | 12/3/24
+ * @version 1.0 | 7/1/24
  */
-// jay wuz hear
+
 public class OuttakeSubsystem {
 
     public enum GrabState {
@@ -20,31 +16,26 @@ public class OuttakeSubsystem {
     }
 
     public enum RotateState {
-        TRANSFER, SCORE, SPECIMENGRAB, SPECIMENSCORE
+        TRANSFER, SCORE, INIT, SPECIMENGRAB, SPECIMENSCORE
     }
     
     public enum PivotState {
-        TRANSFER, SCORE, SPECIMENGRAB, SPECIMENSCORE
+        TRANSFER, SCORING, INIT, SPECIMENGRAB, SPECIMENSCORE
     }
 
     public Servo grab, leftRotate, rightRotate, leftPivot, rightPivot;
     public GrabState grabState;
     public RotateState rotateState;
     public PivotState pivotState;
-    private Telemetry telemetry;
-    private Timer specScoreTimer = new Timer();
-    private int specGrabState = -1;
 
-    public OuttakeSubsystem(HardwareMap hardwareMap, Telemetry telemetry, GrabState grabState, RotateState rotateState, PivotState pivotState) {
+    public OuttakeSubsystem(HardwareMap hardwareMap, GrabState GrabState, RotateState rotateState) {
         grab = hardwareMap.get(Servo.class, "oG");
         leftRotate = hardwareMap.get(Servo.class, "oLR");
         rightRotate = hardwareMap.get(Servo.class, "oRR");
         leftPivot = hardwareMap.get(Servo.class, "oLP");
         rightPivot = hardwareMap.get(Servo.class, "oRP");
-        this.telemetry = telemetry;
-        this.grabState = grabState;
+        this.grabState = GrabState;
         this.rotateState = rotateState;
-        this.pivotState = pivotState;
     }
 
     public void setRotateState(RotateState state) {
@@ -56,6 +47,10 @@ public class OuttakeSubsystem {
             leftRotate.setPosition(outtakeRotateLeftScore);
             rightRotate.setPosition(outtakeRotateRightScore);
             this.rotateState = RotateState.SCORE;
+        } else if (state == RotateState.INIT) {
+            leftRotate.setPosition(outtakeRotateInit);
+            rightRotate.setPosition(outtakeRotateInit);
+            this.rotateState = RotateState.INIT;
         } else if (state == RotateState.SPECIMENGRAB) {
             leftRotate.setPosition(outtakeRotateSpecimenGrab);
             rightRotate.setPosition(outtakeRotateSpecimenGrab);
@@ -64,6 +59,14 @@ public class OuttakeSubsystem {
             leftRotate.setPosition(outtakeRotateLeftSpecimenScore);
             rightRotate.setPosition(outtakeRotateRightSpecimenScore);
             this.rotateState = RotateState.SPECIMENSCORE;
+        }
+    }
+
+    public void switchRotateState() {
+        if (rotateState == RotateState.TRANSFER) {
+            setRotateState(RotateState.SCORE);
+        } else if (rotateState == RotateState.SCORE) {
+            setRotateState(RotateState.TRANSFER);
         }
     }
 
@@ -90,10 +93,14 @@ public class OuttakeSubsystem {
             leftPivot.setPosition(outtakePivotTransfer);
             rightPivot.setPosition(outtakePivotTransfer);
             this.pivotState = PivotState.TRANSFER;
-        } else if (pivotState == PivotState.SCORE) {
-            leftPivot.setPosition(outtakePivotScore);
-            rightPivot.setPosition(outtakePivotScore);
-            this.pivotState = PivotState.SCORE;
+        } else if (pivotState == PivotState.SCORING) {
+            leftPivot.setPosition(outtakePivotScoring);
+            rightPivot.setPosition(outtakePivotScoring);
+            this.pivotState = PivotState.SCORING;
+        } else if (pivotState == PivotState.INIT) {
+            leftPivot.setPosition(outtakePivotInit);
+            rightPivot.setPosition(outtakePivotInit);
+            this.pivotState = PivotState.INIT;
         } else if (pivotState == PivotState.SPECIMENGRAB) {
             leftPivot.setPosition(outtakePivotSpecimenGrab);
             rightPivot.setPosition(outtakePivotSpecimenGrab);
@@ -102,6 +109,14 @@ public class OuttakeSubsystem {
             leftPivot.setPosition(outtakePivotSpecimenScore);
             rightPivot.setPosition(outtakePivotSpecimenScore);
             this.pivotState = PivotState.SPECIMENSCORE;
+        }
+    }
+
+    public void switchPivotState() {
+        if (pivotState == PivotState.TRANSFER) {
+            setPivotState(PivotState.SCORING);
+        } else if (pivotState == PivotState.SCORING) {
+            setPivotState(PivotState.TRANSFER);
         }
     }
 
@@ -121,7 +136,7 @@ public class OuttakeSubsystem {
 
     public void score() {
         setRotateState(RotateState.SCORE);
-        setPivotState(PivotState.SCORE);
+        setPivotState(PivotState.SCORING);
         setGrabState(GrabState.CLOSED);
     }
 
@@ -131,39 +146,6 @@ public class OuttakeSubsystem {
         setGrabState(GrabState.OPEN);
     }
 
-    public void specGrab() {
-        switch(specGrabState) {
-            case 0:
-                if(pivotState == PivotState.SPECIMENSCORE) {
-                    hang();
-                    setGrabState(GrabState.OPEN);
-                    setSpecGrabState(1);
-                } else {
-                    setRotateState(RotateState.SPECIMENGRAB);
-                    setPivotState(PivotState.SPECIMENGRAB);
-                    setGrabState(GrabState.OPEN);
-                    setSpecGrabState(-1);
-                }
-                break;
-            case 1:
-                if(specScoreTimer.getElapsedTimeSeconds() > 1) {
-                    setRotateState(RotateState.SPECIMENGRAB);
-                    setPivotState(PivotState.SPECIMENGRAB);
-                    setGrabState(GrabState.OPEN);
-                    setSpecGrabState(-1);
-                }
-        }
-    }
-
-    public void setSpecGrabState(int i) {
-        specGrabState = i;
-        specScoreTimer.resetTimer();
-    }
-
-    public void startSpecGrab() {
-        setSpecGrabState(0);
-    }
-
     public void specimenScore() {
         setRotateState(RotateState.SPECIMENSCORE);
         setPivotState(PivotState.SPECIMENSCORE);
@@ -171,32 +153,14 @@ public class OuttakeSubsystem {
     } 
 
     public void init() {
-        leftPivot.setPosition(0.175);
-        rightPivot.setPosition(0.175);
-        setRotateState(RotateState.TRANSFER);
+        setPivotState(PivotState.INIT);
+        setRotateState(RotateState.INIT);
         setGrabState(GrabState.CLOSED);
     }
 
     public void start() {
-        setPivotState(PivotState.TRANSFER);
-        setRotateState(RotateState.TRANSFER);
+        setPivotState(PivotState.INIT);
+        setRotateState(RotateState.INIT);
         setGrabState(GrabState.CLOSED);
-    }
-
-    public void loop() {
-        specGrab();
-    }
-
-    public void hang() {
-        setRotateState(RotateState.SPECIMENSCORE);
-        leftPivot.setPosition(0.7); //.7
-        rightPivot.setPosition(0.7); //.7
-        setGrabState(GrabState.CLOSED);
-    }
-
-    public void telemetry() {
-        telemetry.addData("Outtake Grab State: ", grabState);
-        telemetry.addData("Outtake Rotate State: ", rotateState);
-        telemetry.addData("Outtake Pivot State: ", pivotState);
     }
 }

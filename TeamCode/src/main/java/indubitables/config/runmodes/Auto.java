@@ -2,12 +2,10 @@ package indubitables.config.runmodes;
 
 import static indubitables.config.util.FieldConstants.*;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import indubitables.pedroPathing.pathGeneration.BezierCurve;
-import indubitables.config.subsystem.ArmSubsystem;
-import indubitables.config.subsystem.ClawSubsystem;
+import indubitables.config.subsystem.OuttakeSubsystem;
 import indubitables.config.subsystem.ExtendSubsystem;
 import indubitables.config.subsystem.IntakeSubsystem;
 import indubitables.config.subsystem.LiftSubsystem;
@@ -15,7 +13,6 @@ import indubitables.pedroPathing.follower.Follower;
 import indubitables.pedroPathing.localization.Pose;
 import indubitables.pedroPathing.pathGeneration.BezierLine;
 import indubitables.pedroPathing.pathGeneration.Path;
-import indubitables.pedroPathing.pathGeneration.PathBuilder;
 import indubitables.pedroPathing.pathGeneration.PathChain;
 import indubitables.pedroPathing.pathGeneration.Point;
 import indubitables.pedroPathing.util.Timer;
@@ -24,9 +21,9 @@ public class Auto {
 
     private RobotStart startLocation;
 
-    public ClawSubsystem claw;
-    public ClawSubsystem.ClawGrabState clawGrabState;
-    public ClawSubsystem.ClawPivotState clawPivotState;
+    public OuttakeSubsystem claw;
+    public OuttakeSubsystem.ClawGrabState clawGrabState;
+    public OuttakeSubsystem.ClawPivotState clawPivotState;
     public LiftSubsystem lift;
     public ExtendSubsystem extend;
     public IntakeSubsystem intake;
@@ -50,7 +47,7 @@ public class Auto {
     public Pose startPose, preloadPose, sample1Pose, sample1ControlPose, sample2Pose, sample2ControlPose, sample3Pose, sample3ControlPose, sampleScorePose, parkControlPose, parkPose, grab1Pose, specimen1Pose, grab2Pose, specimen2Pose, grab3Pose, specimen3Pose, grab4Pose, specimen4Pose, specimenSetPose;
 
     public Auto(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, boolean isBlue, boolean isBucket) {
-        claw = new ClawSubsystem(hardwareMap, clawGrabState, clawPivotState);
+        claw = new OuttakeSubsystem(hardwareMap, clawGrabState, clawPivotState);
         lift = new LiftSubsystem(hardwareMap, telemetry);
         extend = new ExtendSubsystem(hardwareMap, telemetry);
         intake = new IntakeSubsystem(hardwareMap, intakeSpinState, intakePivotState);
@@ -520,7 +517,7 @@ public class Auto {
         //telemetry.addData("Extend Pos", extend.leftExtend.getPosition());
         //telemetry.addData("Extend Limit", extend.extendLimit);
         telemetry.addData("Claw Grab State", claw.grabState);
-        telemetry.addData("Claw Pivot State", claw.pivotState);
+        telemetry.addData("Claw Pivot State", claw.rotateState);
      //   telemetry.addData("Intake Spin State", intakeSpinState);
      //   telemetry.addData("Intake Pivot State", intakePivotState);
         telemetry.addData("arm State", arm.state);
