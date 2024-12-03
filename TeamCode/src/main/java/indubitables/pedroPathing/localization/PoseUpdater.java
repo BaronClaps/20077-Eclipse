@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import indubitables.pedroPathing.localization.localizers.PinpointLocalizer;
 import indubitables.pedroPathing.localization.localizers.ThreeWheelLocalizer;
 import indubitables.pedroPathing.localization.localizers.TwoWheelLocalizer;
+import indubitables.pedroPathing.localization.localizers.TwoWheelPinpointIMULocalizer;
 import indubitables.pedroPathing.pathGeneration.MathFunctions;
 import indubitables.pedroPathing.pathGeneration.Vector;
 

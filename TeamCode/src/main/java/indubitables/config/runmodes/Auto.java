@@ -64,8 +64,6 @@ public class Auto {
         createPoses();
         buildPaths();
 
-        follower.setStartingPose(startPose);
-
         init();
     }
 
@@ -77,6 +75,8 @@ public class Auto {
         intake.init();
         arm.init();
         telemetryUpdate();
+
+        follower.setStartingPose(startPose);
     }
 
     public void start() {
@@ -85,6 +85,8 @@ public class Auto {
         extend.toZero();
         intake.start();
         claw.close();
+
+        follower.setStartingPose(startPose);
     }
 
     public void update() {
@@ -365,13 +367,13 @@ public class Auto {
             case 2:
                 if ((follower.getPose().getX() >= specimen1Pose.getX() - 0.5)) {
                     chamberTimer.resetTimer();
+                    actionBusy = false;
                     setChamberState(3);
                 }
                 break;
             case 3:
                 if(chamberTimer.getElapsedTimeSeconds() > 0.25) {
                     claw.open();
-                    actionBusy = false;
                     setChamberState(-1);
                 }
                 break;

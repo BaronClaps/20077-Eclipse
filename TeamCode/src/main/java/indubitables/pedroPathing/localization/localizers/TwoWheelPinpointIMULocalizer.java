@@ -1,6 +1,8 @@
 package indubitables.pedroPathing.localization.localizers;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.geometry.Pose2d;
+import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -101,6 +103,7 @@ public class TwoWheelPinpointIMULocalizer extends Localizer {
         strafeEncoder.setDirection(Encoder.REVERSE);
 
         setStartPose(setStartPose);
+
         timer = new NanoTimer();
         deltaTimeNano = 1;
         displacementPose = new Pose();

@@ -40,10 +40,10 @@ public class FieldConstants {
     public static final Pose blueObservationSpecimenPickup2Pose = new Pose(6.5, 35, Math.toRadians(180));
     public static final Pose blueObservationSpecimenPickup3Pose = new Pose(6.5, 35, Math.toRadians(180));
     public static final Pose blueObservationSpecimenPickup4Pose = new Pose(6.5, 35, Math.toRadians(180));
-    public static final Pose blueObservationSpecimen1Pose = new Pose(37.5, 72.25, Math.toRadians(180));
-    public static final Pose blueObservationSpecimen2Pose = new Pose(37.5, 76.75, Math.toRadians(180));
-    public static final Pose blueObservationSpecimen3Pose = new Pose(37.5, 80.25, Math.toRadians(180));
-    public static final Pose blueObservationSpecimen4Pose = new Pose(37.5, 84.25, Math.toRadians(180));
+    public static final Pose blueObservationSpecimen1Pose = new Pose(38, 72.25, Math.toRadians(180));
+    public static final Pose blueObservationSpecimen2Pose = new Pose(38, 76.75, Math.toRadians(180));
+    public static final Pose blueObservationSpecimen3Pose = new Pose(38, 80.25, Math.toRadians(180));
+    public static final Pose blueObservationSpecimen4Pose = new Pose(38, 84.25, Math.toRadians(180));
 
 
     public static final Pose blueBucketParkPose = new Pose(62, 97.75, Math.toRadians(90));

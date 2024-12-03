@@ -44,7 +44,7 @@ public class BlueObservation extends OpMode {
                 setPathState(999);
                 break;
             case 999:
-                if(pathTimer.getElapsedTimeSeconds() > 0.375) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
                     auto.follower.setMaxPower(1);
                     auto.follower.followPath(auto.preload, false);
                     setPathState(1);
@@ -55,9 +55,15 @@ public class BlueObservation extends OpMode {
                     auto.claw.open();
                     auto.follower.setMaxPower(0.9);
                     auto.follower.followPath(auto.pushSamples, true);
-                    setPathState(2);
+                    setPathState(989);
                 }
                 break;
+            case 989:
+                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
+                    auto.arm.specimenGrab();
+                    auto.claw.specimenGrab();
+                    setPathState(2);
+                }
             case 2: //Once the Pathchain finishes, begins the Specimen State Machine
                 if(!auto.follower.isBusy()) {
                     auto.startSpecimen();
@@ -72,7 +78,7 @@ public class BlueObservation extends OpMode {
                 }
                 break;
             case 4: //Closes the claw when the follower reaches the grab1 position
-                if(pathTimer.getElapsedTimeSeconds() > 0.75) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.325) {
                     auto.claw.close();
                     setPathState(5);
                 }
@@ -105,7 +111,7 @@ public class BlueObservation extends OpMode {
                 }
                 break;
             case 9:
-                if(pathTimer.getElapsedTimeSeconds() > 2.125) {
+                if(pathTimer.getElapsedTimeSeconds() > 2.5) {
                         auto.claw.close();
                         setPathState(10);
                 }
@@ -141,7 +147,7 @@ public class BlueObservation extends OpMode {
                 }
                 break;
             case 15:
-                if(pathTimer.getElapsedTimeSeconds() > 2.125) {
+                if(pathTimer.getElapsedTimeSeconds() > 2.5) {
                    auto.claw.close();
                     setPathState(16);
                 }
@@ -177,7 +183,7 @@ public class BlueObservation extends OpMode {
                 }
                 break;
             case 21:
-                if(pathTimer.getElapsedTimeSeconds() > 2.125) {
+                if(pathTimer.getElapsedTimeSeconds() > 2.5) {
                     auto.claw.close();
                     setPathState(22);
                 }
