@@ -53,7 +53,7 @@ public class LocalizationTest extends OpMode {
     @Override
     public void init() {
         poseUpdater = new PoseUpdater(hardwareMap);
-        poseUpdater.setStartingPose(FieldConstants.blueBucketStartPose);
+        poseUpdater.setStartingPose(FieldConstants.bucketStartPose);
 
         dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
 

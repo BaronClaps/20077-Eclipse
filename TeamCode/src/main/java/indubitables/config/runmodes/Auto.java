@@ -21,19 +21,18 @@ public class Auto {
 
     private RobotStart startLocation;
 
-    public OuttakeSubsystem outtake;
-    public OuttakeSubsystem.GrabState outtakeGrabState;
-    public OuttakeSubsystem.RotateState outtakeRotateState;
-    public OuttakeSubsystem.PivotState outtakePivotState;
-
     public IntakeSubsystem intake;
-    public IntakeSubsystem.GrabState intakeGrabState;
-    public IntakeSubsystem.RotateState intakeRotateState;
-    public IntakeSubsystem.PivotState intakePivotState;
+    private IntakeSubsystem.GrabState intakeGrabState;
+    private IntakeSubsystem.PivotState intakePivotState;
+    private IntakeSubsystem.RotateState intakeRotateState;
 
+    public OuttakeSubsystem outtake;
+    private OuttakeSubsystem.GrabState outtakeGrabState;
+    private OuttakeSubsystem.PivotState outtakePivotState;
+    private OuttakeSubsystem.RotateState outtakeRotateState;
+    
     public LiftSubsystem lift;
     public ExtendSubsystem extend;
-
 
 
     public Follower follower;
@@ -50,11 +49,8 @@ public class Auto {
     public Pose startPose, preloadPose, sample1Pose, sample1ControlPose, sample2Pose, sample2ControlPose, sample3Pose, sample3ControlPose, sampleScorePose, parkControlPose, parkPose, grab1Pose, specimen1Pose, grab2Pose, specimen2Pose, grab3Pose, specimen3Pose, grab4Pose, specimen4Pose, specimenSetPose;
 
     public Auto(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, boolean isBlue, boolean isBucket) {
-
         lift = new LiftSubsystem(hardwareMap, telemetry);
         extend = new ExtendSubsystem(hardwareMap, telemetry);
-        intake = new IntakeSubsystem(hardwareMap, telemetry, intakeGrabState, intakeRotateState, intakePivotState);
-        outtake = new OuttakeSubsystem(hardwareMap, telemetry, outtakeGrabState, outtakeRotateState, outtakePivotState);
 
         this.follower = follower;
         this.telemetry = telemetry;
@@ -68,12 +64,10 @@ public class Auto {
     }
 
     public void init() {
-        lift.init();
-        extend.init();
-        extend.toZero();
         outtake.init();
+        lift.init();
+        extend.toZero();
         intake.init();
-
         telemetryUpdate();
 
         follower.setStartingPose(startPose);
@@ -82,8 +76,9 @@ public class Auto {
     public void start() {
         lift.start();
         extend.start();
-        outtake.start();
+        extend.toZero();
         intake.start();
+        outtake.close();
 
         follower.setStartingPose(startPose);
     }
@@ -257,33 +252,25 @@ public class Auto {
         switch (transferState) {
             case 1:
                 actionBusy = true;
-                intake.pivotTransfer();
-                intake.spinIn();
+                intake.transfer();
                 lift.toTransfer();
-                arm.transfer();
-                claw.transfer();
-                claw.open();
+                outtake.transfer();
                 extend.toZero();
+                lift.toZero();
                 transferTimer.resetTimer();
                 setTransferState(2);
                 break;
             case 2:
                 if (transferTimer.getElapsedTimeSeconds() > 1.5) {
-                    intake.spinStop();
+                    outtake.close();
                     transferTimer.resetTimer();
                     setTransferState(3);
                 }
                 break;
             case 3:
                 if (transferTimer.getElapsedTimeSeconds() > 1) {
-                    lift.toZero();
+                    intake.hover();
                     transferTimer.resetTimer();
-                    setTransferState(4);
-                }
-                break;
-            case 4:
-                if (transferTimer.getElapsedTimeSeconds() > 0.5) {
-                    claw.close();
                     actionBusy = false;
                     setTransferState(-1);
                 }
@@ -305,18 +292,17 @@ public class Auto {
         switch (bucketState) {
             case 1:
                 actionBusy = true;
-                intake.pivotTransfer();
-                intake.spinStop();
+                intake.transfer();
                 lift.toHighBucket();
-                claw.close();
+                outtake.close();
                 extend.toZero();
                 bucketTimer.resetTimer();
                 setBucketState(2);
                 break;
             case 2:
                 if (bucketTimer.getElapsedTimeSeconds() > 0.5) {
-                    arm.score();
-                    claw.score();
+                    intake.hover();
+                    outtake.score();
                     bucketTimer.resetTimer();
                     setBucketState(3);
                 }
@@ -344,9 +330,7 @@ public class Auto {
         switch (chamberState) {
             case 1:
                 actionBusy = true;
-                arm.specimenScore();
-                claw.close();
-                claw.specimenScore();
+                outtake.specimenScore();
                 extend.toZero();
                 chamberTimer.resetTimer();
                 setChamberState(2);
@@ -359,7 +343,7 @@ public class Auto {
                 break;
             case 3:
                 if(chamberTimer.getElapsedTimeSeconds() > 0.375) {
-                    claw.open();
+                    outtake.open();
                     actionBusy = false;
                     setChamberState(-1);
                 }
@@ -381,10 +365,8 @@ public class Auto {
         switch (specimenState) {
             case 1:
                 actionBusy = true;
-                claw.open();
+                outtake.specimenGrab();
                 extend.toZero();
-                arm.specimenGrab();
-                claw.specimenGrab();
                 specimenTimer.resetTimer();
                 setSpecimenState(2);
             case 2:
@@ -410,18 +392,16 @@ public class Auto {
         switch (intakeState) {
             case 1:
                 actionBusy = true;
-                claw.open();
+                outtake.open();
                 intakeTimer.resetTimer();
                 setTransferState(2);
                 break;
             case 2:
                 if(intakeTimer.getElapsedTimeSeconds() > 0.5) {
-                    arm.transfer();
-                    claw.transfer();
-                    intake.pivotTransfer();
-                    intake.spinStop();
+                    outtake.transfer();
+                    intake.hover();
                     lift.toTransfer();
-                    claw.open();
+                    outtake.open();
                     extend.toHalf();
                     intakeTimer.resetTimer();
                     setTransferState(3);
@@ -429,15 +409,14 @@ public class Auto {
                 break;
             case 3:
                 if (intakeTimer.getElapsedTimeSeconds() > 1) {
-                    intake.pivotGround();
-                    intake.spinIn();
+                    intake.ground();
                     intakeTimer.resetTimer();
                     setTransferState(4);
                 }
                 break;
             case 4:
                 if (intakeTimer.getElapsedTimeSeconds() > 1.5) {
-                    intake.spinStop();
+                    intake.close();
                     intakeTimer.resetTimer();
                     actionBusy = false;
                     setTransferState(-1);
@@ -460,18 +439,15 @@ public class Auto {
         switch (parkState) {
             case 1:
                 actionBusy = true;
-                claw.open();
+                outtake.open();
                 parkTimer.resetTimer();
                 setParkState(2);
                 break;
             case 2:
                 if(parkTimer.getElapsedTimeSeconds() > 0.5) {
-                    intake.pivotTransfer();
-                    intake.spinStop();
+                    intake.transfer();
                     lift.toPark();
-                    arm.transfer();
-                    claw.transfer();
-                    claw.open();
+                    outtake.transfer();
                     extend.toZero();
                     parkTimer.resetTimer();
                     actionBusy = false;
@@ -500,6 +476,7 @@ public class Auto {
     }
 
     public void telemetryUpdate() {
+        follower.update();
         telemetry.addData("X: ", follower.getPose().getX());
         telemetry.addData("Y: ", follower.getPose().getY());
         telemetry.addData("Heading: ", follower.getPose().getHeading());
