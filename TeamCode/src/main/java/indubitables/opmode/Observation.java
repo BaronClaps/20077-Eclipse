@@ -50,17 +50,15 @@ public class Observation extends OpMode {
                 break;
             case 1: //Once Chamber State Machine finishes, begins Pathchain to push elements to the submersible
                 if(auto.actionNotBusy()) {
-                    auto.claw.open();
+                    auto.outtake.open();
                     auto.follower.setMaxPower(0.9);
-                    auto.follower.getPose().get
                     auto.follower.followPath(auto.pushSamples, true);
                     setPathState(989);
                 }
                 break;
             case 989:
                 if(pathTimer.getElapsedTimeSeconds() > 0.5) {
-                    auto.arm.specimenGrab();
-                    auto.claw.specimenGrab();
+                    auto.outtake.specimenGrab();
                     setPathState(2);
                 }
             case 2: //Once the Pathchain finishes, begins the Specimen State Machine
@@ -77,8 +75,8 @@ public class Observation extends OpMode {
                 }
                 break;
             case 4: //Closes the claw when the follower reaches the grab1 position
-                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
-                    auto.claw.close();
+                if(pathTimer.getElapsedTimeSeconds() > 0.325) {
+                    auto.outtake.close();
                     setPathState(5);
                 }
                 break;
@@ -110,8 +108,8 @@ public class Observation extends OpMode {
                 }
                 break;
             case 9:
-                if(pathTimer.getElapsedTimeSeconds() > 2.25) {
-                        auto.claw.close();
+                if(pathTimer.getElapsedTimeSeconds() > 2.5) {
+                        auto.outtake.close();
                         setPathState(10);
                 }
                 break;
@@ -146,8 +144,8 @@ public class Observation extends OpMode {
                 }
                 break;
             case 15:
-                if(pathTimer.getElapsedTimeSeconds() > 2.25) {
-                   auto.claw.close();
+                if(pathTimer.getElapsedTimeSeconds() > 2.5) {
+                   auto.outtake.close();
                     setPathState(16);
                 }
                 break;
@@ -182,8 +180,8 @@ public class Observation extends OpMode {
                 }
                 break;
             case 21:
-                if(pathTimer.getElapsedTimeSeconds() > 2.25) {
-                    auto.claw.close();
+                if(pathTimer.getElapsedTimeSeconds() > 2.5) {
+                    auto.outtake.close();
                     setPathState(22);
                 }
                 break;

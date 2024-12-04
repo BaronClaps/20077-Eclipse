@@ -103,17 +103,6 @@ public class Teleop {
 
             lift.manual(gamepad2.right_trigger - gamepad2.left_trigger);
 
-
-            if (gamepad2.b)
-                intake.setSpinState(IntakeSubsystem.IntakeSpinState.IN, false);
-            else if (gamepad2.dpad_down)
-                intake.setSpinState(IntakeSubsystem.IntakeSpinState.OUT, false);
-            else
-                intake.setSpinState(IntakeSubsystem.IntakeSpinState.STOP, false);
-
-            if (currentGamepad1.a && !previousGamepad1.a)
-                intake.switchPivotState();
-
             if(gamepad1.dpad_left)
                 startAutoBucket();
 
@@ -170,7 +159,6 @@ public class Teleop {
         autoBucket();
 
         follower.update();
-
         telemetry.addData("X: ", follower.getPose().getX());
         telemetry.addData("Y: ", follower.getPose().getY());
         telemetry.addData("Heading: ", follower.getPose().getHeading());
