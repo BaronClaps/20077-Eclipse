@@ -29,6 +29,7 @@ public class RobotConstants {
     public static double armInit = 0.2;
     public static double armSpecimenGrab = 0.125;
     public static double armSpecimenScore = 0.6;
+    public static double armSpecimenReturn = 0.8;
 
     public static int liftToZero = 30;
     public static int liftToHumanPlayer = 200;

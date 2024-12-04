@@ -204,14 +204,12 @@ public class Auto {
                     .setLinearHeadingInterpolation(Math.toRadians(180),Math.toRadians(180))
                     .addPath(new BezierLine(new Point(56.000, 10, Point.CARTESIAN), new Point(28, 10, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(180),Math.toRadians(180))
-                    .addPath(new BezierLine(new Point(28, 10, Point.CARTESIAN), new Point(specimenSetPose)))
-                    .setLinearHeadingInterpolation(Math.toRadians(180), specimenSetPose.getHeading())
                     //.setZeroPowerAccelerationMultiplier(0.5)
                     .build();
 
             grab1 = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(specimenSetPose), new Point(grab1Pose)))
-                    .setLinearHeadingInterpolation(specimenSetPose.getHeading(), grab1Pose.getHeading())
+                    .addPath(new BezierLine(new Point(28,10,Point.CARTESIAN), new Point(grab1Pose)))
+                    .setLinearHeadingInterpolation(Math.toRadians(180), grab1Pose.getHeading())
                     .setZeroPowerAccelerationMultiplier(1)
                     .build();
 
@@ -373,6 +371,7 @@ public class Auto {
                 break;
             case 3:
                 if(chamberTimer.getElapsedTimeSeconds() > 0.25) {
+                    arm.specimenReturn();
                     actionBusy = false;
                     setChamberState(-1);
                 }
