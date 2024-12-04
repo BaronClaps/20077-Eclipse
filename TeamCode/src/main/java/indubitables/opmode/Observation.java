@@ -8,7 +8,7 @@ import indubitables.config.runmodes.Auto;
 import indubitables.pedroPathing.util.Timer;
 
 @Autonomous(name="Observation", group="A")
-public class BlueObservation extends OpMode {
+public class Observation extends OpMode {
     public int pathState;
     public Auto auto;
 
@@ -31,8 +31,6 @@ public class BlueObservation extends OpMode {
         telemetry.addData("Path Timer: ", pathTimer.getElapsedTimeSeconds());
         auto.update();
         pathUpdate();
-
-        telemetry.update();
     }
 
     public void pathUpdate() {
@@ -54,6 +52,7 @@ public class BlueObservation extends OpMode {
                 if(auto.actionNotBusy()) {
                     auto.claw.open();
                     auto.follower.setMaxPower(0.9);
+                    auto.follower.getPose().get
                     auto.follower.followPath(auto.pushSamples, true);
                     setPathState(989);
                 }

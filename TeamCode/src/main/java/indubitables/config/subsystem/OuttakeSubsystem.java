@@ -18,11 +18,11 @@ public class OuttakeSubsystem {
     }
 
     public enum RotateState {
-        TRANSFER, SCORE, INIT, SPECIMENGRAB, SPECIMENSCORE
+        TRANSFER, SCORE, SPECIMENGRAB, SPECIMENSCORE
     }
     
     public enum PivotState {
-        TRANSFER, SCORE, INIT, SPECIMENGRAB, SPECIMENSCORE
+        TRANSFER, SCORE, SPECIMENGRAB, SPECIMENSCORE
     }
 
     public Servo grab, leftRotate, rightRotate, leftPivot, rightPivot;
@@ -52,10 +52,6 @@ public class OuttakeSubsystem {
             leftRotate.setPosition(outtakeRotateLeftScore);
             rightRotate.setPosition(outtakeRotateRightScore);
             this.rotateState = RotateState.SCORE;
-        } else if (state == RotateState.INIT) {
-            leftRotate.setPosition(outtakeRotateInit);
-            rightRotate.setPosition(outtakeRotateInit);
-            this.rotateState = RotateState.INIT;
         } else if (state == RotateState.SPECIMENGRAB) {
             leftRotate.setPosition(outtakeRotateSpecimenGrab);
             rightRotate.setPosition(outtakeRotateSpecimenGrab);
@@ -94,10 +90,6 @@ public class OuttakeSubsystem {
             leftPivot.setPosition(outtakePivotScore);
             rightPivot.setPosition(outtakePivotScore);
             this.pivotState = PivotState.SCORE;
-        } else if (pivotState == PivotState.INIT) {
-            leftPivot.setPosition(outtakePivotInit);
-            rightPivot.setPosition(outtakePivotInit);
-            this.pivotState = PivotState.INIT;
         } else if (pivotState == PivotState.SPECIMENGRAB) {
             leftPivot.setPosition(outtakePivotSpecimenGrab);
             rightPivot.setPosition(outtakePivotSpecimenGrab);
@@ -142,19 +134,20 @@ public class OuttakeSubsystem {
     } 
 
     public void init() {
-        setPivotState(PivotState.INIT);
-        setRotateState(RotateState.INIT);
+        setPivotState(PivotState.TRANSFER);
+        setRotateState(RotateState.TRANSFER);
         setGrabState(GrabState.CLOSED);
     }
 
     public void start() {
-        setPivotState(PivotState.INIT);
-        setRotateState(RotateState.INIT);
+        setPivotState(PivotState.TRANSFER);
+        setRotateState(RotateState.TRANSFER);
         setGrabState(GrabState.CLOSED);
     }
 
-    public Telemetry.Line telemetry() {
-        return
-
+    public void telemetry() {
+        telemetry.addData("Outtake Grab State: ", grabState);
+        telemetry.addData("Outtake Rotate State: ", rotateState);
+        telemetry.addData("Outtake Pivot State: ", pivotState);
     }
 }

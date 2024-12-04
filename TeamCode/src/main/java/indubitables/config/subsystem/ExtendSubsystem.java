@@ -5,47 +5,40 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import indubitables.config.util.action.RunAction;
 
 public class ExtendSubsystem {
     private Telemetry telemetry;
 
-    public Servo leftExtend, rightExtend;
+    public Servo left, right;
     private double pos = 0;
     public double extendLimit = extendFullSample;
-    public RunAction toZero, toHalf, toFull;
 
     public ExtendSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
         this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        leftExtend = hardwareMap.get(Servo.class, "leftExtend");
-        rightExtend = hardwareMap.get(Servo.class, "rightExtend");
-
-        toZero = new RunAction(this::toZero);
-        toHalf = new RunAction(this::toHalf);
-        toFull = new RunAction(this::toFull);
+        left = hardwareMap.get(Servo.class, "leftExtend");
+        right = hardwareMap.get(Servo.class, "rightExtend");
     }
 
     public void manual(int direction) {
-        double rightPos = rightExtend.getPosition();
+        double rightPos = right.getPosition();
 
         if (rightPos <= extendLimit || direction < 0) {
             rightPos += (extendManualIncrements * direction);
         } else {
-            rightPos = rightExtend.getPosition();
+            rightPos = right.getPosition();
         }
 
-        leftExtend.setPosition(rightPos);
-        rightExtend.setPosition(rightPos);
+        left.setPosition(rightPos);
+        right.setPosition(rightPos);
     }
 
     public void setTarget(double b) {
-        leftExtend.setPosition(b);
-        rightExtend.setPosition(b);
+        left.setPosition(b);
+        right.setPosition(b);
         pos = b;
     }
 
@@ -65,14 +58,10 @@ public class ExtendSubsystem {
         setTarget(extendLimit);
     }
 
-    // Util //
+    // Util
     public double getPos() {
-        updatePos();
+        pos = right.getPosition();
         return pos;
-    }
-
-    public void updatePos() {
-        pos = ((leftExtend.getPosition() + rightExtend.getPosition()) / 2);
     }
 
     public void setLimitToSpecimen() {
@@ -85,13 +74,14 @@ public class ExtendSubsystem {
 
     // Init + Start //
     public void init() {
-        updatePos();
         toZero();
     }
 
     public void start() {
-        updatePos();
         toZero();
     }
 
+    public void telemetry() {
+        telemetry.addData("Extend Pos: ", getPos());
+    }
 }

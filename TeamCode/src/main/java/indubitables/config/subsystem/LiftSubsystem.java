@@ -65,9 +65,6 @@ public class LiftSubsystem {
 
             rightLift.setPower(power);
             leftLift.setPower(power);
-
-            telemetry.addData("lift pos", getPos());
-            telemetry.addData("lift target", target);
         }
     }
 
@@ -130,10 +127,6 @@ public class LiftSubsystem {
         setTarget(liftToHighBucket);
     }
 
-    public void toHighChamber2() {
-        setTarget(liftToHighChamber2);
-    }
-
     public void toHighChamber() {
         setTarget(liftToHighChamber);
     }
@@ -148,6 +141,11 @@ public class LiftSubsystem {
 
     public void toPark() {
         setTarget(liftToPark);
+    }
+
+    public void telemetry() {
+        telemetry.addData("Lift Pos: ", getPos());
+        telemetry.addData("Lift Target: ", target);
     }
 
 }

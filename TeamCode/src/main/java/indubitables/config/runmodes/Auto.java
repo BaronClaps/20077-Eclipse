@@ -21,16 +21,19 @@ public class Auto {
 
     private RobotStart startLocation;
 
-    public OuttakeSubsystem claw;
-    public OuttakeSubsystem.ClawGrabState clawGrabState;
-    public OuttakeSubsystem.ClawPivotState clawPivotState;
+    public OuttakeSubsystem outtake;
+    public OuttakeSubsystem.GrabState outtakeGrabState;
+    public OuttakeSubsystem.RotateState outtakeRotateState;
+    public OuttakeSubsystem.PivotState outtakePivotState;
+
+    public IntakeSubsystem intake;
+    public IntakeSubsystem.GrabState intakeGrabState;
+    public IntakeSubsystem.RotateState intakeRotateState;
+    public IntakeSubsystem.PivotState intakePivotState;
+
     public LiftSubsystem lift;
     public ExtendSubsystem extend;
-    public IntakeSubsystem intake;
-    public IntakeSubsystem.IntakeSpinState intakeSpinState;
-    public IntakeSubsystem.IntakePivotState intakePivotState;
-    public ArmSubsystem arm;
-    public ArmSubsystem.ArmState armState;
+
 
 
     public Follower follower;
@@ -47,16 +50,16 @@ public class Auto {
     public Pose startPose, preloadPose, sample1Pose, sample1ControlPose, sample2Pose, sample2ControlPose, sample3Pose, sample3ControlPose, sampleScorePose, parkControlPose, parkPose, grab1Pose, specimen1Pose, grab2Pose, specimen2Pose, grab3Pose, specimen3Pose, grab4Pose, specimen4Pose, specimenSetPose;
 
     public Auto(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, boolean isBlue, boolean isBucket) {
-        claw = new OuttakeSubsystem(hardwareMap, clawGrabState, clawPivotState);
+
         lift = new LiftSubsystem(hardwareMap, telemetry);
         extend = new ExtendSubsystem(hardwareMap, telemetry);
-        intake = new IntakeSubsystem(hardwareMap, intakeSpinState, intakePivotState);
-        arm = new ArmSubsystem(hardwareMap, armState);
+        intake = new IntakeSubsystem(hardwareMap, telemetry, intakeGrabState, intakeRotateState, intakePivotState);
+        outtake = new OuttakeSubsystem(hardwareMap, telemetry, outtakeGrabState, outtakeRotateState, outtakePivotState);
 
         this.follower = follower;
         this.telemetry = telemetry;
 
-        startLocation = isBlue ? (isBucket ? RobotStart.BLUE_BUCKET : RobotStart.BLUE_OBSERVATION) : (isBucket ? RobotStart.RED_BUCKET : RobotStart.RED_OBSERVATION);
+        startLocation = isBucket ? RobotStart.BUCKET : RobotStart.OBSERVATION;
 
         createPoses();
         buildPaths();
@@ -65,12 +68,12 @@ public class Auto {
     }
 
     public void init() {
-        claw.init();
-        claw.score();
         lift.init();
+        extend.init();
         extend.toZero();
+        outtake.init();
         intake.init();
-        arm.init();
+
         telemetryUpdate();
 
         follower.setStartingPose(startPose);
@@ -79,9 +82,8 @@ public class Auto {
     public void start() {
         lift.start();
         extend.start();
-        extend.toZero();
+        outtake.start();
         intake.start();
-        claw.close();
 
         follower.setStartingPose(startPose);
     }
@@ -105,45 +107,33 @@ public class Auto {
 
     public void createPoses() { //Able to be cut
         switch (startLocation) {
-            case BLUE_BUCKET:
-                startPose = blueBucketStartPose;
-                preloadPose = blueBucketPreloadPose;
-                sample1ControlPose = blueBucketLeftSampleControlPose;
-                sample1Pose = blueBucketLeftSamplePose;
-                sample2ControlPose = blueBucketMidSampleControlPose;
-                sample2Pose = blueBucketMidSamplePose;
-                sample3ControlPose = blueBucketRightSampleControlPose;
-                sample3Pose = blueBucketRightSamplePose;
-                sampleScorePose = blueBucketScorePose;
-                parkControlPose = blueBucketParkControlPose;
-                parkPose = blueBucketParkPose;
+            case BUCKET:
+                startPose = bucketStartPose;
+                preloadPose = bucketPreloadPose;
+                sample1ControlPose = bucketLeftSampleControlPose;
+                sample1Pose = bucketLeftSamplePose;
+                sample2ControlPose = bucketMidSampleControlPose;
+                sample2Pose = bucketMidSamplePose;
+                sample3ControlPose = bucketRightSampleControlPose;
+                sample3Pose = bucketRightSamplePose;
+                sampleScorePose = bucketScorePose;
+                parkControlPose = bucketParkControlPose;
+                parkPose = bucketParkPose;
                 break;
 
-            case BLUE_OBSERVATION:
-                startPose = blueObservationStartPose;
-                preloadPose = blueObservationPreloadPose;
-                specimenSetPose = blueObservationSpecimenSetPose;
-                grab1Pose = blueObservationSpecimenPickupPose;
-                grab2Pose = blueObservationSpecimenPickup2Pose;
-                grab3Pose = blueObservationSpecimenPickup3Pose;
-                grab4Pose = blueObservationSpecimenPickup4Pose;
-                specimen1Pose = blueObservationSpecimen1Pose;
-                specimen2Pose = blueObservationSpecimen2Pose;
-                specimen3Pose = blueObservationSpecimen3Pose;
-                specimen4Pose = blueObservationSpecimen4Pose;
-
-
-                parkPose = blueObservationParkPose;
-                break;
-
-            case RED_BUCKET:
-                startPose = redBucketStartPose;
-                //parkPose = redBucketPark;
-                break;
-
-            case RED_OBSERVATION:
-                startPose = redObservationStartPose;
-                //parkPose = redObservationPark;
+            case OBSERVATION:
+                startPose = observationStartPose;
+                preloadPose = observationPreloadPose;
+                specimenSetPose = observationSpecimenSetPose;
+                grab1Pose = observationSpecimenPickupPose;
+                grab2Pose = observationSpecimenPickup2Pose;
+                grab3Pose = observationSpecimenPickup3Pose;
+                grab4Pose = observationSpecimenPickup4Pose;
+                specimen1Pose = observationSpecimen1Pose;
+                specimen2Pose = observationSpecimen2Pose;
+                specimen3Pose = observationSpecimen3Pose;
+                specimen4Pose = observationSpecimen4Pose;
+                parkPose = observationParkPose;
                 break;
         }
 
@@ -151,7 +141,7 @@ public class Auto {
     }
 
     public void buildPaths() {
-        if((startLocation == RobotStart.BLUE_BUCKET) || (startLocation == RobotStart.RED_BUCKET)) {
+        if(startLocation == RobotStart.BUCKET) {
             preload = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(startPose), new Point(preloadPose)))
                     .setLinearHeadingInterpolation(startPose.getHeading(), preloadPose.getHeading())
@@ -181,7 +171,7 @@ public class Auto {
                     .build();
         }
 
-        if (startLocation == RobotStart.BLUE_OBSERVATION || startLocation == RobotStart.RED_OBSERVATION) {
+        if (startLocation == RobotStart.OBSERVATION) {
             preload = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(startPose), new Point(preloadPose)))
                     .setLinearHeadingInterpolation(startPose.getHeading(), preloadPose.getHeading())
@@ -514,14 +504,10 @@ public class Auto {
         telemetry.addData("Y: ", follower.getPose().getY());
         telemetry.addData("Heading: ", follower.getPose().getHeading());
         telemetry.addData("Action Busy?: ", actionBusy);
-        //telemetry.addData("Lift Pos", lift.getPos());
-        //telemetry.addData("Extend Pos", extend.leftExtend.getPosition());
-        //telemetry.addData("Extend Limit", extend.extendLimit);
-        telemetry.addData("Claw Grab State", claw.grabState);
-        telemetry.addData("Claw Pivot State", claw.rotateState);
-     //   telemetry.addData("Intake Spin State", intakeSpinState);
-     //   telemetry.addData("Intake Pivot State", intakePivotState);
-        telemetry.addData("arm State", arm.state);
+        extend.telemetry();
+        lift.telemetry();
+        outtake.telemetry();
+        intake.telemetry();
         telemetry.update();
     }
 }

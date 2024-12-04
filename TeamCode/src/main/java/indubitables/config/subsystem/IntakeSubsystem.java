@@ -18,11 +18,11 @@ public class IntakeSubsystem {
     }
 
     public enum RotateState {
-        TRANSFER, GROUND, INIT, SPECIMENGRAB, SPECIMENSCORE
+        TRANSFER, GROUND, HOVER
     }
 
     public enum PivotState {
-        TRANSFER, GROUND, INIT, SPECIMENGRAB, SPECIMENSCORE
+        TRANSFER, GROUND, HOVER
     }
 
     public Servo grab, leftRotate, rightRotate, leftPivot, rightPivot;
@@ -49,13 +49,13 @@ public class IntakeSubsystem {
             rightRotate.setPosition(intakeRotateTransfer);
             this.rotateState = RotateState.TRANSFER;
         } else if (state == RotateState.GROUND) {
-            leftRotate.setPosition(intakeRotateLeftGround);
-            rightRotate.setPosition(intakeRotateRightGround);
+            leftRotate.setPosition(intakeRotateGround);
+            rightRotate.setPosition(intakeRotateGround);
             this.rotateState = RotateState.GROUND;
-        } else if (state == RotateState.INIT) {
-            leftRotate.setPosition(intakeRotateInit);
-            rightRotate.setPosition(intakeRotateInit);
-            this.rotateState = RotateState.INIT;
+        } else if (state == RotateState.HOVER) {
+            leftRotate.setPosition(intakeRotateHover);
+            rightRotate.setPosition(intakeRotateHover);
+            this.rotateState = RotateState.HOVER;
         }
     }
 
@@ -86,10 +86,10 @@ public class IntakeSubsystem {
             leftPivot.setPosition(intakePivotGround);
             rightPivot.setPosition(intakePivotGround);
             this.pivotState = PivotState.GROUND;
-        } else if (pivotState == PivotState.INIT) {
-            leftPivot.setPosition(intakePivotInit);
-            rightPivot.setPosition(intakePivotInit);
-            this.pivotState = PivotState.INIT;
+        } else if (pivotState == PivotState.HOVER) {
+            leftPivot.setPosition(intakePivotHover);
+            rightPivot.setPosition(intakePivotHover);
+            this.pivotState = PivotState.HOVER;
         }
     }
 
@@ -104,36 +104,35 @@ public class IntakeSubsystem {
     public void transfer() {
         setRotateState(RotateState.TRANSFER);
         setPivotState(PivotState.TRANSFER);
-        setGrabState(GrabState.OPEN);
+        setGrabState(GrabState.CLOSED);
     }
 
     public void ground() {
         setRotateState(RotateState.GROUND);
         setPivotState(PivotState.GROUND);
-        setGrabState(GrabState.CLOSED);
     }
 
-    public void specimenGrab() {
-        setRotateState(RotateState.SPECIMENGRAB);
-        setPivotState(PivotState.SPECIMENGRAB);
+    public void hover() {
+        setPivotState(PivotState.HOVER);
+        setRotateState(RotateState.HOVER);
         setGrabState(GrabState.OPEN);
     }
 
-    public void specimenScore() {
-        setRotateState(RotateState.SPECIMENSCORE);
-        setPivotState(PivotState.SPECIMENSCORE);
-        setGrabState(GrabState.CLOSED);
-    }
-
     public void init() {
-        setPivotState(PivotState.INIT);
-        setRotateState(RotateState.INIT);
+        setPivotState(PivotState.TRANSFER);
+        setRotateState(RotateState.TRANSFER);
         setGrabState(GrabState.CLOSED);
     }
 
     public void start() {
-        setPivotState(PivotState.INIT);
-        setRotateState(RotateState.INIT);
-        setGrabState(GrabState.CLOSED);
+        setPivotState(PivotState.HOVER);
+        setRotateState(RotateState.HOVER);
+        setGrabState(GrabState.OPEN);
+    }
+
+    public void telemetry() {
+        telemetry.addData("Intake Grab State: ", grabState);
+        telemetry.addData("Intake Rotate State: ", rotateState);
+        telemetry.addData("Intake Pivot State: ", pivotState);
     }
 }

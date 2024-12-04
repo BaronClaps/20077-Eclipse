@@ -17,8 +17,6 @@ import indubitables.pedroPathing.follower.Follower;
 public class VisionSubsystem {
 
     private Telemetry telemetry;
-    private ExtendSubsystem extend;
-
 
     public VisionSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
 

@@ -19,13 +19,20 @@ import indubitables.pedroPathing.util.Timer;
 
 public class Teleop {
 
-    private OuttakeSubsystem outtake;
+
     private ExtendSubsystem extend;
-    private IntakeSubsystem intake;
     private LiftSubsystem lift;
+
+    private IntakeSubsystem intake;
+    private IntakeSubsystem.GrabState intakeGrabState;
+    private IntakeSubsystem.PivotState intakePivotState;
+    private IntakeSubsystem.RotateState intakeRotateState;
+
+    private OuttakeSubsystem outtake;
     private OuttakeSubsystem.GrabState outtakeGrabState;
     private OuttakeSubsystem.PivotState outtakePivotState;
     private OuttakeSubsystem.RotateState outtakeRotateState;
+
 
 
     private Follower follower;
@@ -52,10 +59,10 @@ public class Teleop {
 
 
     public Teleop(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, Pose startPose, boolean fieldCentric, Gamepad gamepad1, Gamepad gamepad2) {
-        outtake = new OuttakeSubsystem(hardwareMap, te);
+        outtake = new OuttakeSubsystem(hardwareMap, telemetry, outtakeGrabState, outtakeRotateState, outtakePivotState);
         lift = new LiftSubsystem(hardwareMap, telemetry);
         extend = new ExtendSubsystem(hardwareMap, telemetry);
-        intake = new IntakeSubsystem(hardwareMap, intakeSpinState, intakePivotState);
+        intake = new IntakeSubsystem(hardwareMap, telemetry, intakeGrabState, intakeRotateState, intakePivotState);
 
         this.follower = follower;
         this.startPose = startPose;
@@ -73,8 +80,6 @@ public class Teleop {
     public void start() {
         extend.setLimitToSample();
         outtake.init();
-        arm.init();
-        //lift.start();
         extend.start();
         intake.start();
         follower.setPose(startPose);
@@ -97,6 +102,7 @@ public class Teleop {
                 speed = 0.75;
 
             lift.manual(gamepad2.right_trigger - gamepad2.left_trigger);
+
 
             if (gamepad2.b)
                 intake.setSpinState(IntakeSubsystem.IntakeSpinState.IN, false);
@@ -142,7 +148,7 @@ public class Teleop {
                 specimenScorePos();
 
             if (currentGamepad1.b && !previousGamepad1.b)
-                intake.setPivotState(IntakeSubsystem.IntakePivotState.TRANSFER);
+                intake.switchGrabState();
 
             if (gamepad2.left_stick_button) {
                 lift.hang = true;
@@ -165,18 +171,21 @@ public class Teleop {
 
         follower.update();
 
-        telemetry.addData("X", follower.getPose().getX());
-        telemetry.addData("Y", follower.getPose().getY());
-        telemetry.addData("Heading", Math.toDegrees(follower.getPose().getHeading()));
-
-        telemetry.addData("Action Busy", actionBusy);
+        telemetry.addData("X: ", follower.getPose().getX());
+        telemetry.addData("Y: ", follower.getPose().getY());
+        telemetry.addData("Heading: ", follower.getPose().getHeading());
+        telemetry.addData("Action Busy?: ", actionBusy);
         telemetry.addData("Auto Bucket State", autoBucketState);
+        extend.telemetry();
+        lift.telemetry();
+        outtake.telemetry();
+        intake.telemetry();
         telemetry.update();
     }
 
     private void scoringPos() {
         extend.setLimitToSample();
-        intake.score();
+        intake.transfer();
         outtake.score();
     }
 
@@ -188,13 +197,11 @@ public class Teleop {
 
     private void specimenGrabPos() {
         extend.setLimitToSpecimen();
-        intake.specimenGrab();
         outtake.specimenGrab();
     }
 
     private void specimenScorePos() {
         extend.setLimitToSpecimen();
-        intake.specimenScore();
         outtake.specimenScore();
     }
 
