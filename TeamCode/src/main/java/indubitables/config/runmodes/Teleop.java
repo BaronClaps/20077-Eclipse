@@ -195,27 +195,32 @@ public class Teleop {
 
     private void transfer() {
         switch (transferState) {
-            case 1:
-                actionBusy = true;
+            case 0:
                 intake.ground();
-                setTransferState(2);
+                setTransferState(1);
+                break;
+            case 1:
+                if(transferTimer.getElapsedTimeSeconds() > 0.5) {
+                    intake.close();
+                    setTransferState(2);
+                }
                 break;
             case 2:
-                if (transferTimer.getElapsedTimeSeconds() > 0.5) {
-                    intake.close();
-                    outtake.transfer();
+                if (transferTimer.getElapsedTimeSeconds() > 1) {
+                    intake.setRotateState(IntakeSubsystem.RotateState.TRANSFER);
                     setTransferState(3);
                 }
                 break;
             case 3:
-                if (transferTimer.getElapsedTimeSeconds() > 0.5) {
+                if (transferTimer.getElapsedTimeSeconds() > 0.75) {
                     intake.transfer();
+                    outtake.transfer();
                     extend.toZero();
                     setTransferState(4);
                 }
                 break;
             case 4:
-                if (transferTimer.getElapsedTimeSeconds() > 0.5) {
+                if (transferTimer.getElapsedTimeSeconds() > 1) {
                     outtake.close();
                     setTransferState(5);
                 }
@@ -243,7 +248,7 @@ public class Teleop {
     }
 
     public void startTransfer() {
-        setTransferState(1);
+        setTransferState(0);
     }
 
     private void autoBucket() {
