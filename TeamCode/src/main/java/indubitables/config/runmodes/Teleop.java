@@ -168,6 +168,7 @@ public class Teleop {
         lift.updatePIDF();
 
         autoBucket();
+        transfer();
 
         follower.update();
         telemetry.addData("X: ", follower.getPose().getX());
