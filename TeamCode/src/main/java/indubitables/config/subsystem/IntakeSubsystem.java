@@ -54,8 +54,8 @@ public class IntakeSubsystem {
                 leftRotate.setPosition(intakeRotateGroundVertical);
                 rightRotate.setPosition(intakeRotateGroundVertical);
             } else {
-                leftRotate.setPosition(intakeRotateGroundHorizontal);
-                rightRotate.setPosition(intakeRotateGroundHorizontal);
+                leftRotate.setPosition(intakeRotateLeftGroundHorizontal);
+                rightRotate.setPosition(intakeRotateRightGroundHorizontal);
             }
             this.rotateState = RotateState.GROUND;
         } else if (state == RotateState.HOVER) {

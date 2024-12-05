@@ -149,8 +149,6 @@ public class Teleop {
                 intake.ground();
             }
 
-
-
             if (gamepad2.left_stick_button) {
                 lift.hang = true;
             }
