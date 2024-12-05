@@ -46,28 +46,33 @@ public class IntakeSubsystem {
 
     public void setRotateState(RotateState state) {
         if (state == RotateState.TRANSFER) {
-            leftRotate.setPosition(intakeRotateTransfer);
+            leftRotate.setPosition(intakeRotateTransfer-0.03);
             rightRotate.setPosition(intakeRotateTransfer);
             this.rotateState = RotateState.TRANSFER;
         } else if (state == RotateState.GROUND) {
             if (rotateVertical) {
-                leftRotate.setPosition(intakeRotateGroundVertical);
+                leftRotate.setPosition(intakeRotateGroundVertical-0.03);
                 rightRotate.setPosition(intakeRotateGroundVertical);
             } else {
-                leftRotate.setPosition(intakeRotateLeftGroundHorizontal);
+                leftRotate.setPosition(intakeRotateLeftGroundHorizontal-0.03);
                 rightRotate.setPosition(intakeRotateRightGroundHorizontal);
             }
             this.rotateState = RotateState.GROUND;
         } else if (state == RotateState.HOVER) {
-            leftRotate.setPosition(intakeRotateHover);
-            rightRotate.setPosition(intakeRotateHover);
+            if (rotateVertical) {
+                leftRotate.setPosition(intakeRotateGroundVertical-0.03);
+                rightRotate.setPosition(intakeRotateGroundVertical);
+            } else {
+                leftRotate.setPosition(intakeRotateLeftGroundHorizontal-0.03);
+                rightRotate.setPosition(intakeRotateRightGroundHorizontal);
+            }
             this.rotateState = RotateState.HOVER;
         }
     }
 
     public void rotateCycle() {
         rotateVertical = !rotateVertical;
-        ground();
+        hover();
     }
 
     public void setGrabState(GrabState grabState) {
