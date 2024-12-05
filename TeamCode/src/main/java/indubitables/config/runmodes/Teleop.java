@@ -196,8 +196,42 @@ public class Teleop {
         switch (transferState) {
             case 1:
                 actionBusy = true;
+                intake.ground();
+                setTransferState(2);
                 break;
             case 2:
+                if (transferTimer.getElapsedTimeSeconds() > 0.5) {
+                    intake.close();
+                    outtake.transfer();
+                    setTransferState(3);
+                }
+                break;
+            case 3:
+                if (transferTimer.getElapsedTimeSeconds() > 0.5) {
+                    intake.transfer();
+                    extend.toZero();
+                    setTransferState(4);
+                }
+                break;
+            case 4:
+                if (transferTimer.getElapsedTimeSeconds() > 0.5) {
+                    outtake.close();
+                    setTransferState(5);
+                }
+                break;
+            case 5:
+                if (transferTimer.getElapsedTimeSeconds() > 0.5) {
+                    intake.open();
+                    intake.hover();
+                    setTransferState(6);
+                }
+                break;
+            case 6:
+                if (transferTimer.getElapsedTimeSeconds() > 0.5) {
+                    outtake.score();
+                    actionBusy = false;
+                    setTransferState(-1);
+                }
                 break;
         }
     }
@@ -315,6 +349,7 @@ public class Teleop {
         follower.setMaxPower(1);
         follower.startTeleopDrive();
         actionBusy = false;
+        setTransferState(-1);
         setAutoBucketState(-1);
     }
 
