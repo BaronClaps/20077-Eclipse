@@ -33,22 +33,17 @@ public class Teleop {
     private OuttakeSubsystem.PivotState outtakePivotState;
     private OuttakeSubsystem.RotateState outtakeRotateState;
 
-
-
     private Follower follower;
     private Pose startPose;
 
     private Telemetry telemetry;
 
     private Gamepad gamepad1, gamepad2;
-    private Gamepad currentGamepad1 = new Gamepad();
-    private Gamepad currentGamepad2 = new Gamepad();
-    private Gamepad previousGamepad1 = new Gamepad();
-    private Gamepad previousGamepad2 = new Gamepad();
+    private Gamepad currentGamepad1 = new Gamepad(), currentGamepad2 = new Gamepad(), previousGamepad1 = new Gamepad(), previousGamepad2 = new Gamepad();
 
-    private Timer autoBucketTimer = new Timer();
+    private Timer autoBucketTimer = new Timer(), transferTimer = new Timer();
 
-    private int flip = 1, autoBucketState = -1;
+    private int flip = 1, autoBucketState = -1, transferState = -1;
 
     public double speed = 0.75;
 
@@ -79,7 +74,7 @@ public class Teleop {
 
     public void start() {
         extend.setLimitToSample();
-        outtake.init();
+        outtake.start();
         extend.start();
         intake.start();
         follower.setPose(startPose);
@@ -87,7 +82,6 @@ public class Teleop {
     }
 
     public void update() {
-
         if (actionNotBusy()) {
             previousGamepad1.copy(currentGamepad1);
             previousGamepad2.copy(currentGamepad2);
@@ -103,9 +97,6 @@ public class Teleop {
 
             lift.manual(gamepad2.right_trigger - gamepad2.left_trigger);
 
-            if(gamepad1.dpad_left)
-                startAutoBucket();
-
             if (gamepad1.x) {
                 flip = -1;
             }
@@ -114,21 +105,24 @@ public class Teleop {
                 flip = 1;
             }
 
-            if (gamepad2.right_bumper)
-                extend.manual(1);
-            else if (gamepad2.left_bumper)
-                extend.manual(-1);
-            else
-                extend.manual(0);
+            if (gamepad1.right_trigger > 0.1)
+                extend.toFull();
+
+            if (gamepad1.left_trigger > 0.1)
+                extend.toZero();
 
             if (currentGamepad2.a && !previousGamepad2.a)
                 outtake.switchGrabState();
 
-            if (currentGamepad2.y && !previousGamepad2.y)
-                transferPos();
+            if (currentGamepad2.y && !previousGamepad2.y) {
+                extend.setLimitToSample();
+                outtake.transfer();
+            }
 
-            if (currentGamepad2.x && !previousGamepad2.x)
-                scoringPos();
+            if (currentGamepad2.x && !previousGamepad2.x) {
+                extend.setLimitToSample();
+                outtake.score();
+            }
 
             if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left)
                 specimenGrabPos();
@@ -136,8 +130,26 @@ public class Teleop {
             if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right)
                 specimenScorePos();
 
-            if (currentGamepad1.b && !previousGamepad1.b)
+            if (currentGamepad2.b && !previousGamepad2.b)
+                startTransfer();
+
+            if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up) {
                 intake.switchGrabState();
+            }
+
+            if (currentGamepad2.left_bumper && !previousGamepad2.left_bumper) {
+                intake.hover();
+            }
+
+            if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper) {
+                intake.rotateCycle();
+            }
+
+            if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down) {
+                intake.ground();
+            }
+
+
 
             if (gamepad2.left_stick_button) {
                 lift.hang = true;
@@ -148,6 +160,7 @@ public class Teleop {
             }
 
             follower.setTeleOpMovementVectors(flip * -gamepad1.left_stick_y * speed, flip * -gamepad1.left_stick_x * speed, -gamepad1.right_stick_x * speed * 0.5, !fieldCentric);
+
         } else {
             if(gamepad1.dpad_right) {
                 stopActions();
@@ -171,18 +184,6 @@ public class Teleop {
         telemetry.update();
     }
 
-    private void scoringPos() {
-        extend.setLimitToSample();
-        intake.transfer();
-        outtake.score();
-    }
-
-    private void transferPos() {
-        extend.setLimitToSample();
-        intake.transfer();
-        outtake.transfer();
-    }
-
     private void specimenGrabPos() {
         extend.setLimitToSpecimen();
         outtake.specimenGrab();
@@ -191,6 +192,25 @@ public class Teleop {
     private void specimenScorePos() {
         extend.setLimitToSpecimen();
         outtake.specimenScore();
+    }
+
+    private void transfer() {
+        switch (transferState) {
+            case 1:
+                actionBusy = true;
+                break;
+            case 2:
+                break;
+        }
+    }
+
+    public void setTransferState(int x) {
+        transferState = x;
+        transferTimer.resetTimer();
+    }
+
+    public void startTransfer() {
+        setTransferState(1);
     }
 
     private void autoBucket() {

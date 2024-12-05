@@ -30,6 +30,7 @@ public class IntakeSubsystem {
     public RotateState rotateState;
     public PivotState pivotState;
     private Telemetry telemetry;
+    private boolean rotateVertical = true;
 
     public IntakeSubsystem(HardwareMap hardwareMap, Telemetry telemetry, GrabState grabState, RotateState rotateState, PivotState pivotState) {
         grab = hardwareMap.get(Servo.class, "iG");
@@ -49,14 +50,24 @@ public class IntakeSubsystem {
             rightRotate.setPosition(intakeRotateTransfer);
             this.rotateState = RotateState.TRANSFER;
         } else if (state == RotateState.GROUND) {
-            leftRotate.setPosition(intakeRotateGround);
-            rightRotate.setPosition(intakeRotateGround);
+            if (rotateVertical) {
+                leftRotate.setPosition(intakeRotateGroundVertical);
+                rightRotate.setPosition(intakeRotateGroundVertical);
+            } else {
+                leftRotate.setPosition(intakeRotateGroundHorizontal);
+                rightRotate.setPosition(intakeRotateGroundHorizontal);
+            }
             this.rotateState = RotateState.GROUND;
         } else if (state == RotateState.HOVER) {
             leftRotate.setPosition(intakeRotateHover);
             rightRotate.setPosition(intakeRotateHover);
             this.rotateState = RotateState.HOVER;
         }
+    }
+
+    public void rotateCycle() {
+        rotateVertical = !rotateVertical;
+        ground();
     }
 
     public void setGrabState(GrabState grabState) {
@@ -102,29 +113,34 @@ public class IntakeSubsystem {
     }
 
     public void transfer() {
+        rotateVertical = true;
         setRotateState(RotateState.TRANSFER);
         setPivotState(PivotState.TRANSFER);
         setGrabState(GrabState.CLOSED);
     }
 
     public void ground() {
+        setGrabState(GrabState.OPEN);
         setRotateState(RotateState.GROUND);
         setPivotState(PivotState.GROUND);
     }
 
     public void hover() {
+        rotateVertical = true;
         setPivotState(PivotState.HOVER);
         setRotateState(RotateState.HOVER);
         setGrabState(GrabState.OPEN);
     }
 
     public void init() {
+        rotateVertical = true;
         setPivotState(PivotState.TRANSFER);
         setRotateState(RotateState.TRANSFER);
         setGrabState(GrabState.CLOSED);
     }
 
     public void start() {
+        rotateVertical = true;
         setPivotState(PivotState.HOVER);
         setRotateState(RotateState.HOVER);
         setGrabState(GrabState.OPEN);
@@ -134,5 +150,6 @@ public class IntakeSubsystem {
         telemetry.addData("Intake Grab State: ", grabState);
         telemetry.addData("Intake Rotate State: ", rotateState);
         telemetry.addData("Intake Pivot State: ", pivotState);
+        telemetry.addData("Rotate Vertical: ", rotateVertical);
     }
 }
