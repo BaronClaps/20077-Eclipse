@@ -159,6 +159,10 @@ public class Teleop {
 
             follower.setTeleOpMovementVectors(flip * -gamepad1.left_stick_y * speed, flip * -gamepad1.left_stick_x * speed, -gamepad1.right_stick_x * speed * 0.5, !fieldCentric);
 
+            if(gamepad1.dpad_right) {
+                stopActions();
+            }
+
         } else {
             if(gamepad1.dpad_right) {
                 stopActions();
@@ -186,11 +190,13 @@ public class Teleop {
     private void specimenGrabPos() {
         extend.setLimitToSpecimen();
         outtake.specimenGrab();
+        intake.specimen();
     }
 
     private void specimenScorePos() {
         extend.setLimitToSpecimen();
         outtake.specimenScore();
+        intake.specimen();
     }
 
     private void transfer() {

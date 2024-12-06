@@ -18,11 +18,11 @@ public class IntakeSubsystem {
     }
 
     public enum RotateState {
-        TRANSFER, GROUND, HOVER
+        TRANSFER, GROUND, HOVER, SPECIMEN
     }
 
     public enum PivotState {
-        TRANSFER, GROUND, HOVER
+        TRANSFER, GROUND, HOVER, SPECIMEN
     }
 
     public Servo grab, leftRotate, rightRotate, leftPivot, rightPivot;
@@ -67,6 +67,10 @@ public class IntakeSubsystem {
                 rightRotate.setPosition(intakeRotateRightHoverHorizontal);
             }
             this.rotateState = RotateState.HOVER;
+        } else if (state == RotateState.SPECIMEN) {
+            leftRotate.setPosition(intakeRotateSpecimen - 0.03);
+            rightRotate.setPosition(intakeRotateSpecimen);
+
         }
     }
 
@@ -108,6 +112,10 @@ public class IntakeSubsystem {
             leftPivot.setPosition(intakePivotHover);
             rightPivot.setPosition(intakePivotHover);
             this.pivotState = PivotState.HOVER;
+        } else if (pivotState == PivotState.SPECIMEN) {
+            leftPivot.setPosition(intakePivotSpecimen);
+            rightPivot.setPosition(intakePivotSpecimen);
+            this.pivotState = PivotState.SPECIMEN;
         }
     }
 
@@ -139,11 +147,16 @@ public class IntakeSubsystem {
         setGrabState(GrabState.OPEN);
     }
 
+    public void specimen() {
+        rotateVertical = true;
+        setPivotState(PivotState.SPECIMEN);
+        setRotateState(RotateState.SPECIMEN);
+        setGrabState(GrabState.CLOSED);
+    }
+
     public void init() {
         rotateVertical = true;
-        setPivotState(PivotState.TRANSFER);
-        setRotateState(RotateState.TRANSFER);
-        setGrabState(GrabState.CLOSED);
+        specimen();
     }
 
     public void start() {

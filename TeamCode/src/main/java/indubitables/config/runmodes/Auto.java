@@ -77,7 +77,6 @@ public class Auto {
         lift.start();
         extend.start();
         extend.toZero();
-        intake.start();
         outtake.close();
 
         follower.setStartingPose(startPose);

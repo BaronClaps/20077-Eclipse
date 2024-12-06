@@ -29,9 +29,11 @@ public class RobotConstants {
     public static double intakeRotateGroundVertical = 0.37;
     public static double intakeRotateLeftGroundHorizontal = 0.48;
     public static double intakeRotateRightGroundHorizontal = 0.26;
+    public static double intakeRotateSpecimen = 0.37;
     public static double intakePivotTransfer= 0.4;
     public static double intakePivotGround = 0.65;
     public static double intakePivotHover = 0.54;
+    public static double intakePivotSpecimen = 0.8;
 
     // Lift Positions
     public static int liftToZero = 30;
