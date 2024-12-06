@@ -51,6 +51,8 @@ public class Auto {
     public Auto(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, boolean isBlue, boolean isBucket) {
         lift = new LiftSubsystem(hardwareMap, telemetry);
         extend = new ExtendSubsystem(hardwareMap, telemetry);
+        intake = new IntakeSubsystem(hardwareMap, telemetry, intakeGrabState, intakeRotateState, intakePivotState);
+        outtake = new OuttakeSubsystem(hardwareMap, telemetry, outtakeGrabState, outtakeRotateState, outtakePivotState);
 
         this.follower = follower;
         this.telemetry = telemetry;
@@ -69,7 +71,6 @@ public class Auto {
         extend.toZero();
         intake.init();
         telemetryUpdate();
-
         follower.setStartingPose(startPose);
     }
 
@@ -78,7 +79,6 @@ public class Auto {
         extend.start();
         extend.toZero();
         outtake.close();
-
         follower.setStartingPose(startPose);
     }
 

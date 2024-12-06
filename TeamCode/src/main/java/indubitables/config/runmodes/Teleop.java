@@ -76,7 +76,7 @@ public class Teleop {
         extend.setLimitToSample();
         outtake.start();
         extend.start();
-        intake.start();
+        intake.init();
         follower.setPose(startPose);
         follower.startTeleopDrive();
     }
@@ -137,16 +137,16 @@ public class Teleop {
                 intake.switchGrabState();
             }
 
+            if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down) {
+                intake.switchState();
+            }
+
             if (currentGamepad2.left_bumper && !previousGamepad2.left_bumper) {
-                intake.hover();
+                intake.rotateCycle(false);
             }
 
             if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper) {
-                intake.rotateCycle();
-            }
-
-            if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down) {
-                intake.ground();
+                intake.rotateCycle(true);
             }
 
             if (gamepad2.left_stick_button) {

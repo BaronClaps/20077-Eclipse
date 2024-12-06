@@ -30,7 +30,7 @@ public class IntakeSubsystem {
     public RotateState rotateState;
     public PivotState pivotState;
     private Telemetry telemetry;
-    private boolean rotateVertical = true;
+    private int rotateTurn = 0;
 
     public IntakeSubsystem(HardwareMap hardwareMap, Telemetry telemetry, GrabState grabState, RotateState rotateState, PivotState pivotState) {
         grab = hardwareMap.get(Servo.class, "iG");
@@ -50,22 +50,12 @@ public class IntakeSubsystem {
             rightRotate.setPosition(intakeRotateTransfer);
             this.rotateState = RotateState.TRANSFER;
         } else if (state == RotateState.GROUND) {
-            if (rotateVertical) {
-                leftRotate.setPosition(intakeRotateGroundVertical-0.03);
-                rightRotate.setPosition(intakeRotateGroundVertical);
-            } else {
-                leftRotate.setPosition(intakeRotateLeftGroundHorizontal-0.03);
-                rightRotate.setPosition(intakeRotateRightGroundHorizontal);
-            }
+            leftRotate.setPosition(intakeRotateGroundVertical - 0.03 + (rotateTurn * 0.055));
+            rightRotate.setPosition(intakeRotateGroundVertical - (rotateTurn * 0.055));
             this.rotateState = RotateState.GROUND;
         } else if (state == RotateState.HOVER) {
-            if (rotateVertical) {
-                leftRotate.setPosition(intakeRotateHoverVertical-0.03);
-                rightRotate.setPosition(intakeRotateHoverVertical);
-            } else {
-                leftRotate.setPosition(intakeRotateLeftHoverHorizontal-0.03);
-                rightRotate.setPosition(intakeRotateRightHoverHorizontal);
-            }
+            leftRotate.setPosition(intakeRotateHoverVertical - 0.03 + (rotateTurn * 0.055));
+            rightRotate.setPosition(intakeRotateHoverVertical - (rotateTurn * 0.055));
             this.rotateState = RotateState.HOVER;
         } else if (state == RotateState.SPECIMEN) {
             leftRotate.setPosition(intakeRotateSpecimen - 0.03);
@@ -74,8 +64,15 @@ public class IntakeSubsystem {
         }
     }
 
-    public void rotateCycle() {
-        rotateVertical = !rotateVertical;
+    public void rotateCycle(boolean right) {
+        if (right) {
+            if (rotateTurn < 2)
+                rotateTurn += 1;
+        } else {
+            if (rotateTurn > -2)
+                rotateTurn -= 1;
+        }
+
         setPivotState(PivotState.HOVER);
         setRotateState(RotateState.HOVER);
         setGrabState(GrabState.OPEN);
@@ -119,6 +116,15 @@ public class IntakeSubsystem {
         }
     }
 
+    public void switchState() {
+        if (pivotState == PivotState.HOVER) {
+            ground();
+        } else {
+            hover();
+        }
+    }
+
+
     public void open() {
         setGrabState(GrabState.OPEN);
     }
@@ -128,7 +134,7 @@ public class IntakeSubsystem {
     }
 
     public void transfer() {
-        rotateVertical = true;
+        rotateTurn = 0;
         setRotateState(RotateState.TRANSFER);
         setPivotState(PivotState.TRANSFER);
         setGrabState(GrabState.CLOSED);
@@ -141,26 +147,25 @@ public class IntakeSubsystem {
     }
 
     public void hover() {
-        rotateVertical = true;
+        rotateTurn = 0;
         setPivotState(PivotState.HOVER);
         setRotateState(RotateState.HOVER);
-        setGrabState(GrabState.OPEN);
     }
 
     public void specimen() {
-        rotateVertical = true;
+        rotateTurn = 0;
         setPivotState(PivotState.SPECIMEN);
         setRotateState(RotateState.SPECIMEN);
         setGrabState(GrabState.CLOSED);
     }
 
     public void init() {
-        rotateVertical = true;
+        rotateTurn = 0;
         specimen();
     }
 
     public void start() {
-        rotateVertical = true;
+        rotateTurn = 0;
         setPivotState(PivotState.HOVER);
         setRotateState(RotateState.HOVER);
         setGrabState(GrabState.OPEN);
@@ -170,6 +175,6 @@ public class IntakeSubsystem {
         telemetry.addData("Intake Grab State: ", grabState);
         telemetry.addData("Intake Rotate State: ", rotateState);
         telemetry.addData("Intake Pivot State: ", pivotState);
-        telemetry.addData("Rotate Vertical: ", rotateVertical);
+        telemetry.addData("Rotate Turn: ", rotateTurn);
     }
 }

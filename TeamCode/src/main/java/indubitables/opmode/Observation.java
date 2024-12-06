@@ -187,7 +187,7 @@ public class Observation extends OpMode {
                 break;
             case 22: //Waits 0.25 seconds and puts robot in neutral position
                 if(pathTimer.getElapsedTimeSeconds() > 0.25) {
-                    auto.init();
+                    auto.intake.init();
                     setPathState(23);
                 }
                 break;
