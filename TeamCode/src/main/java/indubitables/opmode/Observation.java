@@ -42,7 +42,7 @@ public class Observation extends OpMode {
                 setPathState(999);
                 break;
             case 999:
-                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.65) {
                     auto.follower.setMaxPower(1);
                     auto.follower.followPath(auto.preload, false);
                     setPathState(1);
@@ -75,7 +75,7 @@ public class Observation extends OpMode {
                 }
                 break;
             case 4: //Closes the claw when the follower reaches the grab1 position
-                if(pathTimer.getElapsedTimeSeconds() > 0.325) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.525) {
                     auto.outtake.close();
                     setPathState(5);
                 }
@@ -206,7 +206,9 @@ public class Observation extends OpMode {
                 if(auto.actionNotBusy()) {
                     auto.follower.setMaxPower(1);
                     auto.follower.followPath(auto.park, true);
-                 //   auto.extend.toFull();
+                    auto.outtake.open();
+                    auto.extend.toFull();
+                    auto.intake.hover();
                     setPathState(26);
                 }
                 break;

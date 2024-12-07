@@ -173,7 +173,7 @@ public class Auto {
                     .build();
 
             pushSamples = follower.pathBuilder()
-                    .addPath(new BezierCurve(new Point(preloadPose), new Point(15, 36, Point.CARTESIAN), new Point(61, 36.25, Point.CARTESIAN), new Point(59, 26.000, Point.CARTESIAN)))
+                    .addPath(new BezierCurve(new Point(preloadPose), new Point(10, 36, Point.CARTESIAN), new Point(61, 36.25, Point.CARTESIAN), new Point(59, 26.000, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(preloadPose.getHeading(), Math.toRadians(180))
                     .addPath(new BezierLine(new Point(59.000, 26.000, Point.CARTESIAN), new Point(28, 26.000, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(180),Math.toRadians(180))
@@ -185,7 +185,7 @@ public class Auto {
                     .setLinearHeadingInterpolation(Math.toRadians(180),Math.toRadians(180))
                     .addPath(new BezierLine(new Point(56.000, 10, Point.CARTESIAN), new Point(28, 10, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(180),Math.toRadians(180))
-                    .addPath(new BezierLine(new Point(28, 10, Point.CARTESIAN), new Point(specimenSetPose)))
+                    .addPath(new BezierCurve(new Point(28, 10, Point.CARTESIAN), new Point(new Pose(35,17.5)), new Point(specimenSetPose)))
                     .setLinearHeadingInterpolation(Math.toRadians(180), specimenSetPose.getHeading())
                     //.setZeroPowerAccelerationMultiplier(0.5)
                     .build();
@@ -341,8 +341,9 @@ public class Auto {
                 }
                 break;
             case 3:
-                if(chamberTimer.getElapsedTimeSeconds() > 0.375) {
+                if(chamberTimer.getElapsedTimeSeconds() > 0.25) {
                     outtake.open();
+                    outtake.hang();
                     actionBusy = false;
                     setChamberState(-1);
                 }

@@ -134,8 +134,8 @@ public class OuttakeSubsystem {
     } 
 
     public void init() {
-        leftPivot.setPosition(0.3);
-        rightPivot.setPosition(0.3);
+        leftPivot.setPosition(0.175);
+        rightPivot.setPosition(0.175);
         setRotateState(RotateState.TRANSFER);
         setGrabState(GrabState.CLOSED);
     }
@@ -148,8 +148,8 @@ public class OuttakeSubsystem {
 
     public void hang() {
         setRotateState(RotateState.SPECIMENSCORE);
-        leftPivot.setPosition(0.75);
-        rightPivot.setPosition(0.75);
+        leftPivot.setPosition(0.65);
+        rightPivot.setPosition(0.65);
         setGrabState(GrabState.CLOSED);
     }
 

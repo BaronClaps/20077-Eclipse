@@ -39,12 +39,12 @@ public class FieldConstants {
     public static final Pose observationSpecimenPickup3Pose = new Pose(6.5, 35, Math.toRadians(180));
     public static final Pose observationSpecimenPickup4Pose = new Pose(6.5, 35, Math.toRadians(180));
 
-    public static final Pose observationSpecimen1Pose = new Pose(38, 72.25, Math.toRadians(180));
+    public static final Pose observationSpecimen1Pose = new Pose(38, 71, Math.toRadians(180));
     public static final Pose observationSpecimen2Pose = new Pose(38, 76.75, Math.toRadians(180));
     public static final Pose observationSpecimen3Pose = new Pose(38, 80.25, Math.toRadians(180));
     public static final Pose observationSpecimen4Pose = new Pose(38, 84.25, Math.toRadians(180));
 
-    public static final Pose observationParkPose = new Pose(12, 30, Math.toRadians(180));
+    public static final Pose observationParkPose = new Pose(24, 44, Math.toRadians(215));
 
 
 

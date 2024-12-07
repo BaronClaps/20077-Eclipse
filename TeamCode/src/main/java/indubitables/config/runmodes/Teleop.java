@@ -75,7 +75,6 @@ public class Teleop {
     public void start() {
         extend.setLimitToSample();
         outtake.start();
-        extend.start();
         intake.init();
         follower.setPose(startPose);
         follower.startTeleopDrive();
@@ -153,6 +152,13 @@ public class Teleop {
 
             if (gamepad2.left_stick_button) {
                 outtake.hang();
+                intake.transfer();
+                extend.toZero();
+
+            }
+
+            if (gamepad2.right_stick_button) {
+                intake.transfer();
             }
 
             follower.setTeleOpMovementVectors(flip * -gamepad1.left_stick_y * speed, flip * -gamepad1.left_stick_x * speed, -gamepad1.right_stick_x * speed * 0.5, !fieldCentric);
