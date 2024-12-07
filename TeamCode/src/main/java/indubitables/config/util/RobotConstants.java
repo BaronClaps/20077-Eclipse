@@ -24,11 +24,11 @@ public class RobotConstants {
     public static double intakeGrabOpen = 0.24;
     public static double intakeRotateTransfer = 1;
     public static double intakeRotateHoverVertical = 0.3;
-    public static double intakeRotateLeftHoverHorizontal = 0.41;
-    public static double intakeRotateRightHoverHorizontal = 0.19;
+//    public static double intakeRotateLeftHoverHorizontal = 0.41;
+//    public static double intakeRotateRightHoverHorizontal = 0.19;
     public static double intakeRotateGroundVertical = 0.37;
-    public static double intakeRotateLeftGroundHorizontal = 0.48;
-    public static double intakeRotateRightGroundHorizontal = 0.26;
+//    public static double intakeRotateLeftGroundHorizontal = 0.48;
+//    public static double intakeRotateRightGroundHorizontal = 0.26;
     public static double intakeRotateSpecimen = 0.9;
     public static double intakePivotTransfer= 0.4;
     public static double intakePivotGround = 0.65;

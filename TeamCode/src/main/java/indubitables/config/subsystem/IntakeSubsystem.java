@@ -156,7 +156,7 @@ public class IntakeSubsystem {
         rotateTurn = 0;
         setPivotState(PivotState.SPECIMEN);
         setRotateState(RotateState.SPECIMEN);
-        setGrabState(GrabState.CLOSED);
+        setGrabState(GrabState.OPEN);
     }
 
     public void init() {

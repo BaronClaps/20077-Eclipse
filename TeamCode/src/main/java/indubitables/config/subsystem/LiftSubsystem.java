@@ -42,13 +42,6 @@ public class LiftSubsystem {
 
 
         liftPID = new PIDController(p, i, d);
-
-        toZero = new RunAction(this::toZero);
-        toHighBucket = new RunAction(this::toHighBucket);
-        toHighChamber = new RunAction(this::toHighChamber);
-        toHumanPlayer = new RunAction(this::toHumanPlayer);
-        toTransfer = new RunAction(this::toTransfer);
-        toPark = new RunAction(this::toPark);
     }
 
     public void updatePIDF(){
@@ -73,10 +66,6 @@ public class LiftSubsystem {
 
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        if(hang) {
-            n = -0.75;
-        }
 
         rightLift.setPower(n);
         leftLift.setPower(n);

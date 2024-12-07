@@ -117,11 +117,13 @@ public class Teleop {
             if (currentGamepad2.y && !previousGamepad2.y) {
                 extend.setLimitToSample();
                 outtake.transfer();
+                intake.hover();
             }
 
             if (currentGamepad2.x && !previousGamepad2.x) {
                 extend.setLimitToSample();
                 outtake.score();
+                intake.hover();
             }
 
             if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left)
@@ -150,11 +152,7 @@ public class Teleop {
             }
 
             if (gamepad2.left_stick_button) {
-                lift.hang = true;
-            }
-
-            if (gamepad2.right_stick_button) {
-                lift.hang = false;
+                outtake.hang();
             }
 
             follower.setTeleOpMovementVectors(flip * -gamepad1.left_stick_y * speed, flip * -gamepad1.left_stick_x * speed, -gamepad1.right_stick_x * speed * 0.5, !fieldCentric);
@@ -202,43 +200,37 @@ public class Teleop {
     private void transfer() {
         switch (transferState) {
             case 0:
-                intake.ground();
+                intake.close();
+                outtake.transfer();
                 setTransferState(1);
                 break;
             case 1:
                 if(transferTimer.getElapsedTimeSeconds() > 0.5) {
-                    intake.close();
+                    intake.setRotateState(IntakeSubsystem.RotateState.TRANSFER);
                     setTransferState(2);
                 }
                 break;
             case 2:
-                if (transferTimer.getElapsedTimeSeconds() > 1) {
-                    intake.setRotateState(IntakeSubsystem.RotateState.TRANSFER);
+                if (transferTimer.getElapsedTimeSeconds() > 0.75) {
+                    intake.transfer();
+                    extend.toZero();
                     setTransferState(3);
                 }
                 break;
             case 3:
-                if (transferTimer.getElapsedTimeSeconds() > 0.75) {
-                    intake.transfer();
-                    outtake.transfer();
-                    extend.toZero();
+                if (transferTimer.getElapsedTimeSeconds() > 0.5) {
+                    outtake.close();
                     setTransferState(4);
                 }
                 break;
             case 4:
-                if (transferTimer.getElapsedTimeSeconds() > 1) {
-                    outtake.close();
+                if (transferTimer.getElapsedTimeSeconds() > 0.5) {
+                    intake.open();
+                    intake.hover();
                     setTransferState(5);
                 }
                 break;
             case 5:
-                if (transferTimer.getElapsedTimeSeconds() > 0.5) {
-                    intake.open();
-                    intake.hover();
-                    setTransferState(6);
-                }
-                break;
-            case 6:
                 if (transferTimer.getElapsedTimeSeconds() > 0.5) {
                     outtake.score();
                     actionBusy = false;
