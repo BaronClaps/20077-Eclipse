@@ -337,12 +337,12 @@ public class Auto {
             case 2:
                 if ((follower.getPose().getX() >= specimen1Pose.getX() - 0.5)) {
                     chamberTimer.resetTimer();
+                    outtake.open();
                     setChamberState(3);
                 }
                 break;
             case 3:
                 if(chamberTimer.getElapsedTimeSeconds() > 0.25) {
-                    outtake.open();
                     outtake.hang();
                     actionBusy = false;
                     setChamberState(-1);
@@ -365,10 +365,10 @@ public class Auto {
         switch (specimenState) {
             case 1:
                 actionBusy = true;
-                outtake.specimenGrab();
-                extend.toZero();
-                specimenTimer.resetTimer();
-                setSpecimenState(2);
+                    outtake.specimenGrab();
+                    extend.toZero();
+                    specimenTimer.resetTimer();
+                    setSpecimenState(2);
             case 2:
                 if(specimenTimer.getElapsedTimeSeconds() > 0) {
                     actionBusy = false;

@@ -91,8 +91,8 @@ public class TwoWheelLocalizer extends Localizer { // todo: make two wheel odo w
         imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));
 
         // TODO: replace these with your encoder ports
-        forwardEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftFront"));
-        strafeEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftRear"));
+        forwardEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightRear"));
+        strafeEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftFront"));
 
         // TODO: reverse any encoders necessary
         forwardEncoder.setDirection(Encoder.REVERSE);
