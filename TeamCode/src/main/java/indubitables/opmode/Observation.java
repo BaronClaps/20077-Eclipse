@@ -3,6 +3,7 @@ package indubitables.opmode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import indubitables.config.subsystem.IntakeSubsystem;
 import indubitables.pedroPathing.follower.Follower;
 import indubitables.config.runmodes.Auto;
 import indubitables.pedroPathing.util.Timer;
@@ -52,15 +53,56 @@ public class Observation extends OpMode {
                 if(auto.actionNotBusy()) {
                     auto.outtake.open();
                     auto.follower.setMaxPower(0.9);
-                    auto.follower.followPath(auto.pushSamples, true);
+                    auto.follower.followPath(auto.preload1, true);
                     setPathState(989);
                 }
                 break;
             case 989:
                 if(pathTimer.getElapsedTimeSeconds() > 0.5) {
                     auto.outtake.specimenGrab();
-                    setPathState(2);
+                    auto.extend.toFull();
+                    auto.intake.hover();
+                    setPathState(1000);
                 }
+            case 1000:
+                if(!auto.follower.isBusy()) {
+                    auto.follower.followPath(auto.dropoff1, true);
+                    setPathState(1001);
+                }
+                break;
+            case 1001:
+                if(!auto.follower.isBusy()) {
+                    auto.follower.followPath(auto.preload2, true);
+                    setPathState(1002);
+                }
+                break;
+            case 1002:
+                if(!auto.follower.isBusy()) {
+                    auto.follower.followPath(auto.dropoff2, true);
+                    setPathState(1003);
+                }
+                break;
+            case 1003:
+                if(!auto.follower.isBusy()) {
+                    auto.follower.followPath(auto.preload3, true);
+                    setPathState(1004);
+                }
+                break;
+            case 1004:
+                if(!auto.follower.isBusy()) {
+                    auto.follower.followPath(auto.dropoff3, true);
+                    setPathState(1005);
+                }
+                break;
+            case 1005:
+                if(!auto.follower.isBusy()) {
+                    auto.intake.setRotateState(IntakeSubsystem.RotateState.TRANSFER);
+                    auto.intake.transfer();
+                    auto.extend.toZero();
+                    auto.follower.followPath(auto.setup, true);
+                    setPathState(-1);
+                }
+                break;
             case 2: //Once the Pathchain finishes, begins the Specimen State Machine
                 if((auto.follower.getPose().getX() < auto.specimenSetPose.getX() + 1) && (auto.follower.getPose().getY() > auto.specimenSetPose.getY() - 0.5)) {
                     auto.startSpecimen();
