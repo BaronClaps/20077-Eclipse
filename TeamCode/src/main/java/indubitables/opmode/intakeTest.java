@@ -5,12 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import indubitables.config.subsystem.IntakeSubsystem;
-import indubitables.config.subsystem.OuttakeSubsystem;
 import indubitables.pedroPathing.follower.Follower;
 
 @Config
-@TeleOp(name="intakeTest", group="a")
-public class armTest extends OpMode {
+@TeleOp(name="intakeTest", group="b")
+public class intakeTest extends OpMode {
 
     private IntakeSubsystem intake;
     private IntakeSubsystem.GrabState intakeGrabState;

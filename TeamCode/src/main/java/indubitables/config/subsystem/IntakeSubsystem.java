@@ -30,7 +30,8 @@ public class IntakeSubsystem {
     public RotateState rotateState;
     public PivotState pivotState;
     private Telemetry telemetry;
-    private int rotateTurn = 0;
+    private double rotateDegrees = 0;
+    private static final double perDegree = 0.00122222222;
 
     public IntakeSubsystem(HardwareMap hardwareMap, Telemetry telemetry, GrabState grabState, RotateState rotateState, PivotState pivotState) {
         grab = hardwareMap.get(Servo.class, "iG");
@@ -50,12 +51,12 @@ public class IntakeSubsystem {
             rightRotate.setPosition(intakeRotateTransfer);
             this.rotateState = RotateState.TRANSFER;
         } else if (state == RotateState.GROUND) {
-            leftRotate.setPosition(intakeRotateGroundVertical - 0.03 + (rotateTurn * 0.055));
-            rightRotate.setPosition(intakeRotateGroundVertical - (rotateTurn * 0.055));
+            leftRotate.setPosition(intakeRotateGroundVertical - 0.03 + (rotateDegrees * perDegree));
+            rightRotate.setPosition(intakeRotateGroundVertical - (rotateDegrees * perDegree));
             this.rotateState = RotateState.GROUND;
         } else if (state == RotateState.HOVER) {
-            leftRotate.setPosition(intakeRotateHoverVertical - 0.03 + (rotateTurn * 0.055));
-            rightRotate.setPosition(intakeRotateHoverVertical - (rotateTurn * 0.055));
+            leftRotate.setPosition(intakeRotateHoverVertical - 0.03 + (rotateDegrees * perDegree));
+            rightRotate.setPosition(intakeRotateHoverVertical - (rotateDegrees * perDegree));
             this.rotateState = RotateState.HOVER;
         } else if (state == RotateState.SPECIMEN) {
             leftRotate.setPosition(intakeRotateSpecimen - 0.03);
@@ -64,13 +65,34 @@ public class IntakeSubsystem {
         }
     }
 
+    public void rotateDegrees(double degrees) {
+
+        degrees = ((degrees % 360) + 360) % 360;
+        if (degrees > 180) {
+            degrees -= 360;
+        }
+
+        if (degrees > 90) {
+            degrees = 180 - degrees;
+        } else if (degrees < -90) {
+            degrees = -180 - degrees;
+        }
+
+        this.rotateDegrees = degrees;
+
+        setPivotState(PivotState.HOVER);
+        setRotateState(RotateState.HOVER);
+        setGrabState(GrabState.OPEN);
+    }
+
+
     public void rotateCycle(boolean right) {
         if (right) {
-            if (rotateTurn < 2)
-                rotateTurn += 1;
+            if (rotateDegrees < 90)
+                rotateDegrees += 45;
         } else {
-            if (rotateTurn > -2)
-                rotateTurn -= 1;
+            if (rotateDegrees > -90)
+                rotateDegrees -= 45;
         }
 
         setPivotState(PivotState.HOVER);
@@ -134,7 +156,7 @@ public class IntakeSubsystem {
     }
 
     public void transfer() {
-        rotateTurn = 0;
+        rotateDegrees = 0;
         setRotateState(RotateState.TRANSFER);
         setPivotState(PivotState.TRANSFER);
         setGrabState(GrabState.CLOSED);
@@ -147,25 +169,25 @@ public class IntakeSubsystem {
     }
 
     public void hover() {
-        rotateTurn = 0;
+        rotateDegrees = 0;
         setPivotState(PivotState.HOVER);
         setRotateState(RotateState.HOVER);
     }
 
     public void specimen() {
-        rotateTurn = 0;
+        rotateDegrees = 0;
         setPivotState(PivotState.SPECIMEN);
         setRotateState(RotateState.SPECIMEN);
         setGrabState(GrabState.OPEN);
     }
 
     public void init() {
-        rotateTurn = 0;
+        rotateDegrees = 0;
         specimen();
     }
 
     public void start() {
-        rotateTurn = 0;
+        rotateDegrees = 0;
         setPivotState(PivotState.HOVER);
         setRotateState(RotateState.HOVER);
         setGrabState(GrabState.OPEN);
@@ -175,6 +197,6 @@ public class IntakeSubsystem {
         telemetry.addData("Intake Grab State: ", grabState);
         telemetry.addData("Intake Rotate State: ", rotateState);
         telemetry.addData("Intake Pivot State: ", pivotState);
-        telemetry.addData("Rotate Turn: ", rotateTurn);
+        telemetry.addData("Rotate Degrees: ", rotateDegrees);
     }
 }

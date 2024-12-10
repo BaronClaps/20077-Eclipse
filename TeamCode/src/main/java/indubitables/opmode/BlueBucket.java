@@ -10,7 +10,7 @@ import indubitables.config.util.action.Actions;
 import indubitables.config.util.action.SequentialAction;
 
 @Disabled
-@Autonomous(name="BlueBucket", group="A")
+@Autonomous(name="BlueBucket", group="b")
 public class BlueBucket extends OpMode {
     public int pathState;
     public Auto auto;
