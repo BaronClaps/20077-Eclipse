@@ -202,7 +202,7 @@ public class SampleDetectionPipeline extends OpenCvPipeline
 
             // Output telemetry data
             telemetry.addData("Selected Stone", "Color: %s, Angle: %.2f, Distance: %.2f",
-                    bestStone.color, bestStone.angle, smallestDistance);
+                    bestStone.color, bestStone.angle - 90, smallestDistance);
         } else {
             telemetry.addData("Selected Stone", "No stone detected for color: %s", selectedColor);
         }

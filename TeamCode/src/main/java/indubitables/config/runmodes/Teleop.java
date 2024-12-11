@@ -41,9 +41,9 @@ public class Teleop {
     private Gamepad gamepad1, gamepad2;
     private Gamepad currentGamepad1 = new Gamepad(), currentGamepad2 = new Gamepad(), previousGamepad1 = new Gamepad(), previousGamepad2 = new Gamepad();
 
-    private Timer autoBucketTimer = new Timer(), transferTimer = new Timer();
+    private Timer autoBucketTimer = new Timer(), transferTimer = new Timer(), submersibleTimer = new Timer();
 
-    private int flip = 1, autoBucketState = -1, transferState = -1;
+    private int flip = 1, autoBucketState = -1, transferState = -1, submersibleState = -1;
 
     public double speed = 0.75;
 
@@ -139,7 +139,7 @@ public class Teleop {
             }
 
             if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down) {
-                intake.switchState();
+                startSubmersible();
             }
 
             if (currentGamepad2.left_bumper && !previousGamepad2.left_bumper) {
@@ -177,6 +177,7 @@ public class Teleop {
 
         autoBucket();
         transfer();
+        submersible();
 
         follower.update();
         telemetry.addData("X: ", follower.getPose().getX());
@@ -184,6 +185,8 @@ public class Teleop {
         telemetry.addData("Heading: ", follower.getPose().getHeading());
         telemetry.addData("Action Busy?: ", actionBusy);
         telemetry.addData("Auto Bucket State", autoBucketState);
+        telemetry.addData("Transfer State", transferState);
+        telemetry.addData("Submersible State", submersibleState);
         extend.telemetry();
         lift.telemetry();
         outtake.telemetry();
@@ -253,6 +256,38 @@ public class Teleop {
 
     public void startTransfer() {
         setTransferState(0);
+    }
+
+    private void submersible() {
+        switch (submersibleState) {
+            case 0:
+                intake.ground();
+                intake.open();
+                outtake.transfer();
+                setSubmersibleState(1);
+                break;
+            case 1:
+                if(submersibleTimer.getElapsedTimeSeconds() > 0.25) {
+                    intake.close();
+                    setSubmersibleState(2);
+                }
+                break;
+            case 2:
+                if (submersibleTimer.getElapsedTimeSeconds() > 0.25) {
+                    intake.hover();
+                    setSubmersibleState(-1);
+                }
+                break;
+        }
+    }
+
+    public void setSubmersibleState(int x) {
+        submersibleState = x;
+        submersibleTimer.resetTimer();
+    }
+
+    public void startSubmersible() {
+        setSubmersibleState(0);
     }
 
     private void autoBucket() {

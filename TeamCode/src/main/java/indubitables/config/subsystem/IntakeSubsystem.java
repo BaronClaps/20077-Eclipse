@@ -138,15 +138,6 @@ public class IntakeSubsystem {
         }
     }
 
-    public void switchState() {
-        if (pivotState == PivotState.HOVER) {
-            ground();
-        } else {
-            hover();
-        }
-    }
-
-
     public void open() {
         setGrabState(GrabState.OPEN);
     }

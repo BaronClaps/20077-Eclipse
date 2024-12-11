@@ -4,6 +4,8 @@ import static indubitables.config.util.FieldConstants.*;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+import indubitables.config.util.FieldConstants;
 import indubitables.pedroPathing.pathGeneration.BezierCurve;
 import indubitables.config.subsystem.OuttakeSubsystem;
 import indubitables.config.subsystem.ExtendSubsystem;
@@ -504,5 +506,13 @@ public class Auto {
         outtake.telemetry();
         intake.telemetry();
         telemetry.update();
+    }
+
+    public void stop() {
+        if (startLocation == RobotStart.BUCKET) {
+            bucketParkPose = follower.getPose();
+        } else {
+            observationParkPose = follower.getPose();
+        }
     }
 }
