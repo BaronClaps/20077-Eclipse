@@ -171,7 +171,7 @@ public class SampleDetectionPipeline extends OpenCvPipeline
     }
 
     public double getSelectedStoneDegrees() {
-        return selectedStone.angle;
+        return selectedStone.angle - 90;
     }
 
     public AnalyzedStone findBestStone(int imageWidth, int imageHeight) {
