@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 /** @author Baron Henderson
  * @version 1.0 | 12/3/24
  */
-
+// jay wuz hear
 public class OuttakeSubsystem {
 
     public enum GrabState {
@@ -148,8 +148,8 @@ public class OuttakeSubsystem {
 
     public void hang() {
         setRotateState(RotateState.SPECIMENSCORE);
-        leftPivot.setPosition(0.7);
-        rightPivot.setPosition(0.7);
+        leftPivot.setPosition(0.725); //.7
+        rightPivot.setPosition(0.725); //.7
         setGrabState(GrabState.CLOSED);
     }
 

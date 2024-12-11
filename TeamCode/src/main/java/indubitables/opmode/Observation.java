@@ -62,16 +62,25 @@ public class Observation extends OpMode {
                     auto.outtake.specimenGrab();
                     auto.extend.toFull();
                     auto.intake.hover();
+                    auto.intake.rotateDegrees(-45);
                     setPathState(1000);
                 }
             case 1000:
-                if(!auto.follower.isBusy()) {
-                    auto.follower.followPath(auto.dropoff1, true);
-                    setPathState(1001);
+                if(pathTimer.getElapsedTimeSeconds() > 2) {
+                    auto.intake.ground();
+                    if(pathTimer.getElapsedTimeSeconds() > 2.5) {
+                        auto.intake.close();
+                        setPathState(1001);
+                    }
                 }
                 break;
+            case 2000:
+                if(pathTimer.getElapsedTimeSeconds() > 1) {
+                    auto.follower.followPath(auto.dropoff1, true);
+                }
             case 1001:
                 if(!auto.follower.isBusy()) {
+                    auto.intake.open();
                     auto.follower.followPath(auto.preload2, true);
                     setPathState(1002);
                 }
@@ -79,7 +88,7 @@ public class Observation extends OpMode {
             case 1002:
                 if(!auto.follower.isBusy()) {
                     auto.follower.followPath(auto.dropoff2, true);
-                    setPathState(1003);
+                    setPathState(-1);
                 }
                 break;
             case 1003:
