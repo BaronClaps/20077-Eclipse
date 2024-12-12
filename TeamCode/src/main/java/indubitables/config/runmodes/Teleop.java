@@ -75,7 +75,6 @@ public class Teleop {
     public void start() {
         extend.setLimitToSample();
         outtake.start();
-        intake.init();
         follower.setPose(startPose);
         follower.startTeleopDrive();
     }
@@ -140,6 +139,7 @@ public class Teleop {
 
             if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down) {
                 startSubmersible();
+                outtake.score();
             }
 
             if (currentGamepad2.left_bumper && !previousGamepad2.left_bumper) {
@@ -208,40 +208,46 @@ public class Teleop {
 
     private void transfer() {
         switch (transferState) {
-            case 0:
-                intake.close();
-                outtake.transfer();
-                setTransferState(1);
-                break;
             case 1:
-                if(transferTimer.getElapsedTimeSeconds() > 0.5) {
-                    intake.setRotateState(IntakeSubsystem.RotateState.TRANSFER);
-                    setTransferState(2);
-                }
+                intake.close();
+                outtake.score();
+                intake.transfer();
+                setTransferState(2);
                 break;
             case 2:
-                if (transferTimer.getElapsedTimeSeconds() > 0.75) {
-                    intake.transfer();
+                if (transferTimer.getElapsedTimeSeconds() > 0.1) {
+                    outtake.setRotateState(OuttakeSubsystem.RotateState.TRANSFER);
                     extend.toZero();
                     setTransferState(3);
                 }
                 break;
             case 3:
-                if (transferTimer.getElapsedTimeSeconds() > 0.5) {
-                    outtake.close();
+                if (transferTimer.getElapsedTimeSeconds() > 0.2) {
+                    outtake.transfer();
                     setTransferState(4);
                 }
                 break;
             case 4:
-                if (transferTimer.getElapsedTimeSeconds() > 0.5) {
-                    intake.open();
-                    intake.hover();
+                if (transferTimer.getElapsedTimeSeconds() > 0.25) {
+                    outtake.close();
                     setTransferState(5);
                 }
                 break;
             case 5:
                 if (transferTimer.getElapsedTimeSeconds() > 0.5) {
                     outtake.score();
+                    setTransferState(6);
+                }
+                break;
+            case 6:
+                if (transferTimer.getElapsedTimeSeconds() > 0) {
+                    intake.open();
+                    setTransferState(7);
+                }
+                break;
+            case 7:
+                if (transferTimer.getElapsedTimeSeconds() > 0.25) {
+                    intake.hover();
                     actionBusy = false;
                     setTransferState(-1);
                 }
@@ -255,7 +261,7 @@ public class Teleop {
     }
 
     public void startTransfer() {
-        setTransferState(0);
+        setTransferState(1);
     }
 
     private void submersible() {
@@ -267,7 +273,7 @@ public class Teleop {
                 setSubmersibleState(1);
                 break;
             case 1:
-                if(submersibleTimer.getElapsedTimeSeconds() > 0.25) {
+                if(submersibleTimer.getElapsedTimeSeconds() > 0.3) {
                     intake.close();
                     setSubmersibleState(2);
                 }

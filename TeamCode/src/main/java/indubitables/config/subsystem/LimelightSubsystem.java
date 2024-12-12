@@ -31,8 +31,8 @@ public class LimelightSubsystem {
         // Camera field of view and resolution (adjust based on your camera's specs)
         private static final double CAMERA_FOV_HORIZONTAL = 54.5; // in degrees
         private static final double CAMERA_FOV_VERTICAL = 42; // in degrees
-        private static final int CAMERA_RESOLUTION_WIDTH = 960; // in pixels
-        private static final int CAMERA_RESOLUTION_HEIGHT = 720; // in pixels
+        private static final int CAMERA_RESOLUTION_WIDTH = 2592; // in pixels
+        private static final int CAMERA_RESOLUTION_HEIGHT = 1944; // in pixels
 
         private static final double INCHES_PER_PIXEL_HORIZONTAL = CAMERA_FOV_HORIZONTAL / CAMERA_RESOLUTION_WIDTH;
         private static final double INCHES_PER_PIXEL_VERTICAL = CAMERA_FOV_VERTICAL / CAMERA_RESOLUTION_HEIGHT;
@@ -40,35 +40,34 @@ public class LimelightSubsystem {
         private double cameraOffsetX, cameraOffsetY, cameraHeadingOffset;
 
         private Telemetry telemetry;
-        private Follower follower;
+//        private Follower follower;
         private List<Sample> detectedSamples;
 
         public limelightState state;
         private Limelight3A limelight;
         private LLResult result;
 
-        private Pose targetPose;
+        private Pose startPose,targetPose;
 
-        private int pipeline = 0;
+        private int pipeline = 9;
 
-        public LimelightSubsystem(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, Pose targetPose) {
+        public LimelightSubsystem(HardwareMap hardwareMap, Telemetry telemetry, Pose startPose, Pose targetPose) {
             this.telemetry = telemetry;
-            this.follower = follower;
+//            this.follower = follower;
+            this.startPose = startPose;
             this.targetPose = targetPose;
-            this.cameraOffsetX = -3;
-            this.cameraOffsetY = -3;
+            this.cameraOffsetX = 0;
+            this.cameraOffsetY = 0;
             this.cameraHeadingOffset = Math.toRadians(180);
             limelight = hardwareMap.get(Limelight3A.class, "limelight");
             limelight.setPollRateHz(100); // per sec
         }
 
         public void init() {
+            limelight.pipelineSwitch(9);
             limelight.start();
-            limelight.pipelineSwitch(pipeline);
 
-            update();
-
-            List<LLResultTypes.DetectorResult> detections = result.getDetectorResults();
+            List<LLResultTypes.DetectorResult> detections = limelight.getLatestResult().getDetectorResults();
             detectedSamples.clear();
 
             for (LLResultTypes.DetectorResult detection : detections) {
@@ -79,7 +78,7 @@ public class LimelightSubsystem {
                 double targetYInches = detection.getTargetYPixels() * INCHES_PER_PIXEL_VERTICAL;
 
                 // Calculate the field-relative position of the target
-                Pose cameraPose = getCameraPose(follower.getPose(), cameraOffsetX, cameraOffsetY, cameraHeadingOffset);
+                Pose cameraPose = getCameraPose(startPose, cameraOffsetX, cameraOffsetY, cameraHeadingOffset);
                 double fieldX = cameraPose.getX() + targetXInches * Math.cos(cameraPose.getHeading()) -
                         targetYInches * Math.sin(cameraPose.getHeading());
                 double fieldY = cameraPose.getY() + targetXInches * Math.sin(cameraPose.getHeading()) +
@@ -93,6 +92,8 @@ public class LimelightSubsystem {
 
             telemetry.addData("Detected Samples", detectedSamples.toString());
             telemetry.update();
+
+            limelight.stop();
         }
 
         public void start() {
