@@ -175,37 +175,37 @@ public class Auto {
                     .build();
 
             preload1 = follower.pathBuilder()
-                    .addPath(new BezierCurve(new Point(preloadPose), new Point(10, 40, Point.CARTESIAN), new Point(32, 34, Point.CARTESIAN)))
+                    .addPath(new BezierCurve(new Point(preloadPose), new Point(10, 40, Point.CARTESIAN), new Point(32, 33.75, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(preloadPose.getHeading(), Math.toRadians(305))
                     .setZeroPowerAccelerationMultiplier(0.5)
                     .build();
             dropoff1 = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(32, 34, Point.CARTESIAN), new Point(25, 34, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(32, 33.75, Point.CARTESIAN), new Point(25, 33.75, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(305),Math.toRadians(225))
-                    .setZeroPowerAccelerationMultiplier(0.5)
+                    .setZeroPowerAccelerationMultiplier(2)
                     .build();
             preload2 = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(25, 34.000, Point.CARTESIAN), new Point(31.5, 24.000, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(25, 33.75, Point.CARTESIAN), new Point(31.5, 24.25, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(225),Math.toRadians(305))
                     .setZeroPowerAccelerationMultiplier(0.5)
                     .build();
             dropoff2 = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(31.5, 24, Point.CARTESIAN),new Point(25, 24, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(31.5, 24.25, Point.CARTESIAN),new Point(25, 24.25, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(305),Math.toRadians(225))
-                    .setZeroPowerAccelerationMultiplier(0.5)
+                    .setZeroPowerAccelerationMultiplier(2)
                     .build();
             preload3 = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(25, 24, Point.CARTESIAN), new Point(32, 16, Point.CARTESIAN)))
+                    .addPath(new BezierCurve(new Point(25, 24.25, Point.CARTESIAN), new Point(28.5, 30, Point.CARTESIAN), new Point(32, 14.5, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(225),Math.toRadians(305))
                     .setZeroPowerAccelerationMultiplier(0.5)
                     .build();
             dropoff3 = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(32, 16, Point.CARTESIAN), new Point(25, 16, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(32, 14.5, Point.CARTESIAN), new Point(25, 17.5, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(305),Math.toRadians(225))
-                    .setZeroPowerAccelerationMultiplier(0.5)
+                    .setZeroPowerAccelerationMultiplier(2)
                     .build();
             setup = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(25, 16, Point.CARTESIAN), new Point(specimenSetPose)))
+                    .addPath(new BezierLine(new Point(25, 17.5, Point.CARTESIAN), new Point(specimenSetPose)))
                     .setLinearHeadingInterpolation(Math.toRadians(225), specimenSetPose.getHeading())
                     .setZeroPowerAccelerationMultiplier(0.5)
                     .build();
@@ -364,6 +364,7 @@ public class Auto {
             case 3:
                 if(chamberTimer.getElapsedTimeSeconds() > 0.25) {
                     outtake.hang();
+                    outtake.open();
                     actionBusy = false;
                     setChamberState(-1);
                 }

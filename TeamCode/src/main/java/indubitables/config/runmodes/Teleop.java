@@ -174,6 +174,7 @@ public class Teleop {
         }
 
         lift.updatePIDF();
+        outtake.loop();
 
         autoBucket();
         transfer();
@@ -196,7 +197,7 @@ public class Teleop {
 
     private void specimenGrabPos() {
         extend.setLimitToSpecimen();
-        outtake.specimenGrab();
+        outtake.startSpecGrab();
         intake.specimen();
     }
 

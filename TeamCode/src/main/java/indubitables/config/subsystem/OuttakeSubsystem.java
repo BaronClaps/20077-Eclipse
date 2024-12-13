@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import indubitables.pedroPathing.util.Timer;
+
 
 /** @author Baron Henderson
  * @version 1.0 | 12/3/24
@@ -30,6 +32,8 @@ public class OuttakeSubsystem {
     public RotateState rotateState;
     public PivotState pivotState;
     private Telemetry telemetry;
+    private Timer specScoreTimer = new Timer();
+    private int specGrabState = -1;
 
     public OuttakeSubsystem(HardwareMap hardwareMap, Telemetry telemetry, GrabState grabState, RotateState rotateState, PivotState pivotState) {
         grab = hardwareMap.get(Servo.class, "oG");
@@ -127,6 +131,39 @@ public class OuttakeSubsystem {
         setGrabState(GrabState.OPEN);
     }
 
+    public void specGrab() {
+        switch(specGrabState) {
+            case 0:
+                if(pivotState == PivotState.SPECIMENSCORE) {
+                    hang();
+                    setGrabState(GrabState.OPEN);
+                    setSpecGrabState(1);
+                } else {
+                    setRotateState(RotateState.SPECIMENGRAB);
+                    setPivotState(PivotState.SPECIMENGRAB);
+                    setGrabState(GrabState.OPEN);
+                    setSpecGrabState(-1);
+                }
+                break;
+            case 1:
+                if(specScoreTimer.getElapsedTimeSeconds() > 1) {
+                    setRotateState(RotateState.SPECIMENGRAB);
+                    setPivotState(PivotState.SPECIMENGRAB);
+                    setGrabState(GrabState.OPEN);
+                    setSpecGrabState(-1);
+                }
+        }
+    }
+
+    public void setSpecGrabState(int i) {
+        specGrabState = i;
+        specScoreTimer.resetTimer();
+    }
+
+    public void startSpecGrab() {
+        setSpecGrabState(0);
+    }
+
     public void specimenScore() {
         setRotateState(RotateState.SPECIMENSCORE);
         setPivotState(PivotState.SPECIMENSCORE);
@@ -144,6 +181,10 @@ public class OuttakeSubsystem {
         setPivotState(PivotState.TRANSFER);
         setRotateState(RotateState.TRANSFER);
         setGrabState(GrabState.CLOSED);
+    }
+
+    public void loop() {
+        specGrab();
     }
 
     public void hang() {

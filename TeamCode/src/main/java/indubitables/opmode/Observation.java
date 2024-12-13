@@ -8,7 +8,7 @@ import indubitables.pedroPathing.follower.Follower;
 import indubitables.config.runmodes.Auto;
 import indubitables.pedroPathing.util.Timer;
 
-@Autonomous(name="Observation", group="a")
+@Autonomous(name="Observation", group=".")
 public class Observation extends OpMode {
     public int pathState;
     public Auto auto;
@@ -67,19 +67,20 @@ public class Observation extends OpMode {
                 }
                 break;
             case 1000:
-                if(pathTimer.getElapsedTimeSeconds() > 2) {
+                if(pathTimer.getElapsedTimeSeconds() > 1.75) {
                     auto.intake.ground();
                     setPathState(2000);
                 }
                 break;
             case 2000:
-                if(pathTimer.getElapsedTimeSeconds() > 1) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.25) {
                     auto.intake.close();
                     setPathState(2001);
                 }
                 break;
             case 2001:
-                if(pathTimer.getElapsedTimeSeconds() > 0.75) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.25) {
+                    auto.outtake.specimenScore();
                     auto.intake.hover();
                     auto.follower.followPath(auto.dropoff1, true);
                     setPathState(1001);
@@ -94,19 +95,19 @@ public class Observation extends OpMode {
                 }
                 break;
             case 2002:
-                if(pathTimer.getElapsedTimeSeconds() > 2) {
+                if(pathTimer.getElapsedTimeSeconds() > 1.5) {
                     auto.intake.ground();
                     setPathState(2003);
                 }
                 break;
             case 2003:
-                if(pathTimer.getElapsedTimeSeconds() > 1) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.35) {
                     auto.intake.close();
                     setPathState(1002);
                 }
                 break;
             case 1002:
-                if(pathTimer.getElapsedTimeSeconds() > 0.75) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.25) {
                     auto.intake.hover();
                     auto.follower.followPath(auto.dropoff2, true);
                     setPathState(1003);
@@ -115,25 +116,25 @@ public class Observation extends OpMode {
             case 1003:
                 if(!auto.follower.isBusy()) {
                     auto.intake.open();
-                    auto.intake.rotateDegrees(45);
+                    auto.intake.rotateDegrees(-60);
                     auto.follower.followPath(auto.preload3, true);
                     setPathState(2004);
                 }
                 break;
             case 2004:
-                if(pathTimer.getElapsedTimeSeconds() > 2) {
+                if(pathTimer.getElapsedTimeSeconds() > 1.5) {
                     auto.intake.ground();
                     setPathState(2005);
                 }
                 break;
             case 2005:
-                if(pathTimer.getElapsedTimeSeconds() > 1) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.25) {
                     auto.intake.close();
                     setPathState(1004);
                 }
                 break;
             case 1004:
-                if(!auto.follower.isBusy()) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.25) {
                     auto.intake.hover();
                     auto.follower.followPath(auto.dropoff3, true);
                     setPathState(1005);
@@ -141,29 +142,27 @@ public class Observation extends OpMode {
                 break;
             case 1005:
                 if(!auto.follower.isBusy()) {
+                    auto.intake.specimen();
                     auto.intake.open();
-                    auto.intake.setRotateState(IntakeSubsystem.RotateState.TRANSFER);
-                    auto.intake.transfer();
                     auto.extend.toZero();
                     auto.follower.followPath(auto.setup, true);
-                    setPathState(-1);
-                }
-                break;
-            case 2: //Once the Pathchain finishes, begins the Specimen State Machine
-                if((auto.follower.getPose().getX() < auto.specimenSetPose.getX() + 1) && (auto.follower.getPose().getY() > auto.specimenSetPose.getY() - 0.5)) {
-                    auto.startSpecimen();
                     setPathState(3);
                 }
                 break;
-            case 3: //Once the Specimen State Machine finishes, begins the grab path
-                if(auto.actionNotBusy()) {
+            case 3:
+                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
+                    auto.startSpecimen();
+                    setPathState(2);
+                }
+            case 2: //Once the Pathchain finishes, begins the Specimen State Machine
+                if() {
                     auto.follower.setMaxPower(0.9);
                     auto.follower.followPath(auto.grab1, false);
                     setPathState(4);
                 }
                 break;
             case 4: //Closes the claw when the follower reaches the grab1 position
-                if(pathTimer.getElapsedTimeSeconds() > 0.525) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.35) {
                     auto.outtake.close();
                     setPathState(5);
                 }
@@ -195,7 +194,7 @@ public class Observation extends OpMode {
                 }
                 break;
             case 9:
-                if(pathTimer.getElapsedTimeSeconds() > 1.5) {
+                if(pathTimer.getElapsedTimeSeconds() > 1) {
                     auto.outtake.close();
                     setPathState(10);
                 }
@@ -231,7 +230,7 @@ public class Observation extends OpMode {
                 }
                 break;
             case 15:
-                if(pathTimer.getElapsedTimeSeconds() > 1.5) {
+                if(pathTimer.getElapsedTimeSeconds() > 1) {
                    auto.outtake.close();
                     setPathState(16);
                 }
@@ -267,7 +266,7 @@ public class Observation extends OpMode {
                 }
                 break;
             case 21:
-                if(pathTimer.getElapsedTimeSeconds() > 1.5) {
+                if(pathTimer.getElapsedTimeSeconds() > 1) {
                     auto.outtake.close();
                     setPathState(22);
                 }
