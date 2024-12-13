@@ -185,12 +185,12 @@ public class Auto {
                     .setZeroPowerAccelerationMultiplier(0.5)
                     .build();
             preload2 = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(25, 34.000, Point.CARTESIAN), new Point(32, 24.000, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(25, 34.000, Point.CARTESIAN), new Point(31.5, 24.000, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(225),Math.toRadians(305))
                     .setZeroPowerAccelerationMultiplier(0.5)
                     .build();
             dropoff2 = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(32, 24, Point.CARTESIAN),new Point(25, 24, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(31.5, 24, Point.CARTESIAN),new Point(25, 24, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(305),Math.toRadians(225))
                     .setZeroPowerAccelerationMultiplier(0.5)
                     .build();

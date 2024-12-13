@@ -65,46 +65,83 @@ public class Observation extends OpMode {
                     auto.intake.rotateDegrees(-45);
                     setPathState(1000);
                 }
+                break;
             case 1000:
                 if(pathTimer.getElapsedTimeSeconds() > 2) {
                     auto.intake.ground();
-                    if(pathTimer.getElapsedTimeSeconds() > 2.5) {
-                        auto.intake.close();
-                        setPathState(1001);
-                    }
+                    setPathState(2000);
                 }
                 break;
             case 2000:
                 if(pathTimer.getElapsedTimeSeconds() > 1) {
-                    auto.follower.followPath(auto.dropoff1, true);
+                    auto.intake.close();
+                    setPathState(2001);
                 }
+                break;
+            case 2001:
+                if(pathTimer.getElapsedTimeSeconds() > 0.75) {
+                    auto.intake.hover();
+                    auto.follower.followPath(auto.dropoff1, true);
+                    setPathState(1001);
+                }
+                break;
             case 1001:
-                if(!auto.follower.isBusy()) {
+                if(pathTimer.getElapsedTimeSeconds() > 1) {
                     auto.intake.open();
+                    auto.intake.rotateDegrees(-60);
                     auto.follower.followPath(auto.preload2, true);
+                    setPathState(2002);
+                }
+                break;
+            case 2002:
+                if(pathTimer.getElapsedTimeSeconds() > 2) {
+                    auto.intake.ground();
+                    setPathState(2003);
+                }
+                break;
+            case 2003:
+                if(pathTimer.getElapsedTimeSeconds() > 1) {
+                    auto.intake.close();
                     setPathState(1002);
                 }
                 break;
             case 1002:
-                if(!auto.follower.isBusy()) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.75) {
+                    auto.intake.hover();
                     auto.follower.followPath(auto.dropoff2, true);
-                    setPathState(-1);
+                    setPathState(1003);
                 }
                 break;
             case 1003:
                 if(!auto.follower.isBusy()) {
+                    auto.intake.open();
+                    auto.intake.rotateDegrees(45);
                     auto.follower.followPath(auto.preload3, true);
+                    setPathState(2004);
+                }
+                break;
+            case 2004:
+                if(pathTimer.getElapsedTimeSeconds() > 2) {
+                    auto.intake.ground();
+                    setPathState(2005);
+                }
+                break;
+            case 2005:
+                if(pathTimer.getElapsedTimeSeconds() > 1) {
+                    auto.intake.close();
                     setPathState(1004);
                 }
                 break;
             case 1004:
                 if(!auto.follower.isBusy()) {
+                    auto.intake.hover();
                     auto.follower.followPath(auto.dropoff3, true);
                     setPathState(1005);
                 }
                 break;
             case 1005:
                 if(!auto.follower.isBusy()) {
+                    auto.intake.open();
                     auto.intake.setRotateState(IntakeSubsystem.RotateState.TRANSFER);
                     auto.intake.transfer();
                     auto.extend.toZero();
