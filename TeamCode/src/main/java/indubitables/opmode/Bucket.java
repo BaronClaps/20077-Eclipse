@@ -51,55 +51,53 @@ public class Bucket extends OpMode {
                 }
                 break;
             case 1:
-                if(!auto.follower.isBusy() && auto.actionNotBusy()) {
+                if(auto.actionNotBusy()) {
+                    auto.outtake.open();
                     auto.follower.followPath(auto.element1);
-                    setPathState(-1);
+                    auto.intake.hover();
+                    setPathState(2);
                 }
                 break;
             case 2:
-                if(!auto.follower.isBusy()) {
-                    //auto.startIntake();
+                if(pathTimer.getElapsedTimeSeconds() > 0.25) {
+                    auto.outtake.transfer();
                     setPathState(3);
                 }
                 break;
             case 3:
                 if(!auto.follower.isBusy()) {
-                    //auto.startTransfer();
+                    auto.intake.ground();
                     setPathState(4);
                 }
                 break;
             case 4:
-                if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    ///auto.startBucket();
-                    auto.follower.setMaxPower(0.5);
-                    auto.follower.followPath(auto.score1);
+                if(pathTimer.getElapsedTimeSeconds() > 0.25) {
+                    auto.startTransfer();
                     setPathState(5);
                 }
                 break;
             case 5:
-                if(!auto.follower.isBusy() && auto.actionNotBusy()) {
-                    //auto.startIntake();
-                    auto.follower.setMaxPower(0.5);
-                    auto.follower.followPath(auto.element2);
+                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
+                    auto.follower.followPath(auto.score1);
                     setPathState(6);
                 }
                 break;
             case 6:
-                if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    //auto.startTransfer();
+                if(auto.actionNotBusy()) {
+                    auto.liftPIDF = true;
+                    auto.lift.toHighBucket();
+                    auto.outtake.score();
                     setPathState(7);
                 }
                 break;
             case 7:
-                if(auto.actionNotBusy() && !auto.follower.isBusy()) {
-                    //auto.startBucket();
-                    auto.follower.setMaxPower(0.5);
-                    auto.follower.followPath(auto.score2);
-                    setPathState(8);
+                if(auto.lift.getPos() >= 1740) {
+                    auto.outtake.open();
+                    setPathState(-1);
                 }
                 break;
             case 8:
-                if(!auto.follower.isBusy() && auto.actionNotBusy()) {
+                if(!auto.follower.isBusy()) {
                     //auto.startIntake();
                     auto.follower.setMaxPower(0.5);
                     auto.follower.followPath(auto.element3);
