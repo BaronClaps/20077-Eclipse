@@ -13,20 +13,15 @@ public class FieldConstants {
     }
 
     // Bucket Poses
-    public static Pose bucketStartPose = new Pose(7.5, 78.75, Math.toRadians(180));
-    public static Pose bucketPreloadPose = new Pose(29.25, 78.375, Math.toRadians(180));
+    public static Pose bucketStartPose = new Pose(7.5, 78.75, Math.toRadians(270));
 
-    public static Pose bucketLeftSamplePose = new Pose(22, 110, 0);
-    public static Pose bucketLeftSampleControlPose = new Pose(20, 96);
-    public static Pose bucketMidSamplePose = new Pose(22, 116, 0);
-    public static Pose bucketMidSampleControlPose = new Pose(20, 86);
-    public static Pose bucketRightSamplePose = new Pose(22, 122, 0);
-    public static Pose bucketRightSampleControlPose = new Pose(20, 96);
+    public static Pose bucketLeftSampleGrabPose = new Pose(35.1, 120.8, Math.toRadians(0));
+    public static Pose bucketMidSampleGrabPose = new Pose(34.8, 131.4, Math.toRadians(0));
+    public static Pose bucketRightSampleGrabPose = new Pose(45.4, 129.4, Math.toRadians(90));
 
-    public static Pose bucketScorePose = new Pose(20, 128, Math.toRadians(-45));
+    public static Pose bucketScorePose = new Pose(16, 128, Math.toRadians(315));
 
-    public static Pose bucketParkPose = new Pose(62, 97.75, Math.toRadians(90));
-    public static Pose bucketParkControlPose = new Pose(60.25, 123.5);
+    public static Pose bucketParkPose = new Pose(60.7, 95.6, Math.toRadians(90));
 
     // Observation Poses
     public static Pose observationStartPose = new Pose(7.5, 65.25, Math.toRadians(180));
@@ -34,7 +29,7 @@ public class FieldConstants {
 
     public static Pose observationSpecimenSetPose = new Pose(12, 35, Math.toRadians(180));
 
-    public static Pose observationSpecimenPickupPose = new Pose(6.75, 37, Math.toRadians(180));
+    public static Pose observationSpecimenPickupPose = new Pose(6.75, 10, Math.toRadians(180));
     public static Pose observationSpecimenPickup2Pose = new Pose(6.75, 37, Math.toRadians(180));
     public static Pose observationSpecimenPickup3Pose = new Pose(6.75, 37, Math.toRadians(180));
     public static Pose observationSpecimenPickup4Pose = new Pose(6.75, 37, Math.toRadians(180));

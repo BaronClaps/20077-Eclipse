@@ -6,25 +6,19 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import indubitables.pedroPathing.follower.Follower;
 import indubitables.config.runmodes.Auto;
-import indubitables.config.util.action.Actions;
-import indubitables.config.util.action.SequentialAction;
+import indubitables.pedroPathing.util.Timer;
 
 @Disabled
-@Autonomous(name="BlueBucket", group="b")
-public class BlueBucket extends OpMode {
+@Autonomous(name="Bucket", group="b")
+public class Bucket extends OpMode {
     public int pathState;
     public Auto auto;
 
+    public Timer pathTimer = new Timer();
+
     @Override
     public void init() {
-        auto = new Auto(hardwareMap, telemetry, new Follower(hardwareMap), true, true);
-
-        telemetry.addData("state", pathState);
-        telemetry.addData("x", auto.follower.getPose().getX());
-        telemetry.addData("y", auto.follower.getPose().getY());
-        telemetry.addData("h", auto.follower.getPose().getHeading());
-        telemetry.addData("actionBusy", auto.actionBusy);
-        telemetry.update();
+        auto = new Auto(hardwareMap, telemetry, new Follower(hardwareMap), true, false);
     }
 
     @Override
@@ -35,24 +29,26 @@ public class BlueBucket extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addData("State: ", pathState);
+        telemetry.addData("Path Timer: ", pathTimer.getElapsedTimeSeconds());
         auto.update();
         pathUpdate();
-
-        telemetry.addData("state", pathState);
-        telemetry.addData("x", auto.follower.getPose().getX());
-        telemetry.addData("y", auto.follower.getPose().getY());
-        telemetry.addData("h", auto.follower.getPose().getHeading());
-        telemetry.addData("actionBusy", auto.actionBusy);
-        telemetry.update();
     }
 
     public void pathUpdate() {
         switch (pathState) {
-            case 0:
-                auto.follower.setMaxPower(0.7);
-               // auto.startChamber();
-                auto.follower.followPath(auto.preload);
-                setPathState(1);
+            case 0: //Runs to the position of the preload and holds it's point at 0.5 power
+                auto.liftPIDF = false;
+                auto.extend.toZero();
+                auto.startChamber();
+                setPathState(999);
+                break;
+            case 999:
+                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
+                    auto.follower.setMaxPower(1);
+                    auto.follower.followPath(auto.preload, false);
+                    setPathState(1);
+                }
                 break;
             case 1:
                 if(!auto.follower.isBusy() && auto.actionNotBusy()) {
@@ -67,7 +63,7 @@ public class BlueBucket extends OpMode {
                 }
                 break;
             case 3:
-                if(/*auto.actionNotBusy() && */!auto.follower.isBusy()) {
+                if(!auto.follower.isBusy()) {
                     //auto.startTransfer();
                     setPathState(4);
                 }
