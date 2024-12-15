@@ -139,33 +139,33 @@ public class Auto {
                     .build();
 
             element1 = follower.pathBuilder()
-                    .addPath(new BezierCurve(new Point(preloadPose), new Point(sample1Pose)))
-                    .setLinearHeadingInterpolation(preloadPose.getHeading(), sample1Pose.getHeading())
+                    .addPath(new BezierCurve(new Point(preloadPose), new Point(sample1Pose)));
+                    .setLinearHeadingInterpolation(preloadPose.getHeading(), sample1Pose.getHeading());
                     .build();
 
             score1= follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(sample1Pose), new Point(sampleScorePose)))
-                    .setLinearHeadingInterpolation(sample1Pose.getHeading(), sampleScorePose.getHeading())
+                    .addPath(new BezierLine(new Point(sample1Pose), new Point(sampleScorePose)));
+                    .setLinearHeadingInterpolation(sample1Pose.getHeading(), sampleScorePose.getHeading());
                     .build();
 
             element2 = follower.pathBuilder()
-                    .addPath(new BezierCurve(new Point(sampleScorePose), new Point(sample2ControlPose), new Point(sample2Pose)))
-                    .setLinearHeadingInterpolation(sampleScorePose.getHeading(), sample2Pose.getHeading())
+                    .addPath(new BezierCurve(new Point(sampleScorePose), new Point(sample2ControlPose), new Point(sample2Pose)));
+                    .setLinearHeadingInterpolation(sampleScorePose.getHeading(), sample2Pose.getHeading());
                     .build();
 
             score2 = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(sample2Pose), new Point(sampleScorePose)))
-                    .setLinearHeadingInterpolation(sample2Pose.getHeading(), sampleScorePose.getHeading())
+                    .addPath(new BezierLine(new Point(sample2Pose), new Point(sampleScorePose)));
+                    .setLinearHeadingInterpolation(sample2Pose.getHeading(), sampleScorePose.getHeading());
                     .build();
 
             element3 = follower.pathBuilder()
-                    .addPath(new BezierCurve(new Point(sampleScorePose), new Point(sample3ControlPose), new Point(sample3Pose)))
-                    .setLinearHeadingInterpolation(sampleScorePose.getHeading(), sample3Pose.getHeading())
+                    .addPath(new BezierCurve(new Point(sampleScorePose), new Point(sample3ControlPose), new Point(sample3Pose)));
+                    .setLinearHeadingInterpolation(sampleScorePose.getHeading(), sample3Pose.getHeading());
                     .build();
 
             score3 = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(sample3Pose), new Point(sampleScorePose)))
-                    .setLinearHeadingInterpolation(sample3Pose.getHeading(), sampleScorePose.getHeading())
+                    .addPath(new BezierLine(new Point(sample3Pose), new Point(sampleScorePose)));
+                    .setLinearHeadingInterpolation(sample3Pose.getHeading(), sampleScorePose.getHeading());
                     .build();
 
             park = follower.pathBuilder()
