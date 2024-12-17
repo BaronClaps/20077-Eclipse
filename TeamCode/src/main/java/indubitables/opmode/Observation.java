@@ -65,7 +65,6 @@ public class Observation extends OpMode {
                 break;
             case 3: //Closes the claw when the follower reaches the grab1 position
                 if(auto.follower.getPose().getX() <= (auto.grab1Pose.getX() + 1)) {
-                    auto.follower.setMaxPower(0.7);
                     setPathState(4);
                 }
                 break;

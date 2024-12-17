@@ -21,7 +21,7 @@ public class RobotConstants {
 
     // Intake
     public static double intakeGrabClose = 0.12;
-    public static double intakeGrabOpen = 0.27;
+    public static double intakeGrabOpen = 0.35;
     public static double intakeRotateTransfer = 0.355;
     public static double intakeRotateHoverVertical = 0.3;
 //    public static double intakeRotateLeftHoverHorizontal = 0.41;

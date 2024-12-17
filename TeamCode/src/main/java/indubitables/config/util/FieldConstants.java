@@ -29,10 +29,10 @@ public class FieldConstants {
 
     public static Pose observationSpecimenSetPose = new Pose(12, 35, Math.toRadians(180));
 
-    public static Pose observationSpecimenPickupPose = new Pose(6.75, 10, Math.toRadians(180));
-    public static Pose observationSpecimenPickup2Pose = new Pose(6.75, 37, Math.toRadians(180));
-    public static Pose observationSpecimenPickup3Pose = new Pose(6.75, 37, Math.toRadians(180));
-    public static Pose observationSpecimenPickup4Pose = new Pose(6.75, 37, Math.toRadians(180));
+    public static Pose observationSpecimenPickupPose = new Pose(6.25, 37, Math.toRadians(180));
+    public static Pose observationSpecimenPickup2Pose = new Pose(6.25, 37, Math.toRadians(180));
+    public static Pose observationSpecimenPickup3Pose = new Pose(6.25, 37, Math.toRadians(180));
+    public static Pose observationSpecimenPickup4Pose = new Pose(6.25, 37, Math.toRadians(180));
 
     public static Pose observationSpecimen1Pose = new Pose(38, 76, Math.toRadians(180));
     public static Pose observationSpecimen2Pose = new Pose(38, 79.75, Math.toRadians(180));

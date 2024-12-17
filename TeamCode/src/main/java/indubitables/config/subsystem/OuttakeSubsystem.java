@@ -146,7 +146,7 @@ public class OuttakeSubsystem {
                 }
                 break;
             case 1:
-                if(specScoreTimer.getElapsedTimeSeconds() > 1) {
+                if(specScoreTimer.getElapsedTimeSeconds() > 0.65) {
                     setRotateState(RotateState.SPECIMENGRAB);
                     setPivotState(PivotState.SPECIMENGRAB);
                     setGrabState(GrabState.OPEN);
