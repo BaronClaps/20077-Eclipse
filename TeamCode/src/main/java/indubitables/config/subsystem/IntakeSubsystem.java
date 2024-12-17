@@ -47,7 +47,7 @@ public class IntakeSubsystem {
 
     public void setRotateState(RotateState state) {
         if (state == RotateState.TRANSFER) {
-            leftRotate.setPosition(intakeRotateTransfer-0.05);
+            leftRotate.setPosition(intakeRotateTransfer-0.03);
             rightRotate.setPosition(intakeRotateTransfer);
             this.rotateState = RotateState.TRANSFER;
         } else if (state == RotateState.GROUND) {
