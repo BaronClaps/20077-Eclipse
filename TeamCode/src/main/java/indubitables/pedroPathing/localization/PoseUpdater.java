@@ -344,7 +344,7 @@ public class PoseUpdater {
     /**
      *
      */
-    public void resetIMU() {
+    public void resetIMU() throws InterruptedException {
         localizer.resetIMU();
     }
 }
