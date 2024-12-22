@@ -89,13 +89,13 @@ public class Observation extends OpMode {
                 break;
             case 7: //Starts the Specimen State Machine
                 if(auto.actionNotBusy()) {
-                    auto.follower.setMaxPower(0.9);
+                    auto.follower.setMaxPower(0.95);
                     auto.follower.followPath(auto.grab2, true);
                     setPathState(8);
                 }
                 break;
             case 8: //Begins the path for grab 2 & closes the claw once it reaches position and passes 0.75 seconds
-                if(pathTimer.getElapsedTimeSeconds() > 1) {
+                if(pathTimer.getElapsedTimeSeconds() > 1.25) {
                     auto.startSpecimen();
                     setPathState(9);
                 }
