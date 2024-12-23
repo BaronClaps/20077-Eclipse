@@ -95,13 +95,13 @@ public class Observation extends OpMode {
                 }
                 break;
             case 8: //Begins the path for grab 2 & closes the claw once it reaches position and passes 0.75 seconds
-                if(pathTimer.getElapsedTimeSeconds() > 1.25) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.7) {
                     auto.startSpecimen();
                     setPathState(9);
                 }
                 break;
             case 9:
-                if(pathTimer.getElapsedTimeSeconds() > 1) {
+                if(pathTimer.getElapsedTimeSeconds() > 1.35) {
                     auto.outtake.close();
                     setPathState(10);
                 }
@@ -112,7 +112,7 @@ public class Observation extends OpMode {
                 }
                 break;
             case 11: //Drives to chamber once action finishes
-                 auto.follower.setMaxPower(0.8);
+                 auto.follower.setMaxPower(0.95);
                  auto.follower.followPath(auto.specimen2, true);
                  setPathState(12);
                 break;
@@ -124,19 +124,19 @@ public class Observation extends OpMode {
                 break;
             case 13: //Starts the Specimen State Machine
                 if(auto.actionNotBusy()) {
-                    auto.follower.setMaxPower(0.9);
+                    auto.follower.setMaxPower(0.95);
                     auto.follower.followPath(auto.grab3, true);
                     setPathState(14);
                 }
                 break;
             case 14: //Begins the path for grab 2 & closes the claw once it reaches position and passes 0.75 seconds
-                if(pathTimer.getElapsedTimeSeconds() > 1) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.7) {
                     auto.startSpecimen();
                     setPathState(15);
                 }
                 break;
             case 15:
-                if(pathTimer.getElapsedTimeSeconds() > 1) {
+                if(pathTimer.getElapsedTimeSeconds() > 1.3) {
                    auto.outtake.close();
                     setPathState(16);
                 }
@@ -148,7 +148,7 @@ public class Observation extends OpMode {
                 }
                 break;
             case 17: //Drives to chamber once action finishes
-                auto.follower.setMaxPower(0.9);
+                auto.follower.setMaxPower(0.95);
                 auto.follower.followPath(auto.specimen3, true);
                 setPathState(18);
                 break;
@@ -160,19 +160,19 @@ public class Observation extends OpMode {
                 break;
             case 19: //Starts the Specimen State Machine
                 if(auto.actionNotBusy()) {
-                    auto.follower.setMaxPower(0.9);
+                    auto.follower.setMaxPower(0.95);
                     auto.follower.followPath(auto.grab4, true);
                     setPathState(20);
                 }
                 break;
             case 20: //Begins the path for grab 2 & closes the claw once it reaches position and passes 0.75 seconds
-                if(pathTimer.getElapsedTimeSeconds() > 1) {
+                if(pathTimer.getElapsedTimeSeconds() > 0.7) {
                     auto.startSpecimen();
                     setPathState(21);
                 }
                 break;
             case 21:
-                if(pathTimer.getElapsedTimeSeconds() > 1) {
+                if(pathTimer.getElapsedTimeSeconds() > 1.3) {
                     auto.outtake.close();
                     setPathState(22);
                 }
@@ -184,7 +184,7 @@ public class Observation extends OpMode {
                 }
                 break;
             case 23: //Drives to chamber once action finishes
-                auto.follower.setMaxPower(0.9);
+                auto.follower.setMaxPower(0.95);
                 auto.follower.followPath(auto.specimen4, true);
                 setPathState(24);
                 break;

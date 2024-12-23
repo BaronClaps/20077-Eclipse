@@ -211,7 +211,7 @@ public class Teleop {
         switch (transferState) {
             case 1:
                 intake.close();
-                outtake.score();
+                outtake.transferHigh();
                 intake.transfer();
                 setTransferState(2);
                 break;

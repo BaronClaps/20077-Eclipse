@@ -113,6 +113,11 @@ public class OuttakeSubsystem {
         setGrabState(GrabState.CLOSED);
     }
 
+    public void transferHigh() {
+        leftPivot.setPosition(outtakePivotTransfer+0.1);
+        rightPivot.setPosition(outtakePivotTransfer+0.1);
+    }
+
     public void transfer() {
         setRotateState(RotateState.TRANSFER);
         setPivotState(PivotState.TRANSFER);

@@ -1,5 +1,8 @@
 package indubitables.pedroPathing.follower;
 
+import static indubitables.pedroPathing.tuning.FollowerConstants.forwardZeroPowerAcceleration;
+import static indubitables.pedroPathing.tuning.FollowerConstants.lateralZeroPowerAcceleration;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -686,21 +689,39 @@ public class Follower {
         Vector forwardHeadingVector = new Vector(1.0, poseUpdater.getPose().getHeading());
         double forwardVelocity = MathFunctions.dotProduct(forwardHeadingVector, velocity);
         double forwardDistanceToGoal = MathFunctions.dotProduct(forwardHeadingVector, distanceToGoalVector);
-        double forwardVelocityGoal = MathFunctions.getSign(forwardDistanceToGoal) * Math.sqrt(Math.abs(-2 * currentPath.getZeroPowerAccelerationMultiplier() * FollowerConstants.forwardZeroPowerAcceleration * forwardDistanceToGoal));
-        double forwardVelocityZeroPowerDecay = forwardVelocity - MathFunctions.getSign(forwardDistanceToGoal) * Math.sqrt(Math.abs(Math.pow(forwardVelocity, 2) + 2 * FollowerConstants.forwardZeroPowerAcceleration * forwardDistanceToGoal));
+
+        double forwardZeroPowerLocal = forwardZeroPowerAcceleration;
+
+        if (forwardDistanceToGoal < 0) {
+            forwardZeroPowerLocal = Math.abs(forwardZeroPowerLocal);
+        } else if (forwardDistanceToGoal > 0) {
+            forwardZeroPowerLocal = -Math.abs(forwardZeroPowerLocal);
+        }
+
+        double forwardVelocityGoal = MathFunctions.getSign(forwardDistanceToGoal) * Math.sqrt(Math.abs(-2 * currentPath.getZeroPowerAccelerationMultiplier() * forwardZeroPowerLocal * forwardDistanceToGoal));
+        double forwardVelocityZeroPowerDecay = forwardVelocity - MathFunctions.getSign(forwardDistanceToGoal) * Math.sqrt(Math.abs(Math.pow(forwardVelocity, 2) + 2 * forwardZeroPowerLocal * forwardDistanceToGoal));
 
         Vector lateralHeadingVector = new Vector(1.0, poseUpdater.getPose().getHeading() - Math.PI / 2);
         double lateralVelocity = MathFunctions.dotProduct(lateralHeadingVector, velocity);
         double lateralDistanceToGoal = MathFunctions.dotProduct(lateralHeadingVector, distanceToGoalVector);
-        double lateralVelocityGoal = MathFunctions.getSign(lateralDistanceToGoal) * Math.sqrt(Math.abs(-2 * currentPath.getZeroPowerAccelerationMultiplier() * FollowerConstants.lateralZeroPowerAcceleration * lateralDistanceToGoal));
-        double lateralVelocityZeroPowerDecay = lateralVelocity - MathFunctions.getSign(lateralDistanceToGoal) * Math.sqrt(Math.abs(Math.pow(lateralVelocity, 2) + 2 * FollowerConstants.lateralZeroPowerAcceleration * lateralDistanceToGoal));
+
+        double lateralZeroPowerLocal = lateralZeroPowerAcceleration;
+
+        if (lateralDistanceToGoal < 0) {
+            lateralZeroPowerLocal = Math.abs(lateralZeroPowerLocal);
+        } else if (lateralDistanceToGoal > 0) {
+            lateralZeroPowerLocal = -Math.abs(lateralZeroPowerLocal);
+        }
+
+        double lateralVelocityGoal = MathFunctions.getSign(lateralDistanceToGoal) * Math.sqrt(Math.abs(-2 * currentPath.getZeroPowerAccelerationMultiplier() * lateralZeroPowerLocal * lateralDistanceToGoal));
+        double lateralVelocityZeroPowerDecay = lateralVelocity - MathFunctions.getSign(lateralDistanceToGoal) * Math.sqrt(Math.abs(Math.pow(lateralVelocity, 2) + 2 * lateralZeroPowerLocal * lateralDistanceToGoal));
 
         Vector forwardVelocityError = new Vector(forwardVelocityGoal - forwardVelocityZeroPowerDecay - forwardVelocity, forwardHeadingVector.getTheta());
         Vector lateralVelocityError = new Vector(lateralVelocityGoal - lateralVelocityZeroPowerDecay - lateralVelocity, lateralHeadingVector.getTheta());
         Vector velocityErrorVector = MathFunctions.addVectors(forwardVelocityError, lateralVelocityError);
 
         previousRawDriveError = rawDriveError;
-        rawDriveError =  velocityErrorVector.getMagnitude() * MathFunctions.getSign(MathFunctions.dotProduct(velocityErrorVector, currentPath.getClosestPointTangentVector()));
+        rawDriveError = velocityErrorVector.getMagnitude() * MathFunctions.getSign(MathFunctions.dotProduct(velocityErrorVector, currentPath.getClosestPointTangentVector()));
 
         double projection = 2 * driveErrors[1] - driveErrors[0];
 
