@@ -208,7 +208,7 @@ public class Auto {
             grab2 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimen1Pose), new Point(grab2Pose)))
                     .setLinearHeadingInterpolation(specimen1Pose.getHeading(), grab2Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(2)
+                    .setZeroPowerAccelerationMultiplier(2.5)
                     .build();
 
             specimen2 = follower.pathBuilder()
@@ -220,7 +220,7 @@ public class Auto {
             grab3 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimen2Pose), new Point(grab3Pose)))
                     .setLinearHeadingInterpolation(specimen2Pose.getHeading(), grab3Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(2)
+                    .setZeroPowerAccelerationMultiplier(2.5)
                     .build();
 
             specimen3 = follower.pathBuilder()
@@ -232,7 +232,7 @@ public class Auto {
             grab4 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimen3Pose), new Point(grab4Pose)))
                     .setLinearHeadingInterpolation(specimen3Pose.getHeading(), grab4Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(2)
+                    .setZeroPowerAccelerationMultiplier(2.5)
                     .build();
 
             specimen4 = follower.pathBuilder()

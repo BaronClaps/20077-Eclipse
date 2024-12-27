@@ -76,7 +76,7 @@ public class Observation extends OpMode {
                 break;
             case 5: //Sets the arm to a neutral position and puts lifts to zero;
                 if(pathTimer.getElapsedTimeSeconds() > 0.25) {
-                    auto.follower.setMaxPower(0.8);
+                    auto.follower.setMaxPower(1);
                     auto.follower.followPath(auto.specimen1, true);
                     setPathState(6);
                 }
@@ -89,7 +89,7 @@ public class Observation extends OpMode {
                 break;
             case 7: //Starts the Specimen State Machine
                 if(auto.actionNotBusy()) {
-                    auto.follower.setMaxPower(0.95);
+                    auto.follower.setMaxPower(1);
                     auto.follower.followPath(auto.grab2, true);
                     setPathState(8);
                 }
@@ -112,7 +112,7 @@ public class Observation extends OpMode {
                 }
                 break;
             case 11: //Drives to chamber once action finishes
-                 auto.follower.setMaxPower(0.95);
+                 auto.follower.setMaxPower(1);
                  auto.follower.followPath(auto.specimen2, true);
                  setPathState(12);
                 break;
@@ -124,7 +124,7 @@ public class Observation extends OpMode {
                 break;
             case 13: //Starts the Specimen State Machine
                 if(auto.actionNotBusy()) {
-                    auto.follower.setMaxPower(0.95);
+                    auto.follower.setMaxPower(1);
                     auto.follower.followPath(auto.grab3, true);
                     setPathState(14);
                 }
@@ -148,7 +148,7 @@ public class Observation extends OpMode {
                 }
                 break;
             case 17: //Drives to chamber once action finishes
-                auto.follower.setMaxPower(0.95);
+                auto.follower.setMaxPower(1);
                 auto.follower.followPath(auto.specimen3, true);
                 setPathState(18);
                 break;
@@ -160,7 +160,7 @@ public class Observation extends OpMode {
                 break;
             case 19: //Starts the Specimen State Machine
                 if(auto.actionNotBusy()) {
-                    auto.follower.setMaxPower(0.95);
+                    auto.follower.setMaxPower(1);
                     auto.follower.followPath(auto.grab4, true);
                     setPathState(20);
                 }
@@ -184,7 +184,7 @@ public class Observation extends OpMode {
                 }
                 break;
             case 23: //Drives to chamber once action finishes
-                auto.follower.setMaxPower(0.95);
+                auto.follower.setMaxPower(1);
                 auto.follower.followPath(auto.specimen4, true);
                 setPathState(24);
                 break;
