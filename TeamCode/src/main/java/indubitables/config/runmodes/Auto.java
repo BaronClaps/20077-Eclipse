@@ -178,7 +178,7 @@ public class Auto {
             preload = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(startPose), new Point(preloadPose)))
                     .setLinearHeadingInterpolation(startPose.getHeading(), preloadPose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(4)
+                    .setZeroPowerAccelerationMultiplier(7)
                     .build();
 
             pushSamples = follower.pathBuilder()
@@ -196,55 +196,55 @@ public class Auto {
                     .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                     .addPath(new BezierCurve(new Point(26,8,Point.CARTESIAN), new Point(35, 20, Point.CARTESIAN), new Point(grab1Pose)))
                     .setLinearHeadingInterpolation(Math.toRadians(180), grab1Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(3)
+                    .setZeroPowerAccelerationMultiplier(7)
                     .build();
 
             specimen1 = follower.pathBuilder()
                     .addPath(new BezierCurve(new Point(grab1Pose), new Point(specimen1Pose.getX()-10, specimen1Pose.getY(), Point.CARTESIAN), new Point(specimen1Pose)))
                     .setLinearHeadingInterpolation(grab1Pose.getHeading(), specimen1Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(1)
+                    .setZeroPowerAccelerationMultiplier(7)
                     .build();
 
             grab2 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimen1Pose), new Point(grab2Pose)))
                     .setLinearHeadingInterpolation(specimen1Pose.getHeading(), grab2Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(1)
+                    .setZeroPowerAccelerationMultiplier(2)
                     .build();
 
             specimen2 = follower.pathBuilder()
                     .addPath(new BezierCurve(new Point(grab2Pose), new Point(specimen2Pose.getX() - 10, specimen2Pose.getY(), Point.CARTESIAN),new Point(specimen2Pose)))
                     .setLinearHeadingInterpolation(grab2Pose.getHeading(), specimen2Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(1)
+                    .setZeroPowerAccelerationMultiplier(7)
                     .build();
 
             grab3 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimen2Pose), new Point(grab3Pose)))
                     .setLinearHeadingInterpolation(specimen2Pose.getHeading(), grab3Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(1)
+                    .setZeroPowerAccelerationMultiplier(2)
                     .build();
 
             specimen3 = follower.pathBuilder()
                     .addPath(new BezierCurve(new Point(grab3Pose), new Point(specimen3Pose.getX() - 10, specimen3Pose.getY(), Point.CARTESIAN),new Point(specimen3Pose)))
                     .setLinearHeadingInterpolation(grab3Pose.getHeading(), specimen3Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(1)
+                    .setZeroPowerAccelerationMultiplier(7)
                     .build();
 
             grab4 = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimen3Pose), new Point(grab4Pose)))
                     .setLinearHeadingInterpolation(specimen3Pose.getHeading(), grab4Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(1)
+                    .setZeroPowerAccelerationMultiplier(2)
                     .build();
 
             specimen4 = follower.pathBuilder()
                     .addPath(new BezierCurve(new Point(grab4Pose), new Point(specimen4Pose.getX() - 10, specimen3Pose.getY(), Point.CARTESIAN),new Point(specimen3Pose)))
                     .setLinearHeadingInterpolation(grab4Pose.getHeading(), specimen4Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(1)
+                    .setZeroPowerAccelerationMultiplier(7)
                     .build();
 
             park = follower.pathBuilder()
                     .addPath(new BezierLine(new Point(specimen4Pose), new Point(parkPose)))
                     .setLinearHeadingInterpolation(specimen4Pose.getHeading(), parkPose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(3)
+                    .setZeroPowerAccelerationMultiplier(7)
                     .build();      
 
         }

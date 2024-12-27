@@ -101,7 +101,7 @@ public class Observation extends OpMode {
                 }
                 break;
             case 9:
-                if(pathTimer.getElapsedTimeSeconds() > 1.35) {
+                if(pathTimer.getElapsedTimeSeconds() > 1.5) {
                     auto.outtake.close();
                     setPathState(10);
                 }
@@ -136,7 +136,7 @@ public class Observation extends OpMode {
                 }
                 break;
             case 15:
-                if(pathTimer.getElapsedTimeSeconds() > 1.3) {
+                if(pathTimer.getElapsedTimeSeconds() > 1.5) {
                    auto.outtake.close();
                     setPathState(16);
                 }
@@ -172,7 +172,7 @@ public class Observation extends OpMode {
                 }
                 break;
             case 21:
-                if(pathTimer.getElapsedTimeSeconds() > 1.3) {
+                if(pathTimer.getElapsedTimeSeconds() > 1.5) {
                     auto.outtake.close();
                     setPathState(22);
                 }

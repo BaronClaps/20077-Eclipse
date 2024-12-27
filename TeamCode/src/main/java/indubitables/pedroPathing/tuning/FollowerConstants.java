@@ -104,7 +104,7 @@ public class FollowerConstants {
     // Decreasing this will cause the deceleration at the end of the Path to be slower, making the
     // robot slower but reducing risk of end-of-path overshoots or localization slippage.
     // This can be set individually for each Path, but this is the default.
-    public static double zeroPowerAccelerationMultiplier = 3;
+    public static double zeroPowerAccelerationMultiplier = 7;
 
 
     // When the robot is at the end of its current Path or PathChain and the velocity goes below
@@ -178,7 +178,7 @@ public class FollowerConstants {
             0);
 
     // Feed forward constant added on to the small translational PIDF
-    public static double secondaryTranslationalPIDFFeedForward = 0.015;
+    public static double secondaryTranslationalPIDFFeedForward = 0.0005;
 
 
     // the limit at which the heading PIDF switches between the main and secondary heading PIDFs
@@ -192,7 +192,7 @@ public class FollowerConstants {
             0);
 
     // Feed forward constant added on to the secondary heading PIDF
-    public static double secondaryHeadingPIDFFeedForward = 0.01;
+    public static double secondaryHeadingPIDFFeedForward = 0.0005;
 
 
     // the limit at which the heading PIDF switches between the main and secondary drive PIDFs
