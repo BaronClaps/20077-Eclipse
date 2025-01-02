@@ -218,4 +218,9 @@ public class Observation extends OpMode {
         pathState = x;
         pathTimer.resetTimer();
     }
+
+    @Override
+    public void stop() {
+        auto.stop();
+    }
 }

@@ -49,7 +49,7 @@ public class OuttakeSubsystem {
 
     public void setRotateState(RotateState state) {
         if (state == RotateState.TRANSFER) {
-            leftRotate.setPosition(outtakeRotateTransfer);
+            leftRotate.setPosition(outtakeRotateTransfer-0.02);
             rightRotate.setPosition(outtakeRotateTransfer);
             this.rotateState = RotateState.TRANSFER;
         } else if (state == RotateState.SCORE) {

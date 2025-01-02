@@ -1,5 +1,7 @@
 package indubitables.config.runmodes;
 
+import static indubitables.config.util.FieldConstants.humanPlayerPose;
+
 import indubitables.config.subsystem.OuttakeSubsystem;
 import indubitables.config.subsystem.ExtendSubsystem;
 import indubitables.config.subsystem.IntakeSubsystem;
@@ -13,6 +15,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import indubitables.pedroPathing.pathGeneration.BezierCurve;
+import indubitables.pedroPathing.pathGeneration.Path;
 import indubitables.pedroPathing.pathGeneration.PathChain;
 import indubitables.pedroPathing.pathGeneration.Point;
 import indubitables.pedroPathing.util.Timer;
@@ -43,11 +46,11 @@ public class Teleop {
 
     private Timer autoBucketTimer = new Timer(), transferTimer = new Timer(), submersibleTimer = new Timer();
 
-    private int flip = 1, autoBucketState = -1, transferState = -1, submersibleState = -1;
+    private int flip = 1, autoBucketState = -1, transferState = -1, submersibleState = -1, autoSpecimenState = -1;
 
     public double speed = 0.75;
 
-    private boolean fieldCentric, actionBusy;
+    private boolean fieldCentric, actionBusy, driveBusy;
 
     private PathChain autoBucketTo, autoBucketBack;
     private Pose autoBucketToEndPose, autoBucketBackEndPose;
@@ -62,7 +65,7 @@ public class Teleop {
         this.follower = follower;
         this.startPose = startPose;
 
-        this.startPose = new Pose(56,102.25,Math.toRadians(270));
+        this.startPose = startPose;
 
         this.fieldCentric = fieldCentric;
         this.telemetry = telemetry;
@@ -70,12 +73,13 @@ public class Teleop {
         this.gamepad2 = gamepad2;
     }
 
-    public void init() {}
+    public void init() {
+        follower.setPose(startPose);
+    }
 
     public void start() {
         extend.setLimitToSample();
         outtake.start();
-        follower.setPose(startPose);
         follower.startTeleopDrive();
     }
 
@@ -154,17 +158,22 @@ public class Teleop {
                 outtake.hang();
                 intake.transfer();
                 extend.toZero();
-
             }
 
             if (gamepad2.right_stick_button) {
                 intake.transfer();
             }
 
-            follower.setTeleOpMovementVectors(flip * -gamepad1.left_stick_y * speed, flip * -gamepad1.left_stick_x * speed, -gamepad1.right_stick_x * speed * 0.5, !fieldCentric);
+            if (!driveBusy()) {
+                follower.setTeleOpMovementVectors(flip * -gamepad1.left_stick_y * speed, flip * -gamepad1.left_stick_x * speed, -gamepad1.right_stick_x * speed * 0.5, !fieldCentric);
+            }
 
             if(gamepad1.dpad_right) {
                 stopActions();
+            }
+
+            if(gamepad1.a) {
+                startAutoSpecimen();
             }
 
         } else {
@@ -179,12 +188,14 @@ public class Teleop {
         autoBucket();
         transfer();
         submersible();
+        autoSpecimen();
 
         follower.update();
         telemetry.addData("X: ", follower.getPose().getX());
         telemetry.addData("Y: ", follower.getPose().getY());
         telemetry.addData("Heading: ", follower.getPose().getHeading());
         telemetry.addData("Action Busy?: ", actionBusy);
+        telemetry.addData("Drive Busy? ", driveBusy);
         telemetry.addData("Auto Bucket State", autoBucketState);
         telemetry.addData("Transfer State", transferState);
         telemetry.addData("Submersible State", submersibleState);
@@ -211,7 +222,7 @@ public class Teleop {
         switch (transferState) {
             case 1:
                 intake.close();
-                outtake.transferHigh();
+                outtake.transfer();
                 intake.transfer();
                 setTransferState(2);
                 break;
@@ -223,7 +234,7 @@ public class Teleop {
                 }
                 break;
             case 3:
-                if (transferTimer.getElapsedTimeSeconds() > 0.2) {
+                if (transferTimer.getElapsedTimeSeconds() > 0.2599) {
                     outtake.transfer();
                     setTransferState(4);
                 }
@@ -392,8 +403,39 @@ public class Teleop {
         setAutoBucketState(1);
     }
 
+    public void autoSpecimen() {
+        switch (autoSpecimenState) {
+            case 1:
+                driveBusy = true;
+                PathChain path = follower.pathBuilder()
+                    .addPath(new BezierCurve(new Point(follower.getPose()), new Point(follower.getPose().getX() - 10, follower.getPose().getY(), Point.CARTESIAN), new Point(humanPlayerPose.getX() + 10, humanPlayerPose.getY(), Point.CARTESIAN), new Point(humanPlayerPose)))
+                    .setLinearHeadingInterpolation(follower.getPose().getHeading(), humanPlayerPose.getHeading())
+                    .build();
+                follower.followPath(path, true);
+                setAutoSpecimenState(2);
+            case 2:
+                if(follower.getPose().getX() < (humanPlayerPose.getX() + 0.5)) {
+                    driveBusy = false;
+                    flip = -1;
+                    setAutoSpecimenState(-1);
+                }
+        }
+    }
+
+    public void setAutoSpecimenState(int state) {
+        autoSpecimenState = state;
+    }
+
+    public void startAutoSpecimen() {
+        setAutoSpecimenState(1);
+    }
+
     private boolean actionNotBusy() {
         return !actionBusy;
+    }
+
+    private boolean driveBusy() {
+        return driveBusy;
     }
 
     private void stopActions() {
@@ -401,8 +443,9 @@ public class Teleop {
         follower.setMaxPower(1);
         follower.startTeleopDrive();
         actionBusy = false;
+        driveBusy = false;
         setTransferState(-1);
         setAutoBucketState(-1);
+        setAutoSpecimenState(-1);
     }
-
 }

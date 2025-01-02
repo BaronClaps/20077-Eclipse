@@ -132,4 +132,9 @@ public class Bucket extends OpMode {
     public void setPathState(int x) {
         pathState = x;
     }
+
+    @Override
+    public void stop() {
+        auto.stop();
+    }
 }
