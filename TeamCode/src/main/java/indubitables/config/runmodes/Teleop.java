@@ -65,8 +65,6 @@ public class Teleop {
         this.follower = follower;
         this.startPose = startPose;
 
-        this.startPose = startPose;
-
         this.fieldCentric = fieldCentric;
         this.telemetry = telemetry;
         this.gamepad1 = gamepad1;
@@ -74,6 +72,7 @@ public class Teleop {
     }
 
     public void init() {
+        follower.setStartingPose(startPose);
         follower.setPose(startPose);
     }
 
