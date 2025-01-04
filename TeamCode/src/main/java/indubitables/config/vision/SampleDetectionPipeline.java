@@ -63,6 +63,8 @@ public class SampleDetectionPipeline extends OpenCvPipeline
     public String selectedColor = "Red";  // Default color to detect (you can change this to "Blue" or "Yellow")
     private AnalyzedStone selectedStone;
 
+    private Mat input;
+
 
     Telemetry telemetry = null;
 
@@ -110,24 +112,7 @@ public class SampleDetectionPipeline extends OpenCvPipeline
     @Override
     public Mat processFrame(Mat input)
     {
-        internalStoneList.clear();
-
-        // Run the image processing to find contours
-        findContours(input);
-
-        clientStoneList = new ArrayList<>(internalStoneList);
-
-        // Find the contour with the highest y (closest to the bottom) and closest to the center x
-        if (!internalStoneList.isEmpty()) {
-            selectedStone = findBestStone(input.width(), input.height());
-
-            // Telemetry output the angle of the selected stone
-            if (selectedStone != null) {
-                // Send the angle to telemetry
-                telemetry.addData("Detected Angle", selectedStone.angle);
-                telemetry.update();
-            }
-        }
+        this.input = input;
 
         // Decide which buffer to send to the viewport
         switch (stages[stageNum])
@@ -171,7 +156,31 @@ public class SampleDetectionPipeline extends OpenCvPipeline
     }
 
     public double getSelectedStoneDegrees() {
-        return selectedStone.angle - 90;
+
+        internalStoneList.clear();
+
+        // Run the image processing to find contours
+        findContours(input);
+
+        clientStoneList = new ArrayList<>(internalStoneList);
+
+        // Find the contour with the highest y (closest to the bottom) and closest to the center x
+        if (!internalStoneList.isEmpty()) {
+            selectedStone = findBestStone(input.width(), input.height());
+
+            // Telemetry output the angle of the selected stone
+            if (selectedStone != null) {
+                // Send the angle to telemetry
+                telemetry.addData("Detected Angle", selectedStone.angle);
+                telemetry.update();
+            }
+        }
+
+        if (selectedStone == null)
+            return 0;
+
+        return selectedStone.angle;
+
     }
 
     public AnalyzedStone findBestStone(int imageWidth, int imageHeight) {
