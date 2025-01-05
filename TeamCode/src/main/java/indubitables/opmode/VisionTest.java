@@ -28,7 +28,7 @@ public class VisionTest extends OpMode {
         intake = new IntakeSubsystem(hardwareMap, telemetry, intakeGrabState, intakeRotateState, intakePivotState);
         follower = new Follower(hardwareMap);
         intake.init();
-        vision = new VisionSubsystem(hardwareMap, telemetry, "blue", intake);
+        vision = new VisionSubsystem(hardwareMap, telemetry);
         vision.init();
     }
 
@@ -54,10 +54,6 @@ public class VisionTest extends OpMode {
             intake.close();
         } else if (gamepad1.left_bumper) {
             intake.open();
-        }
-
-        if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down) {
-            vision.clawAlign();
         }
 
         follower.setTeleOpMovementVectors(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, true);
