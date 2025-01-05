@@ -178,8 +178,9 @@ public class OuttakeSubsystem {
     public void init() {
         leftPivot.setPosition(0.175);
         rightPivot.setPosition(0.175);
-        setRotateState(RotateState.TRANSFER);
-        setGrabState(GrabState.CLOSED);
+        leftRotate.setPosition(1);
+        rightRotate.setPosition(0.63);
+        close();
     }
 
     public void start() {

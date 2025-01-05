@@ -79,7 +79,7 @@ public class Teleop {
         lift = new LiftSubsystem(hardwareMap, telemetry);
         extend = new ExtendSubsystem(hardwareMap, telemetry);
         intake = new IntakeSubsystem(hardwareMap, telemetry, intakeGrabState, intakeRotateState, intakePivotState);
-        vision = new VisionSubsystem(hardwareMap, telemetry, "blue", intake);
+        vision = new VisionSubsystem(hardwareMap, telemetry);
 
         this.follower = follower;
         this.startPose = startPose;
@@ -197,7 +197,6 @@ public class Teleop {
             }
 
             if(currentGamepad2.options && !previousGamepad2.options) {
-                vision.clawAlign();
                 gamepad1.runRumbleEffect(detectedrumble);
                 gamepad1.runLedEffect(detectedrgb);
                 gamepad2.runRumbleEffect(detectedrumble);
@@ -231,6 +230,7 @@ public class Teleop {
         lift.telemetry();
         outtake.telemetry();
         intake.telemetry();
+        vision.telemetry();
         telemetry.update();
     }
 
@@ -251,7 +251,8 @@ public class Teleop {
             case 1:
                 intake.close();
                 outtake.transfer();
-                intake.transfer();
+                    intake.transfer();
+
                 setTransferState(2);
                 break;
             case 2:

@@ -68,6 +68,7 @@ public class Auto {
 
     public void init() {
         outtake.init();
+        outtake.close();
         lift.init();
         extend.toZero();
         intake.init();

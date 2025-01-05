@@ -153,6 +153,15 @@ public class IntakeSubsystem {
         setGrabState(GrabState.CLOSED);
     }
 
+    public void transferHigh() {
+        rotateDegrees = 0;
+        setRotateState(RotateState.TRANSFER);
+        setPivotState(PivotState.TRANSFER);
+        setGrabState(GrabState.CLOSED);
+        leftPivot.setPosition(intakePivotTransferHigh);
+        rightPivot.setPosition(intakePivotTransferHigh);
+    }
+
     public void ground() {
         setGrabState(GrabState.OPEN);
         setRotateState(RotateState.GROUND);

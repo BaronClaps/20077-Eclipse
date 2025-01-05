@@ -51,11 +51,11 @@ public class VisionSubsystem {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
-        cSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
+       // cSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
     }
 
     public void init() {
-        telemetry.addData("color sensor status", cSensor.getDeviceName());
+       // telemetry.addData("color sensor status", cSensor.getDeviceName());
 
     }
 
@@ -96,14 +96,14 @@ public class VisionSubsystem {
     }
 
     public void telemetry() {
-        telemetry.addLine()
+        /*telemetry.addLine()
                 .addData("Hue", "%.3f", hsvValues[0])
                 .addData("Saturation", "%.3f", hsvValues[1])
                 .addData("Value", "%.3f", hsvValues[2]);
 
         telemetry.addData("isBlue", isBlue(hsvValues));
         telemetry.addData("isRed", isRed(hsvValues));
-        telemetry.addData("isYellow", isYellow(hsvValues));
+        telemetry.addData("isYellow", isYellow(hsvValues));*/
     }
 }
 
