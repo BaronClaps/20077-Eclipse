@@ -6,6 +6,7 @@ import indubitables.config.subsystem.OuttakeSubsystem;
 import indubitables.config.subsystem.ExtendSubsystem;
 import indubitables.config.subsystem.IntakeSubsystem;
 import indubitables.config.subsystem.LiftSubsystem;
+import indubitables.config.subsystem.VisionSubsystem;
 import indubitables.config.util.RobotConstants;
 import indubitables.pedroPathing.follower.Follower;
 import indubitables.pedroPathing.localization.Pose;
@@ -36,6 +37,8 @@ public class Teleop {
     private OuttakeSubsystem.PivotState outtakePivotState;
     private OuttakeSubsystem.RotateState outtakeRotateState;
 
+    private VisionSubsystem vision;
+
     private Follower follower;
     private Pose startPose;
 
@@ -55,12 +58,28 @@ public class Teleop {
     private PathChain autoBucketTo, autoBucketBack;
     private Pose autoBucketToEndPose, autoBucketBackEndPose;
 
+    Gamepad.RumbleEffect detectedrumble = new Gamepad.RumbleEffect.Builder()
+            .addStep(0.0, 1.0, 500)  //  Rumble right motor 100% for 500 mSec
+            .addStep(0.0, 0.0, 300)  //  Pause for 300 mSec
+            .addStep(1.0, 0.0, 250)  //  Rumble left motor 100% for 250 mSec
+            .addStep(0.0, 0.0, 250)  //  Pause for 250 mSec
+            .addStep(1.0, 0.0, 250)  //  Rumble left motor 100% for 250 mSec
+            .build();
+
+    Gamepad.LedEffect detectedrgb = new Gamepad.LedEffect.Builder()
+            .addStep(1, 0, 0, 250) // Show red for 250ms
+            .addStep(0, 1, 0, 250) // Show green for 250ms
+            .addStep(0, 0, 1, 250) // Show blue for 250ms
+            .addStep(1, 1, 1, 250) // Show white for 250ms
+            .build();
+
 
     public Teleop(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, Pose startPose, boolean fieldCentric, Gamepad gamepad1, Gamepad gamepad2) {
         outtake = new OuttakeSubsystem(hardwareMap, telemetry, outtakeGrabState, outtakeRotateState, outtakePivotState);
         lift = new LiftSubsystem(hardwareMap, telemetry);
         extend = new ExtendSubsystem(hardwareMap, telemetry);
         intake = new IntakeSubsystem(hardwareMap, telemetry, intakeGrabState, intakeRotateState, intakePivotState);
+        vision = new VisionSubsystem(hardwareMap, telemetry, "blue", intake);
 
         this.follower = follower;
         this.startPose = startPose;
@@ -74,6 +93,8 @@ public class Teleop {
     public void init() {
         follower.setStartingPose(startPose);
         follower.setPose(startPose);
+
+        vision.init();
     }
 
     public void start() {
@@ -171,8 +192,16 @@ public class Teleop {
                 stopActions();
             }
 
-            if(gamepad1.a) {
+            if(gamepad1.y) {
                 startAutoSpecimen();
+            }
+
+            if(currentGamepad2.options && !previousGamepad2.options) {
+                vision.clawAlign();
+                gamepad1.runRumbleEffect(detectedrumble);
+                gamepad1.runLedEffect(detectedrgb);
+                gamepad2.runRumbleEffect(detectedrumble);
+                gamepad2.runLedEffect(detectedrgb);
             }
 
         } else {

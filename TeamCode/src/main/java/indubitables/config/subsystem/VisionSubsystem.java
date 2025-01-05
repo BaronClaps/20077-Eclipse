@@ -152,7 +152,8 @@ public class VisionSubsystem {
     }
 
     public void clawAlign() {
-        intake.rotateDegrees(pipeline.getSelectedStoneDegrees());
+        telemetry.addData("stone degrees", pipeline.getSelectedStoneDegrees());
+        intake.rotateDegrees(-pipeline.getSelectedStoneDegrees());
     }
 
     public void setBlue() {
