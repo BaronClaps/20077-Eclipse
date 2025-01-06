@@ -41,8 +41,9 @@ public class FieldConstants {
 
     public static Pose observationParkPose = new Pose(24, 44, Math.toRadians(215));
 
+    public static Pose teleopStartPose = new Pose(24,44,Math.toRadians(215));
 
-    public static Pose humanPlayerPose = new Pose(7.5,40, Math.PI);
+    public static Pose humanPlayerPose = new Pose(7,40, Math.PI);
 
 
 

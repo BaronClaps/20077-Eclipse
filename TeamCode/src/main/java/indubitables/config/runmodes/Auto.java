@@ -494,10 +494,6 @@ public class Auto {
     }
 
     public void stop() {
-        if (startLocation == RobotStart.BUCKET) {
-            bucketParkPose = follower.getPose();
-        } else {
-            observationParkPose = follower.getPose();
-        }
+        teleopStartPose = follower.getPose();
     }
 }

@@ -263,13 +263,13 @@ public class Teleop {
                 }
                 break;
             case 3:
-                if (transferTimer.getElapsedTimeSeconds() > 0.2599) {
+                if (transferTimer.getElapsedTimeSeconds() > 0.15) {
                     outtake.transfer();
                     setTransferState(4);
                 }
                 break;
             case 4:
-                if (transferTimer.getElapsedTimeSeconds() > 0.25) {
+                if (transferTimer.getElapsedTimeSeconds() > 0) {
                     outtake.close();
                     setTransferState(5);
                 }
@@ -439,13 +439,14 @@ public class Teleop {
                 PathChain path = follower.pathBuilder()
                     .addPath(new BezierCurve(new Point(follower.getPose()), new Point(follower.getPose().getX() - 10, follower.getPose().getY(), Point.CARTESIAN), new Point(humanPlayerPose.getX() + 10, humanPlayerPose.getY(), Point.CARTESIAN), new Point(humanPlayerPose)))
                     .setLinearHeadingInterpolation(follower.getPose().getHeading(), humanPlayerPose.getHeading())
+                        .setZeroPowerAccelerationMultiplier(2)
                     .build();
                 follower.followPath(path, true);
+                flip = -1;
                 setAutoSpecimenState(2);
             case 2:
-                if(follower.getPose().getX() < (humanPlayerPose.getX() + 0.5)) {
+                if(!follower.isBusy()) {
                     driveBusy = false;
-                    flip = -1;
                     setAutoSpecimenState(-1);
                 }
         }
