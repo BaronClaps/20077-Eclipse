@@ -251,7 +251,7 @@ public class Teleop {
             case 1:
                 intake.close();
                 outtake.transfer();
-                    intake.transfer();
+                intake.transfer();
 
                 setTransferState(2);
                 break;
