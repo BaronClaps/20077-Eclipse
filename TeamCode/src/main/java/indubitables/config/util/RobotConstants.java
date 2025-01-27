@@ -49,5 +49,6 @@ public class RobotConstants {
     public static double extendZero = 0;
     public static double extendFullSample = 0.225;
     public static double extendFullSpecimen = 0.2;
+    public static double extendTransferRatio = 8;
 
 }

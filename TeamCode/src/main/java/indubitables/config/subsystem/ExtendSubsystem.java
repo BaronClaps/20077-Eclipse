@@ -58,6 +58,11 @@ public class ExtendSubsystem {
         setTarget(extendLimit);
     }
 
+    public void toTransfer() {
+        setLimitToSample();
+        setTarget(extendLimit/extendTransferRatio);
+    }
+
     // Util
     public double getPos() {
         pos = right.getPosition();

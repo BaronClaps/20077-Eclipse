@@ -252,13 +252,12 @@ public class Teleop {
                 intake.close();
                 outtake.transfer();
                 intake.transfer();
-
                 setTransferState(2);
                 break;
             case 2:
                 if (transferTimer.getElapsedTimeSeconds() > 0.1) {
                     outtake.setRotateState(OuttakeSubsystem.RotateState.TRANSFER);
-                    extend.toZero();
+                    extend.toTransfer();
                     setTransferState(3);
                 }
                 break;
