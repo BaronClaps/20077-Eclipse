@@ -39,7 +39,7 @@ public class FieldConstants {
     public static Pose observationSpecimen3Pose = new Pose(38, 69, Math.toRadians(180));
     public static Pose observationSpecimen4Pose = new Pose(38, 66, Math.toRadians(180));
 
-    public static Pose observationParkPose = new Pose(24, 44, Math.toRadians(215));
+    public static Pose observationParkPose = new Pose(24, 40, Math.toRadians(215));
 
     public static Pose teleopStartPose = new Pose(24,44,Math.toRadians(215));
 

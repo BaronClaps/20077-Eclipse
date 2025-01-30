@@ -197,7 +197,7 @@ public class Auto {
                     .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                     .addPath(new BezierCurve(new Point(26,8,Point.CARTESIAN), new Point(35, 20, Point.CARTESIAN), new Point(grab1Pose)))
                     .setLinearHeadingInterpolation(Math.toRadians(180), grab1Pose.getHeading())
-                    .setZeroPowerAccelerationMultiplier(7)
+                    .setZeroPowerAccelerationMultiplier(4)
                     .build();
 
             specimen1 = follower.pathBuilder()

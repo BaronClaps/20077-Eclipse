@@ -205,9 +205,8 @@ public class Observation extends OpMode {
                 }
                 break;
             case 26:
-                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
-                   // auto.intake.pivotGround();
-                   // auto.intake.spinIn();
+                if(pathTimer.getElapsedTimeSeconds() > 1) {
+
                     setPathState(-1);
                 }
                 break;
