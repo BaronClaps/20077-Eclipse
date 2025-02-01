@@ -60,7 +60,7 @@ public class ExtendSubsystem {
 
     public void toTransfer() {
         setLimitToSample();
-        setTarget(extendLimit/extendTransferRatio);
+        toZero();
     }
 
     // Util
