@@ -1,6 +1,9 @@
 package indubitables.config.subsystem;
 
 import static indubitables.config.util.RobotConstants.*;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -31,9 +34,21 @@ public class OuttakeSubsystem {
     public GrabState grabState;
     public RotateState rotateState;
     public PivotState pivotState;
-    private Telemetry telemetry;
+    private MultipleTelemetry telemetryA;
     private Timer specScoreTimer = new Timer();
     private int specGrabState = -1;
+
+    public OuttakeSubsystem(HardwareMap hardwareMap, MultipleTelemetry telemetryA, GrabState grabState, RotateState rotateState, PivotState pivotState) {
+        grab = hardwareMap.get(Servo.class, "oG");
+        leftRotate = hardwareMap.get(Servo.class, "oLR");
+        rightRotate = hardwareMap.get(Servo.class, "oRR");
+        leftPivot = hardwareMap.get(Servo.class, "oLP");
+        rightPivot = hardwareMap.get(Servo.class, "oRP");
+        this.telemetryA = telemetryA;
+        this.grabState = grabState;
+        this.rotateState = rotateState;
+        this.pivotState = pivotState;
+    }
 
     public OuttakeSubsystem(HardwareMap hardwareMap, Telemetry telemetry, GrabState grabState, RotateState rotateState, PivotState pivotState) {
         grab = hardwareMap.get(Servo.class, "oG");
@@ -41,7 +56,7 @@ public class OuttakeSubsystem {
         rightRotate = hardwareMap.get(Servo.class, "oRR");
         leftPivot = hardwareMap.get(Servo.class, "oLP");
         rightPivot = hardwareMap.get(Servo.class, "oRP");
-        this.telemetry = telemetry;
+        this.telemetryA = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         this.grabState = grabState;
         this.rotateState = rotateState;
         this.pivotState = pivotState;
@@ -201,8 +216,8 @@ public class OuttakeSubsystem {
     }
 
     public void telemetry() {
-        telemetry.addData("Outtake Grab State: ", grabState);
-        telemetry.addData("Outtake Rotate State: ", rotateState);
-        telemetry.addData("Outtake Pivot State: ", pivotState);
+        telemetryA.addData("Outtake Grab State: ", grabState);
+        telemetryA.addData("Outtake Rotate State: ", rotateState);
+        telemetryA.addData("Outtake Pivot State: ", pivotState);
     }
 }

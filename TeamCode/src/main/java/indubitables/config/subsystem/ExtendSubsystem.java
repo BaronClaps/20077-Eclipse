@@ -9,15 +9,21 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class ExtendSubsystem {
-    private Telemetry telemetry;
+    private MultipleTelemetry telemetryA;
 
     public Servo left, right;
     private double pos = 0;
     public double extendLimit = extendFullSample;
 
+    public ExtendSubsystem(HardwareMap hardwareMap, MultipleTelemetry telemetryA) {
+        this.telemetryA = telemetryA;
+
+        left = hardwareMap.get(Servo.class, "leftExtend");
+        right = hardwareMap.get(Servo.class, "rightExtend");
+    }
+
     public ExtendSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
-        this.telemetry = telemetry;
-        this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        this. telemetryA = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         left = hardwareMap.get(Servo.class, "leftExtend");
         right = hardwareMap.get(Servo.class, "rightExtend");
@@ -87,6 +93,6 @@ public class ExtendSubsystem {
     }
 
     public void telemetry() {
-        telemetry.addData("Extend Pos: ", getPos());
+        telemetryA.addData("Extend Pos: ", getPos());
     }
 }

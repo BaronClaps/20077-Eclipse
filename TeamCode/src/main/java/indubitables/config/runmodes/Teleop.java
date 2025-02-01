@@ -13,14 +13,19 @@ import indubitables.config.util.RobotConstants;
 import indubitables.pedroPathing.follower.Follower;
 import indubitables.pedroPathing.localization.Pose;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import indubitables.pedroPathing.localization.PoseUpdater;
 import indubitables.pedroPathing.pathGeneration.BezierCurve;
 import indubitables.pedroPathing.pathGeneration.Path;
 import indubitables.pedroPathing.pathGeneration.PathChain;
 import indubitables.pedroPathing.pathGeneration.Point;
+import indubitables.pedroPathing.util.DashboardPoseTracker;
 import indubitables.pedroPathing.util.Timer;
 
 public class Teleop {
@@ -47,6 +52,9 @@ public class Teleop {
     private Pose startPose;
 
     private Telemetry telemetry;
+    
+    private DashboardPoseTracker dashboardPoseTracker;
+    private MultipleTelemetry telemetryA;
 
     private Gamepad gamepad1, gamepad2;
     private Gamepad currentGamepad1 = new Gamepad(), currentGamepad2 = new Gamepad(), previousGamepad1 = new Gamepad(), previousGamepad2 = new Gamepad();
@@ -79,18 +87,20 @@ public class Teleop {
 
 
     public Teleop(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, Pose startPose, boolean fieldCentric, Gamepad gamepad1, Gamepad gamepad2) {
-        outtake = new OuttakeSubsystem(hardwareMap, telemetry, outtakeGrabState, outtakeRotateState, outtakePivotState);
-        lift = new LiftSubsystem(hardwareMap, telemetry);
-        extend = new ExtendSubsystem(hardwareMap, telemetry);
-        intake = new IntakeSubsystem(hardwareMap, telemetry, intakeGrabState, intakeRotateState, intakePivotState);
-        vision = new VisionSubsystem(hardwareMap, telemetry);
-        light = new LightSubsystem(hardwareMap, telemetry);
+        this.telemetry = telemetry;
+        telemetryA = new MultipleTelemetry(this.telemetryA, FtcDashboard.getInstance().getTelemetry());
+        outtake = new OuttakeSubsystem(hardwareMap, telemetryA, outtakeGrabState, outtakeRotateState, outtakePivotState);
+        lift = new LiftSubsystem(hardwareMap, telemetryA);
+        extend = new ExtendSubsystem(hardwareMap, telemetryA);
+        intake = new IntakeSubsystem(hardwareMap, telemetryA, intakeGrabState, intakeRotateState, intakePivotState);
+        vision = new VisionSubsystem(hardwareMap, telemetryA);
+        light = new LightSubsystem(hardwareMap, telemetryA);
 
         this.follower = follower;
         this.startPose = startPose;
 
         this.fieldCentric = fieldCentric;
-        this.telemetry = telemetry;
+
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
     }
@@ -230,20 +240,20 @@ public class Teleop {
 
 
         follower.update();
-        telemetry.addData("X: ", follower.getPose().getX());
-        telemetry.addData("Y: ", follower.getPose().getY());
-        telemetry.addData("Heading: ", follower.getPose().getHeading());
-        telemetry.addData("Action Busy?: ", actionBusy);
-        telemetry.addData("Drive Busy? ", driveBusy);
-        telemetry.addData("Auto Bucket State", autoBucketState);
-        telemetry.addData("Transfer State", transferState);
-        telemetry.addData("Submersible State", submersibleState);
+        telemetryA.addData("X: ", follower.getPose().getX());
+        telemetryA.addData("Y: ", follower.getPose().getY());
+        telemetryA.addData("Heading: ", follower.getPose().getHeading());
+        telemetryA.addData("Action Busy?: ", actionBusy);
+        telemetryA.addData("Drive Busy? ", driveBusy);
+        telemetryA.addData("Auto Bucket State", autoBucketState);
+        telemetryA.addData("Transfer State", transferState);
+        telemetryA.addData("Submersible State", submersibleState);
         extend.telemetry();
         lift.telemetry();
         outtake.telemetry();
         intake.telemetry();
         vision.telemetry();
-        telemetry.update();
+        telemetryA.update();
     }
 
     private void specimenGrabPos() {
