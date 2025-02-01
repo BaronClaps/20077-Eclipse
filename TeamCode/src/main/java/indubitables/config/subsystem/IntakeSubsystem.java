@@ -220,14 +220,14 @@ public class IntakeSubsystem {
     }
 
     public IntakeColor getColor() {
-        if(sensor.red() >= 900) {
+        if(sensor.red() >= 650 && sensor.red() <= 850 && sensor.blue() >= 100 && sensor.blue() <= 250 && sensor.green() >= 200 && sensor.green() <= 500) {
             return IntakeColor.RED;
-        } else if (sensor.blue() >= 3000) {
+        } else if (sensor.red() >= 75 && sensor.red() <= 250 && sensor.blue() >= 650 && sensor.blue() <= 850 && sensor.green() >= 200 && sensor.green() <= 450) {
             return IntakeColor.BLUE;
-        } else if (sensor.green() >= 1500 && sensor.red() <= 1000 && sensor.blue() <= 1000) {
+        } else if (sensor.red() >= 1000 && sensor.red() <= 1400 && sensor.blue() >= 200 && sensor.blue() <= 450 && sensor.green() >= 1500 && sensor.green() <= 1800) {
             return IntakeColor.YELLOW;
         } else {
-            return IntakeColor.WHITE;
+            return IntakeColor.BLACK;
         }
     }
 
