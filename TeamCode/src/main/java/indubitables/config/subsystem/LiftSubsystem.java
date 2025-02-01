@@ -14,7 +14,7 @@ import indubitables.config.util.RobotConstants;
 import indubitables.config.util.action.RunAction;
 
 public class LiftSubsystem {
-    private MultipleTelemetry telemetryA;
+    private Telemetry telemetry;
 
     public DcMotor rightLift, leftLift;
     public boolean manual = false;
@@ -27,24 +27,9 @@ public class LiftSubsystem {
     public static double f = 0.005;
 
 
-    public LiftSubsystem(HardwareMap hardwareMap, MultipleTelemetry telemetryA) {
-        this.telemetryA = telemetryA;
-
-        rightLift = hardwareMap.get(DcMotor.class, "rightLift");
-        leftLift = hardwareMap.get(DcMotor.class, "leftLift");
-
-        rightLift.setDirection(DcMotor.Direction.FORWARD);
-        leftLift.setDirection(DcMotor.Direction.REVERSE);
-        rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-
-        liftPID = new PIDController(p, i, d);
-    }
-
     public LiftSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
-        this.telemetryA = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        this.telemetry = telemetry;
+        this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
@@ -148,8 +133,8 @@ public class LiftSubsystem {
     }
 
     public void telemetry() {
-        telemetryA.addData("Lift Pos: ", getPos());
-        telemetryA.addData("Lift Target: ", target);
+        telemetry.addData("Lift Pos: ", getPos());
+        telemetry.addData("Lift Target: ", target);
     }
 
 }

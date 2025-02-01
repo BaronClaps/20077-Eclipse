@@ -28,7 +28,7 @@ import indubitables.pedroPathing.follower.Follower;
 
 @Config
 public class VisionSubsystem {
-    private MultipleTelemetry telemetryA;
+    private Telemetry telemetry;
     private HardwareMap hardwareMap;
     private NormalizedColorSensor cSensor;
     private float[] hsvValues = new float[3];
@@ -47,22 +47,15 @@ public class VisionSubsystem {
     int[] yellowTop = {30, 255, 255};
 
 
-    public VisionSubsystem(HardwareMap hardwareMap, MultipleTelemetry telemetryA) {
+    public VisionSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         this.hardwareMap = hardwareMap;
-        this.telemetryA = telemetryA;
+        this.telemetry = telemetry;
 
        // cSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
     }
 
-    public VisionSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
-        this.hardwareMap = hardwareMap;
-        this.telemetryA = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
-        // cSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
-    }
-
     public void init() {
-       // telemetryA.addData("color sensor status", cSensor.getDeviceName());
+       // telemetry.addData("color sensor status", cSensor.getDeviceName());
 
     }
 
@@ -103,19 +96,19 @@ public class VisionSubsystem {
     }
 
     public void telemetry() {
-        /*telemetryA.addLine()
+        /*telemetry.addLine()
                 .addData("Hue", "%.3f", hsvValues[0])
                 .addData("Saturation", "%.3f", hsvValues[1])
                 .addData("Value", "%.3f", hsvValues[2]);
 
-        telemetryA.addData("isBlue", isBlue(hsvValues));
-        telemetryA.addData("isRed", isRed(hsvValues));
-        telemetryA.addData("isYellow", isYellow(hsvValues));*/
+        telemetry.addData("isBlue", isBlue(hsvValues));
+        telemetry.addData("isRed", isRed(hsvValues));
+        telemetry.addData("isYellow", isYellow(hsvValues));*/
     }
 }
 
 
-   /* private MultipleTelemetry telemetryA;
+   /* private Telemetry telemetry;
     private HardwareMap hardwareMap;
     private double degrees;
 
@@ -128,7 +121,7 @@ public class VisionSubsystem {
     private String color;
 
 
-   public VisionSubsystem(HardwareMap hardwareMap, MultipleTelemetry telemetryA, String color, IntakeSubsystem intake) {
+   public VisionSubsystem(HardwareMap hardwareMap, Telemetry telemetry, String color, IntakeSubsystem intake) {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
         this.intake = intake;
@@ -159,7 +152,7 @@ public class VisionSubsystem {
     }
 
     public void clawAlign() {
-        telemetryA.addData("stone degrees", pipeline.getSelectedStoneDegrees());
+        telemetry.addData("stone degrees", pipeline.getSelectedStoneDegrees());
         intake.rotateDegrees(-pipeline.getSelectedStoneDegrees());
     }
 

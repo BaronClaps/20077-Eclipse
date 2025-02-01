@@ -37,24 +37,9 @@ public class IntakeSubsystem {
     public GrabState grabState;
     public RotateState rotateState;
     public PivotState pivotState;
-    private MultipleTelemetry telemetryA;
+    private Telemetry telemetry;
     private double rotateDegrees = 0;
     private static final double perDegree = 0.00122222222;
-
-    public IntakeSubsystem(HardwareMap hardwareMap, MultipleTelemetry telemetryA, GrabState grabState, RotateState rotateState, PivotState pivotState) {
-        grab = hardwareMap.get(Servo.class, "iG");
-        leftRotate = hardwareMap.get(Servo.class, "iLR");
-        rightRotate = hardwareMap.get(Servo.class, "iRR");
-        leftPivot = hardwareMap.get(Servo.class, "iLP");
-        rightPivot = hardwareMap.get(Servo.class, "iRP");
-        sensor = hardwareMap.get(RevColorSensorV3.class, "iS");
-
-        this.telemetryA = telemetryA;
-        this.grabState = grabState;
-        this.rotateState = rotateState;
-        this.pivotState = pivotState;
-        this.color = IntakeColor.BLACK;
-    }
 
     public IntakeSubsystem(HardwareMap hardwareMap, Telemetry telemetry, GrabState grabState, RotateState rotateState, PivotState pivotState) {
         grab = hardwareMap.get(Servo.class, "iG");
@@ -64,7 +49,7 @@ public class IntakeSubsystem {
         rightPivot = hardwareMap.get(Servo.class, "iRP");
         sensor = hardwareMap.get(RevColorSensorV3.class, "iS");
 
-        this.telemetryA = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        this.telemetry = telemetry;
         this.grabState = grabState;
         this.rotateState = rotateState;
         this.pivotState = pivotState;
@@ -232,12 +217,12 @@ public class IntakeSubsystem {
     }
 
     public void telemetry() {
-        telemetryA.addData("Intake Grab State: ", grabState);
-        telemetryA.addData("Intake Rotate State: ", rotateState);
-        telemetryA.addData("Intake Pivot State: ", pivotState);
-        telemetryA.addData("Rotate Degrees: ", rotateDegrees);
-        telemetryA.addData("Red", sensor.red());
-        telemetryA.addData("Green", sensor.green());
-        telemetryA.addData("Blue", sensor.blue());
+        telemetry.addData("Intake Grab State: ", grabState);
+        telemetry.addData("Intake Rotate State: ", rotateState);
+        telemetry.addData("Intake Pivot State: ", pivotState);
+        telemetry.addData("Rotate Degrees: ", rotateDegrees);
+        telemetry.addData("Red", sensor.red());
+        telemetry.addData("Green", sensor.green());
+        telemetry.addData("Blue", sensor.blue());
     }
 }
