@@ -2,8 +2,6 @@ package indubitables.config.subsystem;
 
 import static indubitables.config.util.RobotConstants.*;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -24,11 +22,11 @@ public class IntakeSubsystem {
     }
 
     public enum RotateState {
-        TRANSFER, GROUND, HOVER, SPECIMEN
+        TRANSFER_DETECTED, TRANSFER_UNDETECTED, GROUND, HOVER, SPECIMEN
     }
 
     public enum PivotState {
-        TRANSFER, GROUND, HOVER, SPECIMEN
+        TRANSFER_DETECTED, TRANSFER_UNDETECTED, GROUND, HOVER, SPECIMEN
     }
 
     public Servo grab, leftRotate, rightRotate, leftPivot, rightPivot;
@@ -53,14 +51,18 @@ public class IntakeSubsystem {
         this.grabState = grabState;
         this.rotateState = rotateState;
         this.pivotState = pivotState;
-        this.color = IntakeColor.BLACK;
+        this.color = IntakeColor.OFF;
     }
 
     public void setRotateState(RotateState state) {
-        if (state == RotateState.TRANSFER) {
-            leftRotate.setPosition(intakeRotateTransfer-0.03);
-            rightRotate.setPosition(intakeRotateTransfer);
-            this.rotateState = RotateState.TRANSFER;
+        if (state == RotateState.TRANSFER_DETECTED) {
+            leftRotate.setPosition(intakeRotateTransferDetected-0.03);
+            rightRotate.setPosition(intakeRotateTransferDetected);
+            this.rotateState = RotateState.TRANSFER_DETECTED;
+        } else if (state == RotateState.TRANSFER_UNDETECTED) {
+            leftRotate.setPosition(intakeRotateTransferUndetected-0.03);
+            rightRotate.setPosition(intakeRotateTransferUndetected);
+            this.rotateState = RotateState.TRANSFER_UNDETECTED;
         } else if (state == RotateState.GROUND) {
             leftRotate.setPosition(intakeRotateGroundVertical - 0.03 + (rotateDegrees * perDegree));
             rightRotate.setPosition(intakeRotateGroundVertical - (rotateDegrees * perDegree));
@@ -130,10 +132,14 @@ public class IntakeSubsystem {
     }
 
     public void setPivotState(PivotState pivotState) {
-        if (pivotState == PivotState.TRANSFER) {
-            leftPivot.setPosition(intakePivotTransfer);
-            rightPivot.setPosition(intakePivotTransfer);
-            this.pivotState = PivotState.TRANSFER;
+        if (pivotState == PivotState.TRANSFER_DETECTED) {
+            leftPivot.setPosition(intakePivotTransferDetected);
+            rightPivot.setPosition(intakePivotTransferDetected);
+            this.pivotState = PivotState.TRANSFER_DETECTED;
+        } else if (pivotState == PivotState.TRANSFER_UNDETECTED) {
+            leftPivot.setPosition(intakePivotTransferUndetected);
+            rightPivot.setPosition(intakePivotTransferUndetected);
+            this.pivotState = PivotState.TRANSFER_UNDETECTED;
         } else if (pivotState == PivotState.GROUND) {
             leftPivot.setPosition(intakePivotGround);
             rightPivot.setPosition(intakePivotGround);
@@ -157,20 +163,18 @@ public class IntakeSubsystem {
         setGrabState(GrabState.CLOSED);
     }
 
-    public void transfer() {
+    public void transferDetected() {
         rotateDegrees = 0;
-        setRotateState(RotateState.TRANSFER);
-        setPivotState(PivotState.TRANSFER);
+        setRotateState(RotateState.TRANSFER_DETECTED);
+        setPivotState(PivotState.TRANSFER_DETECTED);
         setGrabState(GrabState.CLOSED);
     }
 
-    public void transferHigh() {
+    public void transferUndetected() {
         rotateDegrees = 0;
-        setRotateState(RotateState.TRANSFER);
-        setPivotState(PivotState.TRANSFER);
+        setRotateState(RotateState.TRANSFER_UNDETECTED);
+        setPivotState(PivotState.TRANSFER_UNDETECTED);
         setGrabState(GrabState.CLOSED);
-        leftPivot.setPosition(intakePivotTransferHigh);
-        rightPivot.setPosition(intakePivotTransferHigh);
     }
 
     public void ground() {
@@ -212,7 +216,7 @@ public class IntakeSubsystem {
         } else if (sensor.red() >= 1000 && sensor.red() <= 1400 && sensor.blue() >= 200 && sensor.blue() <= 450 && sensor.green() >= 1500 && sensor.green() <= 1800) {
             return IntakeColor.YELLOW;
         } else {
-            return IntakeColor.BLACK;
+            return IntakeColor.OFF;
         }
     }
 
@@ -221,8 +225,10 @@ public class IntakeSubsystem {
         telemetry.addData("Intake Rotate State: ", rotateState);
         telemetry.addData("Intake Pivot State: ", pivotState);
         telemetry.addData("Rotate Degrees: ", rotateDegrees);
+        telemetry.addData("Color: ", getColor());
         telemetry.addData("Red", sensor.red());
         telemetry.addData("Green", sensor.green());
         telemetry.addData("Blue", sensor.blue());
+
     }
 }

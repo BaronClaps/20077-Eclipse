@@ -7,7 +7,6 @@ import indubitables.config.subsystem.OuttakeSubsystem;
 import indubitables.config.subsystem.ExtendSubsystem;
 import indubitables.config.subsystem.IntakeSubsystem;
 import indubitables.config.subsystem.LiftSubsystem;
-import indubitables.config.subsystem.VisionSubsystem;
 import indubitables.config.util.IntakeColor;
 import indubitables.config.util.RobotConstants;
 import indubitables.pedroPathing.follower.Follower;
@@ -18,13 +17,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import indubitables.pedroPathing.pathGeneration.BezierCurve;
-import indubitables.pedroPathing.pathGeneration.Path;
 import indubitables.pedroPathing.pathGeneration.PathChain;
 import indubitables.pedroPathing.pathGeneration.Point;
 import indubitables.pedroPathing.util.Timer;
 
 public class Teleop {
-
 
     private ExtendSubsystem extend;
     private LiftSubsystem lift;
@@ -41,7 +38,7 @@ public class Teleop {
 
     private LightSubsystem light;
 
-    private VisionSubsystem vision;
+    //private VisionSubsystem vision;
 
     private Follower follower;
     private Pose startPose;
@@ -51,31 +48,16 @@ public class Teleop {
     private Gamepad gamepad1, gamepad2;
     private Gamepad currentGamepad1 = new Gamepad(), currentGamepad2 = new Gamepad(), previousGamepad1 = new Gamepad(), previousGamepad2 = new Gamepad();
 
-    private Timer autoBucketTimer = new Timer(), transferTimer = new Timer(), submersibleTimer = new Timer();
+    private Timer autoBucketTimer = new Timer(), transferTimer = new Timer(), submersibleTimer = new Timer(), opmodeTimer = new Timer();
 
     private int flip = 1, autoBucketState = -1, transferState = -1, submersibleState = -1, autoSpecimenState = -1;
 
     public double speed = 0.75;
 
-    private boolean fieldCentric, actionBusy, driveBusy;
+    private boolean fieldCentric, actionBusy, driveBusy, transferSampleDetected = false;
 
     private PathChain autoBucketTo, autoBucketBack;
     private Pose autoBucketToEndPose, autoBucketBackEndPose;
-
-    Gamepad.RumbleEffect detectedrumble = new Gamepad.RumbleEffect.Builder()
-            .addStep(0.0, 1.0, 500)  //  Rumble right motor 100% for 500 mSec
-            .addStep(0.0, 0.0, 300)  //  Pause for 300 mSec
-            .addStep(1.0, 0.0, 250)  //  Rumble left motor 100% for 250 mSec
-            .addStep(0.0, 0.0, 250)  //  Pause for 250 mSec
-            .addStep(1.0, 0.0, 250)  //  Rumble left motor 100% for 250 mSec
-            .build();
-
-    Gamepad.LedEffect detectedrgb = new Gamepad.LedEffect.Builder()
-            .addStep(1, 0, 0, 250) // Show red for 250ms
-            .addStep(0, 1, 0, 250) // Show green for 250ms
-            .addStep(0, 0, 1, 250) // Show blue for 250ms
-            .addStep(1, 1, 1, 250) // Show white for 250ms
-            .build();
 
 
     public Teleop(HardwareMap hardwareMap, Telemetry telemetry, Follower follower, Pose startPose, boolean fieldCentric, Gamepad gamepad1, Gamepad gamepad2) {
@@ -83,7 +65,7 @@ public class Teleop {
         lift = new LiftSubsystem(hardwareMap, telemetry);
         extend = new ExtendSubsystem(hardwareMap, telemetry);
         intake = new IntakeSubsystem(hardwareMap, telemetry, intakeGrabState, intakeRotateState, intakePivotState);
-        vision = new VisionSubsystem(hardwareMap, telemetry);
+   //     vision = new VisionSubsystem(hardwareMap, telemetry);
         light = new LightSubsystem(hardwareMap, telemetry);
 
         this.follower = follower;
@@ -96,24 +78,77 @@ public class Teleop {
     }
 
     public void init() {
-        light.blue();
+        light.violet();
         light.max();
 
         follower.setStartingPose(startPose);
         follower.setPose(startPose);
 
-        vision.init();
+       // vision.init();
     }
 
     public void start() {
         extend.setLimitToSample();
         outtake.start();
         follower.startTeleopDrive();
+
+        opmodeTimer.resetTimer();
     }
 
     public void update() {
-        light.max();
-        light.setColor(intake.getColor());
+        if(opmodeTimer.getElapsedTimeSeconds() >= 120) {
+            gamepad1.rumble(1, 1, 3000);
+            gamepad2.rumble(1, 1, 3000);
+            gamepad1.setLedColor(0.75, 0, 0, 3000);
+            gamepad2.setLedColor(0.75, 0, 0, 3000);
+        } else if(opmodeTimer.getElapsedTimeSeconds() >= 115) {
+            gamepad1.rumble(0.75, 0.75, 250);
+            gamepad2.rumble(0.75, 0.75, 250);
+            gamepad1.setLedColor(0.929, 0.039, 0.031, 5000);
+            gamepad2.setLedColor(0.929, 0.039, 0.031, 5000);
+        } else if(opmodeTimer.getElapsedTimeSeconds() >= 110) {
+            gamepad1.rumble(0.75, 0.75, 250);
+            gamepad2.rumble(0.75, 0.75, 250);
+            gamepad1.setLedColor(0.996, 0.616, 0.008, 5000);
+            gamepad2.setLedColor(0.996, 0.616, 0.008, 5000);
+        } else if(opmodeTimer.getElapsedTimeSeconds() >= 100) {
+            gamepad1.rumble(0.75, 0.75, 250);
+            gamepad2.rumble(0.75, 0.75, 250);
+            gamepad1.setLedColor(0.996, 0.996, 0.004, 10000);
+            gamepad2.setLedColor(0.996, 0.996, 0.004, 10000);
+        } else if(opmodeTimer.getElapsedTimeSeconds() >= 90) {
+            gamepad1.rumble(1, 1, 250);
+            gamepad2.rumble(1, 1, 250);
+            gamepad1.setLedColor(0.427, 0.722, 0.004, 10000);
+            gamepad2.setLedColor(0.427, 0.722, 0.004, 10000);
+        }
+
+        if(intake.pivotState == IntakeSubsystem.PivotState.SPECIMEN) {
+            if(opmodeTimer.getElapsedTimeSeconds() >= 122) {
+                light.max();
+                light.blue();
+            } else if(opmodeTimer.getElapsedTimeSeconds() >= 120) {
+                light.allOff();
+            } else if(opmodeTimer.getElapsedTimeSeconds() >= 115) {
+                light.red();
+                light.off();
+            } else if(opmodeTimer.getElapsedTimeSeconds() >= 110) {
+                light.orange();
+            } else if(opmodeTimer.getElapsedTimeSeconds() >= 100) {
+                light.yellow();
+            } else if(opmodeTimer.getElapsedTimeSeconds() >= 90) {
+                light.sage();
+            }
+        } else {
+
+            if(!(follower.getPose().getHeading() > Math.toRadians(60) && follower.getPose().getHeading() < Math.toRadians(270+60))) {
+                light.max();
+            } else {
+               light.off();
+            }
+
+            light.setColor(intake.getColor());
+        }
 
         if (actionNotBusy()) {
             previousGamepad1.copy(currentGamepad1);
@@ -149,7 +184,7 @@ public class Teleop {
 
             if (currentGamepad2.y && !previousGamepad2.y) {
                 extend.setLimitToSample();
-                outtake.transfer();
+                outtake.transferDetected();
                 intake.hover();
             }
 
@@ -187,12 +222,12 @@ public class Teleop {
 
             if (gamepad2.left_stick_button) {
                 outtake.hang();
-                intake.transfer();
+                intake.transferDetected();
                 extend.toZero();
             }
 
             if (gamepad2.right_stick_button) {
-                intake.transfer();
+                intake.transferDetected();
             }
 
             if (!driveBusy()) {
@@ -205,13 +240,6 @@ public class Teleop {
 
             if(gamepad1.y) {
                 startAutoSpecimen();
-            }
-
-            if(currentGamepad2.options && !previousGamepad2.options) {
-                gamepad1.runRumbleEffect(detectedrumble);
-                gamepad1.runLedEffect(detectedrgb);
-                gamepad2.runRumbleEffect(detectedrumble);
-                gamepad2.runLedEffect(detectedrgb);
             }
 
         } else {
@@ -242,7 +270,7 @@ public class Teleop {
         lift.telemetry();
         outtake.telemetry();
         intake.telemetry();
-        vision.telemetry();
+       // vision.telemetry();
         telemetry.update();
     }
 
@@ -262,20 +290,38 @@ public class Teleop {
         switch (transferState) {
             case 1:
                 intake.close();
-                outtake.transfer();
-                intake.transfer();
+
+                transferSampleDetected = (intake.getColor() == IntakeColor.BLUE || intake.getColor() == IntakeColor.RED || intake.getColor() == IntakeColor.YELLOW);
+
+                if (transferSampleDetected) {
+                    outtake.transferDetected();
+                    intake.transferDetected();
+                } else {
+                   outtake.transferUndetected();
+                   intake.transferUndetected();
+                }
+
                 setTransferState(2);
                 break;
             case 2:
                 if (transferTimer.getElapsedTimeSeconds() > 0.1) {
-                    outtake.setRotateState(OuttakeSubsystem.RotateState.TRANSFER);
+                    if (transferSampleDetected)
+                        outtake.setRotateState(OuttakeSubsystem.RotateState.TRANSFER_DETECTED);
+                    else
+                        outtake.setRotateState(OuttakeSubsystem.RotateState.TRANSFER_UNDETECTED);
+
                     extend.toTransfer();
                     setTransferState(3);
                 }
                 break;
             case 3:
                 if (transferTimer.getElapsedTimeSeconds() > 0.15) {
-                    outtake.transfer();
+                    if (transferSampleDetected) {
+                        outtake.transferDetected();
+                    } else {
+                        outtake.transferUndetected();
+                    }
+
                     setTransferState(4);
                 }
                 break;
@@ -301,6 +347,7 @@ public class Teleop {
                 if (transferTimer.getElapsedTimeSeconds() > 0.25) {
                     intake.hover();
                     actionBusy = false;
+                    transferSampleDetected = false;
                     setTransferState(-1);
                 }
                 break;
@@ -321,7 +368,7 @@ public class Teleop {
             case 0:
                 intake.ground();
                 intake.open();
-                outtake.transfer();
+                outtake.transferDetected();
                 setSubmersibleState(1);
                 break;
             case 1:
@@ -353,7 +400,7 @@ public class Teleop {
             case 1:
                 actionBusy = true;
                 outtake.open();
-                outtake.transfer();
+                outtake.transferDetected();
                 extend.toZero();
 
                 follower.breakFollowing();
@@ -407,7 +454,7 @@ public class Teleop {
                     follower.followPath(autoBucketBack, true);
 
                     outtake.open();
-                    outtake.transfer();
+                    outtake.transferDetected();
                     setAutoBucketState(7);
                 }
                 break;

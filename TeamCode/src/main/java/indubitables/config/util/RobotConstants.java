@@ -8,13 +8,15 @@ public class RobotConstants {
     // Outtake
     public static double outtakeGrabClose = 0.06;
     public static double outtakeGrabOpen = 0.275;
-    public static double outtakeRotateTransfer = 0.37; //.775
+    public static double outtakeRotateTransferDetected = 0.37; //.775
+    public static double outtakeRotateTransferUndetected = 0.37; //.775
     public static double outtakeRotateSpecimenGrab = 0.58;
     public static double outtakeRotateLeftScore = 0.83;
     public static double outtakeRotateRightScore = 0.4375;
     public static double outtakeRotateLeftSpecimenScore = 0.6;
     public static double outtakeRotateRightSpecimenScore = 0.23;
-    public static double outtakePivotTransfer= 0.2; //0
+    public static double outtakePivotTransferDetected= 0.2; //0
+    public static double outtakePivotTransferUndetected= 0.2; //0
     public static double outtakePivotScore = 0.475;
     public static double outtakePivotSpecimenGrab = 0.1325;
     public static double outtakePivotSpecimenScore = 0.6225;
@@ -22,12 +24,13 @@ public class RobotConstants {
     // Intake
     public static double intakeGrabClose = 0.12;
     public static double intakeGrabOpen = 0.35;
-    public static double intakeRotateTransfer = 0.9;
+    public static double intakeRotateTransferDetected = 0.9;
+    public static double intakeRotateTransferUndetected = 0.9;
     public static double intakeRotateHoverVertical = 0.3;
     public static double intakeRotateGroundVertical = 0.38;
     public static double intakeRotateSpecimen = 0.9;
-    public static double intakePivotTransfer= 0.45;
-    public static double intakePivotTransferHigh = 0.45;
+    public static double intakePivotTransferDetected = 0.45;
+    public static double intakePivotTransferUndetected = 0.45;
     public static double intakePivotGround = 0.64;
     public static double intakePivotHover = 0.4;
     public static double intakePivotSpecimen = 0;

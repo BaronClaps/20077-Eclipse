@@ -44,7 +44,7 @@ public class VisionTest extends OpMode {
         currentGamepad2.copy(gamepad2);
 
         if(gamepad1.x) {
-            intake.transfer();
+            intake.transferDetected();
         }
 
         if(gamepad1.y) {

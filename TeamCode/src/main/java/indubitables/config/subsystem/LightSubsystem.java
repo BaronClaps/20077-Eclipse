@@ -60,6 +60,9 @@ public class LightSubsystem {
                 rL.violet();
                 rR.violet();
                 break;
+            case OFF:
+                rL.off();
+                rR.off();
         }
     }
 

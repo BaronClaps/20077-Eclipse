@@ -60,7 +60,7 @@ public class Bucket extends OpMode {
                 break;
             case 2:
                 if(pathTimer.getElapsedTimeSeconds() > 0.25) {
-                    auto.outtake.transfer();
+                    auto.outtake.transferDetected();
                     setPathState(3);
                 }
                 break;

@@ -20,11 +20,11 @@ public class OuttakeSubsystem {
     }
 
     public enum RotateState {
-        TRANSFER, SCORE, SPECIMENGRAB, SPECIMENSCORE
+        SCORE, SPECIMENGRAB, SPECIMENSCORE, TRANSFER_UNDETECTED, TRANSFER_DETECTED
     }
     
     public enum PivotState {
-        TRANSFER, SCORE, SPECIMENGRAB, SPECIMENSCORE
+        SCORE, SPECIMENGRAB, SPECIMENSCORE, TRANSFER_UNDETECTED, TRANSFER_DETECTED
     }
 
     public Servo grab, leftRotate, rightRotate, leftPivot, rightPivot;
@@ -48,10 +48,14 @@ public class OuttakeSubsystem {
     }
 
     public void setRotateState(RotateState state) {
-        if (state == RotateState.TRANSFER) {
-            leftRotate.setPosition(outtakeRotateTransfer-0.02);
-            rightRotate.setPosition(outtakeRotateTransfer);
-            this.rotateState = RotateState.TRANSFER;
+        if (state == RotateState.TRANSFER_DETECTED) {
+            leftRotate.setPosition(outtakeRotateTransferDetected-0.02);
+            rightRotate.setPosition(outtakeRotateTransferDetected);
+            this.rotateState = RotateState.TRANSFER_DETECTED;
+        } else if (state == RotateState.TRANSFER_UNDETECTED) {
+            leftRotate.setPosition(outtakeRotateTransferUndetected-0.02);
+            rightRotate.setPosition(outtakeRotateTransferUndetected);
+            this.rotateState = RotateState.TRANSFER_UNDETECTED;
         } else if (state == RotateState.SCORE) {
             leftRotate.setPosition(outtakeRotateLeftScore);
             rightRotate.setPosition(outtakeRotateRightScore);
@@ -86,10 +90,14 @@ public class OuttakeSubsystem {
     }
 
     public void setPivotState(PivotState pivotState) {
-        if (pivotState == PivotState.TRANSFER) {
-            leftPivot.setPosition(outtakePivotTransfer);
-            rightPivot.setPosition(outtakePivotTransfer);
-            this.pivotState = PivotState.TRANSFER;
+        if (pivotState == PivotState.TRANSFER_DETECTED) {
+            leftPivot.setPosition(outtakePivotTransferDetected);
+            rightPivot.setPosition(outtakePivotTransferDetected);
+            this.pivotState = PivotState.TRANSFER_DETECTED;
+        } else if (pivotState == PivotState.TRANSFER_UNDETECTED) {
+            leftPivot.setPosition(outtakePivotTransferUndetected);
+            rightPivot.setPosition(outtakePivotTransferUndetected);
+            this.pivotState = PivotState.TRANSFER_UNDETECTED;
         } else if (pivotState == PivotState.SCORE) {
             leftPivot.setPosition(outtakePivotScore);
             rightPivot.setPosition(outtakePivotScore);
@@ -113,14 +121,15 @@ public class OuttakeSubsystem {
         setGrabState(GrabState.CLOSED);
     }
 
-    public void transferHigh() {
-        leftPivot.setPosition(outtakePivotTransfer+0.1);
-        rightPivot.setPosition(outtakePivotTransfer+0.1);
+    public void transferDetected() {
+        setRotateState(RotateState.TRANSFER_DETECTED);
+        setPivotState(PivotState.TRANSFER_DETECTED);
+        setGrabState(GrabState.OPEN);
     }
 
-    public void transfer() {
-        setRotateState(RotateState.TRANSFER);
-        setPivotState(PivotState.TRANSFER);
+    public void transferUndetected() {
+        setRotateState(RotateState.TRANSFER_UNDETECTED);
+        setPivotState(PivotState.TRANSFER_UNDETECTED);
         setGrabState(GrabState.OPEN);
     }
 

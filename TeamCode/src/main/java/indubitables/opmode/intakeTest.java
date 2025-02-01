@@ -34,7 +34,7 @@ public class intakeTest extends OpMode {
     @Override
     public void loop() {
         if(gamepad1.x) {
-            intake.transfer();
+            intake.transferDetected();
         }
 
         if(gamepad1.y) {

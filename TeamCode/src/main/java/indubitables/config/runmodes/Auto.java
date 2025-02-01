@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import indubitables.config.subsystem.LightSubsystem;
-import indubitables.config.util.FieldConstants;
 import indubitables.pedroPathing.pathGeneration.BezierCurve;
 import indubitables.config.subsystem.OuttakeSubsystem;
 import indubitables.config.subsystem.ExtendSubsystem;
@@ -14,9 +13,7 @@ import indubitables.config.subsystem.IntakeSubsystem;
 import indubitables.config.subsystem.LiftSubsystem;
 import indubitables.pedroPathing.follower.Follower;
 import indubitables.pedroPathing.localization.Pose;
-import indubitables.pedroPathing.pathGeneration.BezierCurveCoefficients;
 import indubitables.pedroPathing.pathGeneration.BezierLine;
-import indubitables.pedroPathing.pathGeneration.Path;
 import indubitables.pedroPathing.pathGeneration.PathChain;
 import indubitables.pedroPathing.pathGeneration.Point;
 import indubitables.pedroPathing.util.Timer;
@@ -268,9 +265,9 @@ public class Auto {
         switch (transferState) {
             case 1:
                 actionBusy = true;
-                intake.transfer();
+                intake.transferDetected();
                 lift.toTransfer();
-                outtake.transfer();
+                outtake.transferDetected();
                 extend.toZero();
                 lift.toZero();
                 transferTimer.resetTimer();
@@ -308,7 +305,7 @@ public class Auto {
         switch (bucketState) {
             case 1:
                 actionBusy = true;
-                intake.transfer();
+                intake.transferDetected();
                 lift.toHighBucket();
                 outtake.close();
                 extend.toZero();
@@ -416,7 +413,7 @@ public class Auto {
                 break;
             case 2:
                 if(intakeTimer.getElapsedTimeSeconds() > 0.5) {
-                    outtake.transfer();
+                    outtake.transferDetected();
                     intake.hover();
                     lift.toTransfer();
                     outtake.open();
@@ -463,9 +460,9 @@ public class Auto {
                 break;
             case 2:
                 if(parkTimer.getElapsedTimeSeconds() > 0.5) {
-                    intake.transfer();
+                    intake.transferDetected();
                     lift.toPark();
-                    outtake.transfer();
+                    outtake.transferDetected();
                     extend.toZero();
                     parkTimer.resetTimer();
                     actionBusy = false;

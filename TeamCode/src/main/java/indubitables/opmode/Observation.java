@@ -3,7 +3,6 @@ package indubitables.opmode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import indubitables.config.subsystem.IntakeSubsystem;
 import indubitables.pedroPathing.follower.Follower;
 import indubitables.config.runmodes.Auto;
 import indubitables.pedroPathing.util.Timer;
@@ -205,7 +204,7 @@ public class Observation extends OpMode {
                 break;
             case 26:
                 if(pathTimer.getElapsedTimeSeconds() > 0.5) {
-                    auto.outtake.transfer();
+                    auto.outtake.transferDetected();
                     auto.intake.hover();
                     setPathState(-1);
                 }
