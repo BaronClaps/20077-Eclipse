@@ -200,13 +200,13 @@ public class Observation extends OpMode {
                     auto.follower.followPath(auto.park, true);
                     auto.outtake.open();
                     auto.extend.toFull();
-                    auto.intake.hover();
                     setPathState(26);
                 }
                 break;
             case 26:
-                if(pathTimer.getElapsedTimeSeconds() > 1) {
-
+                if(pathTimer.getElapsedTimeSeconds() > 0.5) {
+                    auto.outtake.transfer();
+                    auto.intake.hover();
                     setPathState(-1);
                 }
                 break;

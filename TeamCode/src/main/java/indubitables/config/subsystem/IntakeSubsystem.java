@@ -1,10 +1,14 @@
 package indubitables.config.subsystem;
 
 import static indubitables.config.util.RobotConstants.*;
+
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+import indubitables.config.util.IntakeColor;
 
 
 /** @author Baron Henderson
@@ -26,6 +30,8 @@ public class IntakeSubsystem {
     }
 
     public Servo grab, leftRotate, rightRotate, leftPivot, rightPivot;
+    public RevColorSensorV3 sensor;
+    public IntakeColor color;
     public GrabState grabState;
     public RotateState rotateState;
     public PivotState pivotState;
@@ -39,10 +45,13 @@ public class IntakeSubsystem {
         rightRotate = hardwareMap.get(Servo.class, "iRR");
         leftPivot = hardwareMap.get(Servo.class, "iLP");
         rightPivot = hardwareMap.get(Servo.class, "iRP");
+        sensor = hardwareMap.get(RevColorSensorV3.class, "iS");
+
         this.telemetry = telemetry;
         this.grabState = grabState;
         this.rotateState = rotateState;
         this.pivotState = pivotState;
+        this.color = IntakeColor.BLACK;
     }
 
     public void setRotateState(RotateState state) {
@@ -191,6 +200,32 @@ public class IntakeSubsystem {
         setPivotState(PivotState.HOVER);
         setRotateState(RotateState.HOVER);
         setGrabState(GrabState.OPEN);
+    }
+
+    public IntakeColor getColor() {
+        if (sensor.red() <= 100 && sensor.blue() <= 100 && sensor.green() <= 100) {
+            return IntakeColor.BLACK;
+        } else if (sensor.red() > 200 && sensor.green() < 100 && sensor.blue() < 100) {
+            return IntakeColor.RED;
+        } else if (sensor.red() > 200 && sensor.green() > 100 && sensor.blue() < 100) {
+            return IntakeColor.ORANGE;
+        } else if (sensor.red() > 200 && sensor.green() > 200 && sensor.blue() < 100) {
+            return IntakeColor.YELLOW;
+        } else if (sensor.red() < 100 && sensor.green() > 200 && sensor.blue() < 100) {
+            return IntakeColor.SAGE;
+        } else if (sensor.red() < 100 && sensor.green() > 200 && sensor.blue() > 200) {
+            return IntakeColor.AZURE;
+        } else if (sensor.red() < 100 && sensor.green() < 100 && sensor.blue() > 200) {
+            return IntakeColor.BLUE;
+        } else if (sensor.red() > 100 && sensor.green() < 100 && sensor.blue() > 200) {
+            return IntakeColor.INDIGO;
+        } else if (sensor.red() > 200 && sensor.green() < 100 && sensor.blue() > 200) {
+            return IntakeColor.VIOLET;
+        } else if (sensor.red() < 50 && sensor.green() < 50 && sensor.blue() < 50) {
+            return IntakeColor.BLACK;
+        } else {
+            return IntakeColor.WHITE;
+        }
     }
 
     public void telemetry() {

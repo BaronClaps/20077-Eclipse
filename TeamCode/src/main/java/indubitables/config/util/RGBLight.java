@@ -14,8 +14,8 @@ public class RGBLight {
         s.setPosition(i);
     }
 
-    public void setColorFromRange(int percent) {
-        s.setPosition((double) percent / 100);
+    public void setColorFromRange(double percent) {
+        s.setPosition(percent / 100);
     }
 
     public double getPosition() {

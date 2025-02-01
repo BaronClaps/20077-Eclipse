@@ -14,8 +14,8 @@ public class Headlight {
         s.setPosition(i);
     }
 
-    public void setIntensity(int percent) {
-        s.setPosition((double) percent / 100);
+    public void setIntensity(double percent) {
+        s.setPosition(percent / 100);
     }
 
     public double getPosition() {

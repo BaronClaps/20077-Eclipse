@@ -2,11 +2,13 @@ package indubitables.config.runmodes;
 
 import static indubitables.config.util.FieldConstants.humanPlayerPose;
 
+import indubitables.config.subsystem.LightSubsystem;
 import indubitables.config.subsystem.OuttakeSubsystem;
 import indubitables.config.subsystem.ExtendSubsystem;
 import indubitables.config.subsystem.IntakeSubsystem;
 import indubitables.config.subsystem.LiftSubsystem;
 import indubitables.config.subsystem.VisionSubsystem;
+import indubitables.config.util.IntakeColor;
 import indubitables.config.util.RobotConstants;
 import indubitables.pedroPathing.follower.Follower;
 import indubitables.pedroPathing.localization.Pose;
@@ -36,6 +38,8 @@ public class Teleop {
     private OuttakeSubsystem.GrabState outtakeGrabState;
     private OuttakeSubsystem.PivotState outtakePivotState;
     private OuttakeSubsystem.RotateState outtakeRotateState;
+
+    private LightSubsystem light;
 
     private VisionSubsystem vision;
 
@@ -80,6 +84,7 @@ public class Teleop {
         extend = new ExtendSubsystem(hardwareMap, telemetry);
         intake = new IntakeSubsystem(hardwareMap, telemetry, intakeGrabState, intakeRotateState, intakePivotState);
         vision = new VisionSubsystem(hardwareMap, telemetry);
+        light = new LightSubsystem(hardwareMap, telemetry);
 
         this.follower = follower;
         this.startPose = startPose;
@@ -91,6 +96,9 @@ public class Teleop {
     }
 
     public void init() {
+        light.blue();
+        light.max();
+
         follower.setStartingPose(startPose);
         follower.setPose(startPose);
 
@@ -104,6 +112,9 @@ public class Teleop {
     }
 
     public void update() {
+        light.max();
+        light.setColor(intake.getColor());
+
         if (actionNotBusy()) {
             previousGamepad1.copy(currentGamepad1);
             previousGamepad2.copy(currentGamepad2);
@@ -216,6 +227,7 @@ public class Teleop {
         transfer();
         submersible();
         autoSpecimen();
+
 
         follower.update();
         telemetry.addData("X: ", follower.getPose().getX());

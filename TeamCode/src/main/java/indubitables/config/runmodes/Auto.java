@@ -5,6 +5,7 @@ import static indubitables.config.util.FieldConstants.*;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import indubitables.config.subsystem.LightSubsystem;
 import indubitables.config.util.FieldConstants;
 import indubitables.pedroPathing.pathGeneration.BezierCurve;
 import indubitables.config.subsystem.OuttakeSubsystem;
@@ -13,6 +14,7 @@ import indubitables.config.subsystem.IntakeSubsystem;
 import indubitables.config.subsystem.LiftSubsystem;
 import indubitables.pedroPathing.follower.Follower;
 import indubitables.pedroPathing.localization.Pose;
+import indubitables.pedroPathing.pathGeneration.BezierCurveCoefficients;
 import indubitables.pedroPathing.pathGeneration.BezierLine;
 import indubitables.pedroPathing.pathGeneration.Path;
 import indubitables.pedroPathing.pathGeneration.PathChain;
@@ -35,6 +37,7 @@ public class Auto {
     
     public LiftSubsystem lift;
     public ExtendSubsystem extend;
+    public LightSubsystem light;
 
 
     public Follower follower;
@@ -43,7 +46,7 @@ public class Auto {
     public boolean actionBusy, liftPIDF = true;
     public double liftManual = 0;
 
-    public Timer transferTimer = new Timer(), bucketTimer = new Timer(), chamberTimer = new Timer(), intakeTimer = new Timer(), parkTimer = new Timer(), specimenTimer = new Timer(), chamberTimer2 = new Timer();
+    public Timer transferTimer = new Timer(), bucketTimer = new Timer(), chamberTimer = new Timer(), intakeTimer = new Timer(), parkTimer = new Timer(), specimenTimer = new Timer(), lightTimer = new Timer();
     public int transferState = -1, bucketState = -1, chamberState = -1, intakeState = -1, parkState = -1, specimenState = -1;
 
     public PathChain preload, pushSamples, specimen1, specimen2, specimen3, specimen4, grab1, grab2, grab3, grab4, park, element1, element2, element3, score1, score2, score3;
@@ -54,6 +57,7 @@ public class Auto {
         extend = new ExtendSubsystem(hardwareMap, telemetry);
         intake = new IntakeSubsystem(hardwareMap, telemetry, intakeGrabState, intakeRotateState, intakePivotState);
         outtake = new OuttakeSubsystem(hardwareMap, telemetry, outtakeGrabState, outtakeRotateState, outtakePivotState);
+        light = new LightSubsystem(hardwareMap, telemetry);
 
         this.follower = follower;
         this.telemetry = telemetry;
@@ -67,6 +71,9 @@ public class Auto {
     }
 
     public void init() {
+        light.max();
+        light.blue();
+
         outtake.init();
         outtake.close();
         lift.init();
@@ -77,14 +84,20 @@ public class Auto {
     }
 
     public void start() {
+        light.allOff();
+
         lift.start();
         extend.start();
         extend.toZero();
         outtake.close();
         follower.setStartingPose(startPose);
+
+        lightTimer.resetTimer();
     }
 
     public void update() {
+        light.allOff();
+
         follower.update();
 
         if(!liftPIDF)
@@ -185,15 +198,15 @@ public class Auto {
             pushSamples = follower.pathBuilder()
                     .addPath(new BezierCurve(new Point(preloadPose), new Point(15, 36, Point.CARTESIAN), new Point(59, 36.25, Point.CARTESIAN), new Point(56, 26.000, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(preloadPose.getHeading(), Math.toRadians(180))
-                    .addPath(new BezierLine(new Point(56.000, 26.000, Point.CARTESIAN), new Point(28, 26.000, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(56, 26.000, Point.CARTESIAN), new Point(28, 26.000, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(180),Math.toRadians(180))
-                    .addPath(new BezierCurve(new Point(28, 26.000, Point.CARTESIAN), new Point(52.000, 26.000, Point.CARTESIAN), new Point(56.000, 15.000, Point.CARTESIAN)))
+                    .addPath(new BezierCurve(new Point(28, 26.000, Point.CARTESIAN), new Point(52.000, 26.000, Point.CARTESIAN), new Point(58.000, 15.000, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(180),Math.toRadians(180))
-                    .addPath(new BezierLine(new Point(56.000, 15.000, Point.CARTESIAN), new Point(28, 15.000, Point.CARTESIAN)))
+                    .addPath(new BezierLine(new Point(58.000, 15.000, Point.CARTESIAN), new Point(28, 15.000, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(180),Math.toRadians(180))
-                    .addPath(new BezierCurve(new Point(28, 15.000, Point.CARTESIAN), new Point(56.000, 10.000, Point.CARTESIAN), new Point(56.000, 8, Point.CARTESIAN)))
+                    .addPath(new BezierCurve(new Point(28, 15.000, Point.CARTESIAN), new Point(58.000, 10.000, Point.CARTESIAN), new Point(58.000, 8, Point.CARTESIAN)))
                     .setLinearHeadingInterpolation(Math.toRadians(180),Math.toRadians(180))
-                    .addPath(new BezierLine(new Point(56.000, 8, Point.CARTESIAN), new Point(26, 8, Point.CARTESIAN)) )
+                    .addPath(new BezierLine(new Point(58.000, 8, Point.CARTESIAN), new Point(26, 8, Point.CARTESIAN)) )
                     .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                     .addPath(new BezierCurve(new Point(26,8,Point.CARTESIAN), new Point(35, 20, Point.CARTESIAN), new Point(grab1Pose)))
                     .setLinearHeadingInterpolation(Math.toRadians(180), grab1Pose.getHeading())
@@ -231,7 +244,7 @@ public class Auto {
                     .build();
 
             grab4 = follower.pathBuilder()
-                    .addPath(new BezierLine(new Point(specimen3Pose), new Point(grab4Pose)))
+                    .addPath(new BezierCurve(new Point(specimen3Pose),new Point(grab4Pose.getX() + 10, grab4Pose.getY()+10, Point.CARTESIAN), new Point(grab4Pose)))
                     .setLinearHeadingInterpolation(specimen3Pose.getHeading(), grab4Pose.getHeading())
                     .setZeroPowerAccelerationMultiplier(2.5)
                     .build();

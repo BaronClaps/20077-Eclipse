@@ -6,17 +6,65 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import indubitables.config.util.Headlight;
+import indubitables.config.util.IntakeColor;
 import indubitables.config.util.RGBLight;
 
 public class LightSubsystem {
     private Headlight hL, hR;
     private RGBLight rL, rR;
+    private IntakeColor color;
 
     public LightSubsystem(HardwareMap h, Telemetry t) {
         hL = new Headlight(h.get(Servo.class, "hL"));
         hR = new Headlight(h.get(Servo.class, "hR"));
         rL = new RGBLight(h.get(Servo.class, "rL"));
         rR = new RGBLight(h.get(Servo.class, "rR"));
+    }
+
+    public void setColor(IntakeColor color) {
+        this.color = color;
+        switch (color) {
+            case RED:
+                rL.red();
+                rR.red();
+                break;
+            case ORANGE:
+                rL.orange();
+                rR.orange();
+                break;
+            case YELLOW:
+                rL.yellow();
+                rR.yellow();
+                break;
+            case SAGE:
+                rL.sage();
+                rR.sage();
+                break;
+            case GREEN:
+                rL.green();
+                rR.green();
+                break;
+            case AZURE:
+                rL.azure();
+                rR.azure();
+                break;
+            case BLUE:
+                rL.blue();
+                rR.blue();
+                break;
+            case INDIGO:
+                rL.indigo();
+                rR.indigo();
+                break;
+            case VIOLET:
+                rL.violet();
+                rR.violet();
+                break;
+        }
+    }
+
+    public IntakeColor getColor() {
+        return color;
     }
 
     public void red() {
@@ -91,5 +139,12 @@ public class LightSubsystem {
         rR.white();
         hL.max();
         hR.max();
+    }
+
+    public void setPercent(double percent) {
+        rL.setColorFromRange(percent);
+        rR.setColorFromRange(percent);
+        hL.setIntensity(percent);
+        hR.setIntensity(percent);
     }
 }
