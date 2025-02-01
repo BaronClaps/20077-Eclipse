@@ -233,5 +233,8 @@ public class IntakeSubsystem {
         telemetry.addData("Intake Rotate State: ", rotateState);
         telemetry.addData("Intake Pivot State: ", pivotState);
         telemetry.addData("Rotate Degrees: ", rotateDegrees);
+        telemetry.addData("Red", sensor.red());
+        telemetry.addData("Green", sensor.green());
+        telemetry.addData("Blue", sensor.blue());
     }
 }
