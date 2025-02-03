@@ -13,9 +13,9 @@ import indubitables.pedroPathing.pathGeneration.Vector;
  * @version 1.0, 4/2/2024
  */
 public class Pose {
-    public static double x;
-    public static double y;
-    public static double heading;
+    private double x;
+    private double y;
+    private double heading;
 
     /**
      * This creates a new Pose from a x, y, and heading inputs.

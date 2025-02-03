@@ -10,13 +10,13 @@ import indubitables.config.util.IntakeColor;
 import indubitables.config.util.RGBLight;
 
 public class LightSubsystem {
-    private Headlight hL, hR;
+    //private Headlight hL, hR;
     private RGBLight rL, rR;
     private IntakeColor color;
 
     public LightSubsystem(HardwareMap h, Telemetry t) {
-        hL = new Headlight(h.get(Servo.class, "hL"));
-        hR = new Headlight(h.get(Servo.class, "hR"));
+       // hL = new Headlight(h.get(Servo.class, "hL"));
+     //   hR = new Headlight(h.get(Servo.class, "hR"));
         rL = new RGBLight(h.get(Servo.class, "rL"));
         rR = new RGBLight(h.get(Servo.class, "rR"));
     }
@@ -115,39 +115,44 @@ public class LightSubsystem {
         rR.violet();
     }
 
-    public void max() {
-        hL.max();
-        hR.max();
-    }
-
     public void off() {
-        hL.off();
-        hR.off();
+        rL.off();
+        rR.off();
     }
 
-    public void half() {
-        hL.half();
-        hR.half();
-    }
+//    public void max() {
+//        hL.max();
+//        hR.max();
+//    }
+//
+//    public void off() {
+//        hL.off();
+//        hR.off();
+//    }
+//
+//    public void half() {
+//        hL.half();
+//        hR.half();
+//    }
 
     public void allOff() {
         rL.off();
         rR.off();
-        hL.off();
-        hR.off();
+//        hL.off();
+//        hR.off();
     }
 
     public void allMax() {
         rL.white();
         rR.white();
-        hL.max();
-        hR.max();
+//        hL.max();
+//        hR.max();
     }
 
     public void setPercent(double percent) {
         rL.setColorFromRange(percent);
         rR.setColorFromRange(percent);
-        hL.setIntensity(percent);
-        hR.setIntensity(percent);
+//        hL.setIntensity(percent);
+//        hR.setIntensity(percent);
     }
 }

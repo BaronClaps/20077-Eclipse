@@ -45,7 +45,7 @@ public class IntakeSubsystem {
         rightRotate = hardwareMap.get(Servo.class, "iRR");
         leftPivot = hardwareMap.get(Servo.class, "iLP");
         rightPivot = hardwareMap.get(Servo.class, "iRP");
-        sensor = hardwareMap.get(RevColorSensorV3.class, "iS");
+      //  sensor = hardwareMap.get(RevColorSensorV3.class, "iS");
 
         this.telemetry = telemetry;
         this.grabState = grabState;
@@ -208,8 +208,8 @@ public class IntakeSubsystem {
         setGrabState(GrabState.OPEN);
     }
 
-    public IntakeColor getColor() {
-        if(sensor.red() >= 650 && sensor.red() <= 850 && sensor.blue() >= 100 && sensor.blue() <= 250 && sensor.green() >= 200 && sensor.green() <= 500) {
+  /*  public IntakeColor getColor() {
+        /*if(sensor.red() >= 650 && sensor.red() <= 850 && sensor.blue() >= 100 && sensor.blue() <= 250 && sensor.green() >= 200 && sensor.green() <= 500) {
             return IntakeColor.RED;
         } else if (sensor.red() >= 75 && sensor.red() <= 250 && sensor.blue() >= 650 && sensor.blue() <= 850 && sensor.green() >= 200 && sensor.green() <= 450) {
             return IntakeColor.BLUE;
@@ -217,18 +217,35 @@ public class IntakeSubsystem {
             return IntakeColor.YELLOW;
         } else {
             return IntakeColor.OFF;
-        }
-    }
+        }*/
+    /*
+
+        IntakeColor c = IntakeColor.OFF;
+
+        if((sensor.red() * 2) >= sensor.blue())
+            c = IntakeColor.RED;
+
+        if((sensor.blue() * 2) >= sensor.red())
+            c = IntakeColor.BLUE;
+
+        if((sensor.green() >= sensor.red()) && (sensor.green() >= sensor.blue()))
+            c =IntakeColor.YELLOW;
+
+        if(sensor.blue() <= 200 && sensor.red() <= 200 && sensor.green() <= 200)
+            c = IntakeColor.OFF;
+
+        return c;
+    } */
 
     public void telemetry() {
         telemetry.addData("Intake Grab State: ", grabState);
         telemetry.addData("Intake Rotate State: ", rotateState);
         telemetry.addData("Intake Pivot State: ", pivotState);
         telemetry.addData("Rotate Degrees: ", rotateDegrees);
-        telemetry.addData("Color: ", getColor());
-        telemetry.addData("Red", sensor.red());
-        telemetry.addData("Green", sensor.green());
-        telemetry.addData("Blue", sensor.blue());
+    //    telemetry.addData("Color: ", getColor());
+//        telemetry.addData("Red", sensor.red());
+//        telemetry.addData("Green", sensor.green());
+//        telemetry.addData("Blue", sensor.blue());
 
     }
 }

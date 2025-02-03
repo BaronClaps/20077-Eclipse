@@ -193,8 +193,8 @@ public class OuttakeSubsystem {
     }
 
     public void start() {
-        setPivotState(PivotState.TRANSFER);
-        setRotateState(RotateState.TRANSFER);
+        setPivotState(PivotState.TRANSFER_DETECTED);
+        setRotateState(RotateState.TRANSFER_DETECTED);
         setGrabState(GrabState.CLOSED);
     }
 

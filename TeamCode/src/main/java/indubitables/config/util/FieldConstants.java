@@ -29,15 +29,15 @@ public class FieldConstants {
 
     public static Pose observationSpecimenSetPose = new Pose(12, 33, Math.toRadians(180));
 
-    public static Pose observationSpecimenPickupPose = new Pose(6.25, 33, Math.toRadians(180));
-    public static Pose observationSpecimenPickup2Pose = new Pose(6.25, 33, Math.toRadians(180));
-    public static Pose observationSpecimenPickup3Pose = new Pose(6.25, 33, Math.toRadians(180));
-    public static Pose observationSpecimenPickup4Pose = new Pose(6.25, 33, Math.toRadians(180));
+    public static Pose observationSpecimenPickupPose = new Pose(6, 33, Math.toRadians(180));
+    public static Pose observationSpecimenPickup2Pose = new Pose(6, 33, Math.toRadians(180));
+    public static Pose observationSpecimenPickup3Pose = new Pose(6, 33, Math.toRadians(180));
+    public static Pose observationSpecimenPickup4Pose = new Pose(6, 33, Math.toRadians(180));
 
-    public static Pose observationSpecimen1Pose = new Pose(38, 74, Math.toRadians(180));
-    public static Pose observationSpecimen2Pose = new Pose(38, 72, Math.toRadians(180));
-    public static Pose observationSpecimen3Pose = new Pose(38, 69, Math.toRadians(180));
-    public static Pose observationSpecimen4Pose = new Pose(38, 66, Math.toRadians(180));
+    public static Pose observationSpecimen1Pose = new Pose(38, 75, Math.toRadians(180));
+    public static Pose observationSpecimen2Pose = new Pose(38, 73, Math.toRadians(180));
+    public static Pose observationSpecimen3Pose = new Pose(38, 70, Math.toRadians(180));
+    public static Pose observationSpecimen4Pose = new Pose(38, 68, Math.toRadians(180));
 
     public static Pose observationParkPose = new Pose(24, 40, Math.toRadians(215));
 

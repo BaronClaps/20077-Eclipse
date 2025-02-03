@@ -79,7 +79,7 @@ public class Teleop {
 
     public void init() {
         light.violet();
-        light.max();
+      //  light.max();
 
         follower.setStartingPose(startPose);
         follower.setPose(startPose);
@@ -96,59 +96,54 @@ public class Teleop {
     }
 
     public void update() {
-        if(opmodeTimer.getElapsedTimeSeconds() >= 120) {
+        if(opmodeTimer.getElapsedTimeSeconds() == 120) {
             gamepad1.rumble(1, 1, 3000);
             gamepad2.rumble(1, 1, 3000);
             gamepad1.setLedColor(0.75, 0, 0, 3000);
             gamepad2.setLedColor(0.75, 0, 0, 3000);
-        } else if(opmodeTimer.getElapsedTimeSeconds() >= 115) {
+        } else if(opmodeTimer.getElapsedTimeSeconds() == 115) {
             gamepad1.rumble(0.75, 0.75, 250);
             gamepad2.rumble(0.75, 0.75, 250);
             gamepad1.setLedColor(0.929, 0.039, 0.031, 5000);
             gamepad2.setLedColor(0.929, 0.039, 0.031, 5000);
-        } else if(opmodeTimer.getElapsedTimeSeconds() >= 110) {
+        } else if(opmodeTimer.getElapsedTimeSeconds() == 110) {
             gamepad1.rumble(0.75, 0.75, 250);
             gamepad2.rumble(0.75, 0.75, 250);
             gamepad1.setLedColor(0.996, 0.616, 0.008, 5000);
             gamepad2.setLedColor(0.996, 0.616, 0.008, 5000);
-        } else if(opmodeTimer.getElapsedTimeSeconds() >= 100) {
+        } else if(opmodeTimer.getElapsedTimeSeconds() == 100) {
             gamepad1.rumble(0.75, 0.75, 250);
             gamepad2.rumble(0.75, 0.75, 250);
             gamepad1.setLedColor(0.996, 0.996, 0.004, 10000);
             gamepad2.setLedColor(0.996, 0.996, 0.004, 10000);
-        } else if(opmodeTimer.getElapsedTimeSeconds() >= 90) {
+        } else if(opmodeTimer.getElapsedTimeSeconds() == 90) {
             gamepad1.rumble(1, 1, 250);
             gamepad2.rumble(1, 1, 250);
             gamepad1.setLedColor(0.427, 0.722, 0.004, 10000);
             gamepad2.setLedColor(0.427, 0.722, 0.004, 10000);
         }
 
-        if(intake.pivotState == IntakeSubsystem.PivotState.SPECIMEN) {
-            if(opmodeTimer.getElapsedTimeSeconds() >= 122) {
-                light.max();
-                light.blue();
-            } else if(opmodeTimer.getElapsedTimeSeconds() >= 120) {
-                light.allOff();
-            } else if(opmodeTimer.getElapsedTimeSeconds() >= 115) {
-                light.red();
-                light.off();
-            } else if(opmodeTimer.getElapsedTimeSeconds() >= 110) {
-                light.orange();
-            } else if(opmodeTimer.getElapsedTimeSeconds() >= 100) {
-                light.yellow();
-            } else if(opmodeTimer.getElapsedTimeSeconds() >= 90) {
-                light.sage();
-            }
-        } else {
-
-            if(!(follower.getPose().getHeading() > Math.toRadians(60) && follower.getPose().getHeading() < Math.toRadians(270+60))) {
-                light.max();
-            } else {
-               light.off();
-            }
-
-            light.setColor(intake.getColor());
-        }
+//        if(intake.pivotState == IntakeSubsystem.PivotState.SPECIMEN) {
+//            if(opmodeTimer.getElapsedTimeSeconds() == 122) {
+//                light.blue();
+//            } else if(opmodeTimer.getElapsedTimeSeconds() == 120) {
+//                light.off();
+//            } else if(opmodeTimer.getElapsedTimeSeconds() == 115) {
+//                light.red();
+//            } else if(opmodeTimer.getElapsedTimeSeconds() == 110) {
+//                light.orange();
+//            } else if(opmodeTimer.getElapsedTimeSeconds() == 100) {
+//                light.yellow();
+//            } else if(opmodeTimer.getElapsedTimeSeconds() == 90) {
+//                light.sage();
+//            } else if(opmodeTimer.getElapsedTimeSeconds() == 62) {
+//                light.off();
+//            } else if (opmodeTimer.getElapsedTimeSeconds() == 61) {
+//                light.red();
+//            } else if (opmodeTimer.getElapsedTimeSeconds() == 60) {
+//                light.azure();
+//            }
+//        }
 
         if (actionNotBusy()) {
             previousGamepad1.copy(currentGamepad1);
@@ -213,11 +208,11 @@ public class Teleop {
             }
 
             if (currentGamepad2.left_bumper && !previousGamepad2.left_bumper) {
-                intake.rotateCycle(false);
+                intake.rotateCycle(true);
             }
 
             if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper) {
-                intake.rotateCycle(true);
+                intake.rotateCycle(false);
             }
 
             if (gamepad2.left_stick_button) {
@@ -291,24 +286,17 @@ public class Teleop {
             case 1:
                 intake.close();
 
-                transferSampleDetected = (intake.getColor() == IntakeColor.BLUE || intake.getColor() == IntakeColor.RED || intake.getColor() == IntakeColor.YELLOW);
-
-                if (transferSampleDetected) {
-                    outtake.transferDetected();
-                    intake.transferDetected();
-                } else {
+           //     transferSampleDetected = (intake.getColor() == IntakeColor.BLUE || intake.getColor() == IntakeColor.RED || intake.getColor() == IntakeColor.YELLOW);
                    outtake.transferUndetected();
                    intake.transferUndetected();
-                }
+
 
                 setTransferState(2);
                 break;
             case 2:
                 if (transferTimer.getElapsedTimeSeconds() > 0.1) {
-                    if (transferSampleDetected)
+
                         outtake.setRotateState(OuttakeSubsystem.RotateState.TRANSFER_DETECTED);
-                    else
-                        outtake.setRotateState(OuttakeSubsystem.RotateState.TRANSFER_UNDETECTED);
 
                     extend.toTransfer();
                     setTransferState(3);
@@ -316,11 +304,8 @@ public class Teleop {
                 break;
             case 3:
                 if (transferTimer.getElapsedTimeSeconds() > 0.15) {
-                    if (transferSampleDetected) {
                         outtake.transferDetected();
-                    } else {
-                        outtake.transferUndetected();
-                    }
+
 
                     setTransferState(4);
                 }
